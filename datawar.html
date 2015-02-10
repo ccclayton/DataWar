@@ -181,7 +181,7 @@ function init() {
 
 		// Room Model Legally Borrowed From BlendSwap.com
 		//var loader = new THREE.JSONLoader();
-		//loader.load( '/Users/ccclayton/Documents/Programming/Graphics/Assignment11/room.js', function (geometry, materials)
+		//loader.load( 'https://github.com/ccclayton/DataWar/blob/master/room.js', function (geometry, materials)
 		//{
 			//  var  mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial(materials));
 			//  mesh.scale.set(20, 20, 20);
@@ -207,7 +207,7 @@ function init() {
 		camera.position.y = 15;
 
 		//Backyard 
-		var floorText = new THREE.ImageUtils.loadTexture( '/Users/ccclayton/Documents/Programming/Graphics/Assignment11/grasstile.jpg' );
+		var floorText = new THREE.ImageUtils.loadTexture( 'https://github.com/ccclayton/DataWar/blob/master/grasstile.jpg' );
 		var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
 		var fGeometry = new THREE.PlaneBufferGeometry(20, 192, 10, 10);
 		var floor = new THREE.Mesh(fGeometry, floorMaterial);
@@ -219,7 +219,7 @@ function init() {
 		scene.add(floor);
 
 		//box texture
-		var boxText = new THREE.ImageUtils.loadTexture('/Users/ccclayton/Documents/Programming/Graphics/Assignment11/wood_texture.jpg');
+		var boxText = new THREE.ImageUtils.loadTexture('https://github.com/ccclayton/DataWar/blob/master/wood_texture.jpg');
 
 		//treasure chest/storage
 		geometry = new THREE.BoxGeometry(20,10,15);
