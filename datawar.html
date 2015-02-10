@@ -1,0 +1,322 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Assignment 11 First-Person Virtual World</title>
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: Comic;
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0.3,0.0);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #EEEEEE;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+		</style>
+	</head>
+	<body>
+		<script src="/Users/ccclayton/Documents/Programming/mrdoob-three.js-74e7d09/build/three.js"></script>
+		<script src="/Users/ccclayton/Documents/Programming/mrdoob-three.js-74e7d09/examples/js/controls/PointerLockControls.js"></script>
+		<script src = "/Users/ccclayton/Documents/Programming/mrdoob-three.js-74e7d09/src/loaders/JSONLoader.js"> </script>
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:50px">Click To Load Environment</span>
+				<br />
+				(Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
+			</div>
+
+		</div>
+
+		<script>
+
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+			var controls;
+			var materials = [];
+
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'instructions' );
+
+	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+	if ( havePointerLock ) {
+
+		var element = document.body;
+
+		var pointerlockchange = function ( event ) {
+
+			if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+				controls.enabled = true;
+
+				blocker.style.display = 'none';
+
+			} else {
+
+				controls.enabled = false;
+
+				blocker.style.display = '-webkit-box';
+				blocker.style.display = '-moz-box';
+				blocker.style.display = 'box';
+
+				instructions.style.display = '';
+
+			}
+
+		}
+
+		var pointerlockerror = function ( event ) {
+
+			instructions.style.display = '';
+
+		}
+
+		// Hook pointer lock state change events
+		document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+		document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+		document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+		document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+		document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+		document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+		instructions.addEventListener( 'click', function ( event ) {
+
+			instructions.style.display = 'none';
+
+			// Ask the browser to lock the pointer
+			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+			if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+				var fullscreenchange = function ( event ) {
+
+					if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+						document.removeEventListener( 'fullscreenchange', fullscreenchange );
+						document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+						element.requestPointerLock();
+					}
+
+				}
+
+				document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+				document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+				element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+				element.requestFullscreen();
+
+			} else {
+
+				element.requestPointerLock();
+
+			}
+
+		}, false );
+
+} else {
+
+	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+}
+
+init();
+animate();
+
+function init() {
+
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+
+	scene = new THREE.Scene();
+	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+		// Room Model Legally Borrowed From BlendSwap.com
+		//var loader = new THREE.JSONLoader();
+		//loader.load( '/Users/ccclayton/Documents/Programming/Graphics/Assignment11/room.js', function (geometry, materials)
+		//{
+			//  var  mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial(materials));
+			//  mesh.scale.set(20, 20, 20);
+			//  mesh.receiveShadow = true;
+			//  mesh.castShadow = true;
+			// mesh.position.set(0, 0, 0);
+			// scene.add(mesh);
+			// });
+
+		//Dining Table Light
+		var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
+		light.position.set( 0, 20, 80 ); 
+		scene.add( light );
+
+		//Coffee Table Light
+		var light = new THREE.PointLight( 0xB22222, 1.0, 80 ); 
+		light.position.set( 0, 20, -10 ); 
+		scene.add( light );
+
+		//controls
+		controls = new THREE.PointerLockControls( camera );
+		scene.add( controls.getObject() );
+		camera.position.y = 15;
+
+		//Backyard 
+		var floorText = new THREE.ImageUtils.loadTexture( '/Users/ccclayton/Documents/Programming/Graphics/Assignment11/grasstile.jpg' );
+		var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
+		var fGeometry = new THREE.PlaneBufferGeometry(20, 192, 10, 10);
+		var floor = new THREE.Mesh(fGeometry, floorMaterial);
+		floor.position.y = 0.2;
+		floor.position.z = -216;
+		floor.rotation.x = Math.PI / 2;
+		floor.scale.x = 12;
+		floor.receiveShadow = true;
+		scene.add(floor);
+
+		//box texture
+		var boxText = new THREE.ImageUtils.loadTexture('/Users/ccclayton/Documents/Programming/Graphics/Assignment11/wood_texture.jpg');
+
+		//treasure chest/storage
+		geometry = new THREE.BoxGeometry(20,10,15);
+		material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		var mesh = new THREE.Mesh(geometry,material);
+		mesh.receiveShadow = true;
+		mesh.castShadow = true;
+		scene.add(mesh);
+		mesh.position.x = 90;
+		mesh.position.y = 5;
+
+		//random box in backyard
+		geometry = new THREE.BoxGeometry(20,10,15);
+		material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		var mesh = new THREE.Mesh(geometry,material);
+		mesh.receiveShadow = true;
+		mesh.castShadow = true;
+		scene.add(mesh);
+		mesh.position.z = -165;
+		mesh.position.y = 5;
+
+		// back fence
+		geometry = new THREE.BoxGeometry(240,40,2);
+		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		mesh = new THREE.Mesh(geometry,material);
+		mesh.receiveShadow = true;
+		mesh.castShadow = true;
+		scene.add(mesh);
+		mesh.position.y = 20;
+		mesh.position.z = -312;
+
+		//back fence spotlight
+		var light = new THREE.DirectionalLight(0xEEEEEE, 0.5);
+		light.position.y = 300;
+		light.target = mesh;
+		scene.add(light);
+
+		//right fence
+		geometry = new THREE.BoxGeometry(193,40,2);
+		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		meshRight = new THREE.Mesh(geometry,material);
+		meshRight.receiveShadow = true;
+		meshRight.castShadow = true;
+		scene.add(meshRight);
+		meshRight.rotation.y = 90 * Math.PI/180;
+		meshRight.position.x = 121;
+		meshRight.position.z = -216.39;
+		meshRight.position.y = 20;
+
+		//right fence spotlight
+		var rightLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		light.position.y = 300;
+		light.position.x = -10;
+		light.target = meshRight;
+		scene.add(rightLight);
+
+		//left fence
+		geometry = new THREE.BoxGeometry(193,40,2);
+		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		meshLeft = new THREE.Mesh(geometry,material);
+		meshLeft.receiveShadow = true;
+		meshLeft.castShadow = true;
+		scene.add(meshLeft);
+		meshLeft.rotation.y = -90 * Math.PI/180;
+		meshLeft.position.x = -121;
+		meshLeft.position.z = -216.39;
+		meshLeft.position.y = 20;
+
+		//left fence spotlight
+		var leftLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		light.position.y = 300;
+		light.target = meshLeft;
+		scene.add(leftLight);
+		renderer = new THREE.WebGLRenderer({clearAlpha: 1});
+		renderer.setClearColor( 0x000000 );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.shadowMapSoft = true;
+		document.body.appendChild( renderer.domElement );
+
+		window.addEventListener( 'resize', onWindowResize, false );
+
+	}
+
+	function onWindowResize() {
+
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+	}
+
+	function animate() {
+		requestAnimationFrame( animate );
+		controls.update();
+		renderer.render( scene, camera );
+	}
+</script>
+</body>
+</html>
