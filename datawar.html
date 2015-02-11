@@ -58,9 +58,9 @@
 		</style>
 	</head>
 	<body>
-		<script src="https://github.com/ccclayton/DataWar/blob/master/mrdoob-three.js-74e7d09/build/three.js"></script>
-		<script src="https://github.com/ccclayton/DataWar/blob/master/mrdoob-three.js-74e7d09/examples/js/controls/PointerLockControls.js"></script>
-		<script src = "https://github.com/ccclayton/DataWar/blob/master/mrdoob-three.js-74e7d09/src/loaders/JSONLoader.js"> </script>
+		<script src="mrdoob-three.js-74e7d09/build/three.js"></script>
+		<script src="mrdoob-three.js-74e7d09/examples/js/controls/PointerLockControls.js"></script>
+		<script src = "mrdoob-three.js-74e7d09/src/loaders/JSONLoader.js"> </script>
 
 		<div id="blocker">
 
@@ -207,7 +207,7 @@ function init() {
 		camera.position.y = 15;
 
 		//Backyard 
-		var floorText = new THREE.ImageUtils.loadTexture( 'https://github.com/ccclayton/DataWar/blob/master/grasstile.jpg' );
+		var floorText = new THREE.ImageUtils.loadTexture( 'grasstile.jpg' );
 		var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
 		var fGeometry = new THREE.PlaneBufferGeometry(20, 192, 10, 10);
 		var floor = new THREE.Mesh(fGeometry, floorMaterial);
@@ -219,7 +219,7 @@ function init() {
 		scene.add(floor);
 
 		//box texture
-		var boxText = new THREE.ImageUtils.loadTexture('https://github.com/ccclayton/DataWar/blob/master/wood_texture.jpg');
+		var boxText = new THREE.ImageUtils.loadTexture('wood_texture.jpg');
 
 		//treasure chest/storage
 		geometry = new THREE.BoxGeometry(20,10,15);
