@@ -2,13 +2,71 @@
 	<html>
 	<head>
 		<meta charset="utf-8">
+<<<<<<< Updated upstream
 		<title>Assignment 11 First-Person Virtual World</title>
 		<link rel="stylesheet" type="text/css" href="stylesheet.css">
+=======
+		<title>Data War</title>
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: Comic;
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0.3,0.0);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #EEEEEE;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+		</style>
+>>>>>>> Stashed changes
 	</head>
 	<body>
 		<script src="mrdoob-three.js-74e7d09/build/three.js"></script>
 		<script src="mrdoob-three.js-74e7d09/examples/js/controls/PointerLockControls.js"></script>
 		<script src = "mrdoob-three.js-74e7d09/src/loaders/JSONLoader.js"> </script>
+		<script src = "mrdoob-three.js-74e7d09/examples/js/loaders/ColladaLoader.js"></script>
 
 		<div id="blocker">
 
@@ -138,6 +196,16 @@ function init() {
 			// mesh.position.set(0, 0, 0);
 			// scene.add(mesh);
 			// });
+			// 
+		
+		var loader = new THREE.ColladaLoader();
+		loader.load('../housetest.dae', function (result) {
+  		scene.add(result.scene);
+  		result.scene.rotation.z = Math.PI/2;
+  		result.scene.rotation.x = - (Math.PI/2);
+  		result.scene.scale.set(0.8,0.8,0.5);
+
+		});
 
 		//Dining Table Light
 		var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
