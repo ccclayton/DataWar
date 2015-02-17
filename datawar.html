@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Assignment 11 First-Person Virtual World</title>
+		<title>DataWar</title>
 		<link rel="stylesheet" type="text/css" href="stylesheet.css">
 
 		<title>Data War</title>
@@ -130,6 +130,7 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
+
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 
@@ -145,14 +146,15 @@ function init() {
 			// scene.add(mesh);
 			// });
 			// 
-		
-		var loader = new THREE.ColladaLoader();
-		loader.load('models/housetest.dae', function (result) {
-	  		scene.add(result.scene);
-	  		result.scene.rotation.z = Math.PI/2;
-	  		result.scene.rotation.x = - (Math.PI/2);
-	  		result.scene.scale.set(.5, .5, .5);
-		});
+
+			var loader = new THREE.ColladaLoader();
+			loader.load('models/housetest.dae', function (result) {
+				scene.add(result.scene);
+				result.scene.scale.set(.8, .8, .6);
+				result.scene.rotation.x = -90 * Math.PI/180;
+				result.scene.position.x += -250;
+				result.scene.position.z += -200;
+			});
 
 		//Dining Table Light
 		// var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
@@ -167,27 +169,52 @@ function init() {
 		//controls
 		controls = new THREE.PointerLockControls( camera );
 		scene.add( controls.getObject() );
-		camera.position.y = 15;
+		camera.position.set(0,10,0);
+
 
 		//Backyard 
-		var floorText = new THREE.ImageUtils.loadTexture( 'textures/grasstile.jpg' );
-		var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
-		var fGeometry = new THREE.PlaneBufferGeometry(20, 192, 10, 10);
-		var floor = new THREE.Mesh(fGeometry, floorMaterial);
-		floor.position.y = 0.2;
-		floor.position.z = -216;
-		floor.rotation.x = Math.PI / 2;
-		floor.scale.x = 12;
-		floor.receiveShadow = true;
-		scene.add(floor);
+		// var floorText = new THREE.ImageUtils.loadTexture( 'textures/grasstile.jpg' );
+		// var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
+		// var fGeometry = new THREE.PlaneBufferGeometry(400, 600, 10, 10);
+		// var floor = new THREE.Mesh(fGeometry, floorMaterial);
+		// floor.position.y = 0.2;
+		// floor.position.z = -216;
+		// floor.rotation.x = Math.PI / 2;
+		// // floor.scale.x = 12;
+		// floor.receiveShadow = true;
+		// scene.add(floor);
+		// 
+		// 
+		// 
+		var geometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+		geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+
+		
+
+		material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
+
+		mesh = new THREE.Mesh( geometry, material );
+				//mesh.rotation.y = Math.PI/2;
+				scene.add( mesh );
+
+				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+				light.position.set( 0.5, 1, 0.75 );
+				scene.add( light );
+
+				var light = new THREE.SpotLight(0xffffff, 1);
+				light.position.set( 0, 50, 0);
+				scene.add(light);
 
 
-		var light = new THREE.AmbientLight( 0x333333 );
-		light.position.set(0, 20, 0);
-		scene.add( light );
+		// Add axes
+		axes = buildAxes( 1000 );
+		scene.add( axes );
+		// var light = new THREE.AmbientLight( 0x333333 );
+		// light.position.set(0, 0, 0);
+		// scene.add( light );
 
 		//box texture
-		// var boxText = new THREE.ImageUtils.loadTexture('textures/wood_texture.jpg');
+		var boxText = new THREE.ImageUtils.loadTexture('textures/wood_texture.jpg');
 
 		//treasure chest/storage
 		// geometry = new THREE.BoxGeometry(20,10,15);
@@ -219,17 +246,46 @@ function init() {
 		// scene.add(mesh);
 		// mesh.position.z = -100;
 		// mesh.position.y = 5;
+		// 
+		
+		function buildAxes( length ) {
+		var axes = new THREE.Object3D();
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+		return axes;
+	}	
+		function buildAxis( src, dst, colorHex, dashed ) {
+		var geom = new THREE.Geometry(),
+		mat;
+		if(dashed) {
+			mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+		} else {
+			mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+		}
+		geom.vertices.push( src.clone() );
+		geom.vertices.push( dst.clone() );
+	geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+	var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+	return axis;
+	}
 
 
-		// // back fence
-		// geometry = new THREE.BoxGeometry(240,40,2);
+
+		// back fence
+		// geometry = new THREE.BoxGeometry(220,40,2);
 		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
 		// mesh = new THREE.Mesh(geometry,material);
 		// mesh.receiveShadow = true;
 		// mesh.castShadow = true;
 		// scene.add(mesh);
-		// mesh.position.y = 20;
-		// mesh.position.z = -312;
+		// mesh.position.y = 2;
+		//mesh.position.x 
+		//mesh.rotation.y = -20 * Math.PI/180;
+		//mesh.position.z = -250;
 
 		//back fence spotlight
 		// var light = new THREE.DirectionalLight(0xEEEEEE, 0.5);
