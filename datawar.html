@@ -148,22 +148,23 @@ function init() {
 		
 		var loader = new THREE.ColladaLoader();
 		loader.load('models/housetest.dae', function (result) {
-  		scene.add(result.scene);
-  		result.scene.rotation.z = Math.PI/2;
-  		result.scene.rotation.x = - (Math.PI/2);
-  		result.scene.scale.set(0.8,0.8,0.5);
+	  		scene.add(result.scene);
+	  		result.scene.rotation.z = Math.PI/2;
+	  		result.scene.rotation.x = - (Math.PI/2);
+	  		result.scene.scale.set(.5, .5, .5);
+	  		// result.scene.scale.x = result.scene.scale.y = result.scene.scale.z = .02539999969303608;
 
 		});
 
 		//Dining Table Light
-		var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
-		light.position.set( 0, 20, 80 ); 
-		scene.add( light );
+		// var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
+		// light.position.set( 0, 20, 80 ); 
+		// scene.add( light );
 
-		//Coffee Table Light
-		var light = new THREE.PointLight( 0xB22222, 1.0, 80 ); 
-		light.position.set( 0, 20, -10 ); 
-		scene.add( light );
+		// //Coffee Table Light
+		// var light = new THREE.PointLight( 0xB22222, 1.0, 80 ); 
+		// light.position.set( 0, 20, -10 ); 
+		// scene.add( light );
 
 		//controls
 		controls = new THREE.PointerLockControls( camera );
@@ -182,93 +183,98 @@ function init() {
 		floor.receiveShadow = true;
 		scene.add(floor);
 
+
+		var light = new THREE.AmbientLight( 0x333333 );
+		light.position.set(0, 20, 0);
+		scene.add( light );
+
 		//box texture
-		var boxText = new THREE.ImageUtils.loadTexture('textures/wood_texture.jpg');
+		// var boxText = new THREE.ImageUtils.loadTexture('textures/wood_texture.jpg');
 
 		//treasure chest/storage
-		geometry = new THREE.BoxGeometry(20,10,15);
-		material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
-		var mesh = new THREE.Mesh(geometry,material);
-		mesh.receiveShadow = true;
-		mesh.castShadow = true;
-		scene.add(mesh);
-		mesh.position.x = 90;
-		mesh.position.y = 5;
+		// geometry = new THREE.BoxGeometry(20,10,15);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.x = 90;
+		// mesh.position.y = 5;
 
-		//random box in backyard
-		geometry = new THREE.BoxGeometry(20,10,15);
-		material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
-		var mesh = new THREE.Mesh(geometry,material);
-		mesh.receiveShadow = true;
-		mesh.castShadow = true;
-		scene.add(mesh);
-		mesh.position.z = -165;
-		mesh.position.y = 5;
-
-
-		//another box
-		geometry = new THREE.BoxGeometry(45,25,30);
-		material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
-		var mesh = new THREE.Mesh(geometry,material);
-		mesh.receiveShadow = true;
-		mesh.castShadow = true;
-		scene.add(mesh);
-		mesh.position.z = -100;
-		mesh.position.y = 5;
+		// //random box in backyard
+		// geometry = new THREE.BoxGeometry(20,10,15);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.z = -165;
+		// mesh.position.y = 5;
 
 
-		// back fence
-		geometry = new THREE.BoxGeometry(240,40,2);
-		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-		mesh = new THREE.Mesh(geometry,material);
-		mesh.receiveShadow = true;
-		mesh.castShadow = true;
-		scene.add(mesh);
-		mesh.position.y = 20;
-		mesh.position.z = -312;
+		// //another box
+		// geometry = new THREE.BoxGeometry(45,25,30);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.z = -100;
+		// mesh.position.y = 5;
+
+
+		// // back fence
+		// geometry = new THREE.BoxGeometry(240,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.y = 20;
+		// mesh.position.z = -312;
 
 		//back fence spotlight
-		var light = new THREE.DirectionalLight(0xEEEEEE, 0.5);
-		light.position.y = 300;
-		light.target = mesh;
-		scene.add(light);
+		// var light = new THREE.DirectionalLight(0xEEEEEE, 0.5);
+		// light.position.y = 300;
+		// light.target = mesh;
+		// scene.add(light);
 
 		//right fence
-		geometry = new THREE.BoxGeometry(193,40,2);
-		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-		meshRight = new THREE.Mesh(geometry,material);
-		meshRight.receiveShadow = true;
-		meshRight.castShadow = true;
-		scene.add(meshRight);
-		meshRight.rotation.y = 90 * Math.PI/180;
-		meshRight.position.x = 121;
-		meshRight.position.z = -216.39;
-		meshRight.position.y = 20;
+		// geometry = new THREE.BoxGeometry(193,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// meshRight = new THREE.Mesh(geometry,material);
+		// meshRight.receiveShadow = true;
+		// meshRight.castShadow = true;
+		// scene.add(meshRight);
+		// meshRight.rotation.y = 90 * Math.PI/180;
+		// meshRight.position.x = 121;
+		// meshRight.position.z = -216.39;
+		// meshRight.position.y = 20;
 
-		//right fence spotlight
-		var rightLight = new THREE.SpotLight(0xEEEEEE, 0.9);
-		light.position.y = 300;
-		light.position.x = -10;
-		light.target = meshRight;
-		scene.add(rightLight);
+		// //right fence spotlight
+		// var rightLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		// light.position.y = 300;
+		// light.position.x = -10;
+		// light.target = meshRight;
+		// scene.add(rightLight);
 
-		//left fence
-		geometry = new THREE.BoxGeometry(193,40,2);
-		material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-		meshLeft = new THREE.Mesh(geometry,material);
-		meshLeft.receiveShadow = true;
-		meshLeft.castShadow = true;
-		scene.add(meshLeft);
-		meshLeft.rotation.y = -90 * Math.PI/180;
-		meshLeft.position.x = -121;
-		meshLeft.position.z = -216.39;
-		meshLeft.position.y = 20;
+		// //left fence
+		// geometry = new THREE.BoxGeometry(193,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// meshLeft = new THREE.Mesh(geometry,material);
+		// meshLeft.receiveShadow = true;
+		// meshLeft.castShadow = true;
+		// scene.add(meshLeft);
+		// meshLeft.rotation.y = -90 * Math.PI/180;
+		// meshLeft.position.x = -121;
+		// meshLeft.position.z = -216.39;
+		// meshLeft.position.y = 20;
 
-		//left fence spotlight
-		var leftLight = new THREE.SpotLight(0xEEEEEE, 0.9);
-		light.position.y = 300;
-		light.target = meshLeft;
-		scene.add(leftLight);
+		// //left fence spotlight
+		// var leftLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		// light.position.y = 300;
+		// light.target = meshLeft;
+		// scene.add(leftLight);
 		renderer = new THREE.WebGLRenderer({clearAlpha: 1});
 		renderer.setClearColor( 0x000000 );
 		renderer.setSize( window.innerWidth, window.innerHeight );
