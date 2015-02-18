@@ -16,6 +16,9 @@
 		<script src = "mrdoob-three.js-74e7d09/src/loaders/JSONLoader.js"> </script>
 		<script src = "mrdoob-three.js-74e7d09/examples/js/loaders/ColladaLoader.js"></script>
 
+		<script type="text/javascript" charset="utf-8" src="components/MathBox/vendor/domready.js"></script>
+ 		<script type="text/javascript" charset="utf-8" src="components/MathBox/build/MathBox-bundle.js"></script>
+
 		<div id="blocker">
 
 			<div id="instructions">
@@ -25,6 +28,16 @@
 			</div>
 
 		</div>
+
+		<script type="text/javascript" charset="utf-8">
+		    DomReady.ready(function () {
+		      	if (location.href.match(/^file:/)) {
+		        	document.getElementById('info').style.opacity = 1;
+		        	document.getElementById('info').innerHTML = "Sorry. This example does not work when accessed using file://. Please use an http:// host and try again.";
+		      	}
+		    });
+		</script>
+
 
 		<script>
 
@@ -338,6 +351,8 @@ function init() {
 		window.addEventListener( 'resize', onWindowResize, false );
 
 	}
+
+
 
 	function onWindowResize() {
 
