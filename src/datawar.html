@@ -1,0 +1,358 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8">
+
+		<title>DataWar</title>
+		<link rel="stylesheet" type="text/css" href="stylesheet.css">
+
+		<title>Data War</title>
+		
+
+	</head>
+	<body>
+		<script src ="../threejs.r65/build/three.js"></script>
+		<script src ="../threejs.r65/examples/js/controls/PointerLockControls.js"></script>
+		<script src ="../threejs.r65/src/loaders/JSONLoader.js"> </script>
+		<script src ="../threejs.r65/examples/js/loaders/ColladaLoader.js"></script>
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:50px">Click To Load Environment</span>
+				<br />
+				(Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
+			</div>
+
+		</div>
+
+		<script>
+
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+			var controls;
+			var materials = [];
+
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'instructions' );
+
+	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+	if ( havePointerLock ) {
+
+		var element = document.body;
+
+		var pointerlockchange = function ( event ) {
+
+			if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+				controls.enabled = true;
+
+				blocker.style.display = 'none';
+
+			} else {
+
+				controls.enabled = false;
+
+				blocker.style.display = '-webkit-box';
+				blocker.style.display = '-moz-box';
+				blocker.style.display = 'box';
+
+				instructions.style.display = '';
+
+			}
+
+		}
+
+		var pointerlockerror = function ( event ) {
+
+			instructions.style.display = '';
+
+		}
+
+		// Hook pointer lock state change events
+		document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+		document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+		document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+		document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+		document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+		document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+		instructions.addEventListener( 'click', function ( event ) {
+
+			instructions.style.display = 'none';
+
+			// Ask the browser to lock the pointer
+			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+			if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+				var fullscreenchange = function ( event ) {
+
+					if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+						document.removeEventListener( 'fullscreenchange', fullscreenchange );
+						document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+						element.requestPointerLock();
+					}
+
+				}
+
+				document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+				document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+				element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+				element.requestFullscreen();
+
+			} else {
+
+				element.requestPointerLock();
+
+			}
+
+		}, false );
+
+} else {
+
+	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+}
+
+init();
+animate();
+
+function init() {
+
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+
+
+	scene = new THREE.Scene();
+	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+		// Room Model Legally Borrowed From BlendSwap.com
+		//var loader = new THREE.JSONLoader();
+		//loader.load( 'https://github.com/ccclayton/DataWar/blob/master/room.js', function (geometry, materials)
+		//{
+			//  var  mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial(materials));
+			//  mesh.scale.set(20, 20, 20);
+			//  mesh.receiveShadow = true;
+			//  mesh.castShadow = true;
+			// mesh.position.set(0, 0, 0);
+			// scene.add(mesh);
+			// });
+			// 
+
+			var loader = new THREE.ColladaLoader();
+			loader.load('../models/housetest.dae', function (result) {
+				scene.add(result.scene);
+				result.scene.scale.set(.8, .8, .6);
+				result.scene.rotation.x = -90 * Math.PI/180;
+				result.scene.position.x += -250;
+				result.scene.position.z += -200;
+			});
+
+		//Dining Table Light
+		// var light = new THREE.PointLight( 0xFF8C00, 1.0, 80 ); 
+		// light.position.set( 0, 20, 80 ); 
+		// scene.add( light );
+
+		// //Coffee Table Light
+		// var light = new THREE.PointLight( 0xB22222, 1.0, 80 ); 
+		// light.position.set( 0, 20, -10 ); 
+		// scene.add( light );
+
+		//controls
+		controls = new THREE.PointerLockControls( camera );
+		scene.add( controls.getObject() );
+		camera.position.set(0,10,0);
+
+
+		//Backyard 
+		// var floorText = new THREE.ImageUtils.loadTexture( 'textures/grasstile.jpg' );
+		// var floorMaterial = new THREE.MeshLambertMaterial( { map: floorText, side: THREE.DoubleSide } );
+		// var fGeometry = new THREE.PlaneBufferGeometry(400, 600, 10, 10);
+		// var floor = new THREE.Mesh(fGeometry, floorMaterial);
+		// floor.position.y = 0.2;
+		// floor.position.z = -216;
+		// floor.rotation.x = Math.PI / 2;
+		// // floor.scale.x = 12;
+		// floor.receiveShadow = true;
+		// scene.add(floor);
+		// 
+		// 
+		// 
+		var geometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+		geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+
+		
+
+		material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
+
+		mesh = new THREE.Mesh( geometry, material );
+				//mesh.rotation.y = Math.PI/2;
+				scene.add( mesh );
+
+				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+				light.position.set( 0.5, 1, 0.75 );
+				scene.add( light );
+
+				var light = new THREE.SpotLight(0xffffff, 1);
+				light.position.set( 0, 50, 0);
+				scene.add(light);
+
+
+		// Add axes
+		axes = buildAxes( 1000 );
+		scene.add( axes );
+		// var light = new THREE.AmbientLight( 0x333333 );
+		// light.position.set(0, 0, 0);
+		// scene.add( light );
+
+		//box texture
+		var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
+
+		//treasure chest/storage
+		// geometry = new THREE.BoxGeometry(20,10,15);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.x = 90;
+		// mesh.position.y = 5;
+
+		// //random box in backyard
+		// geometry = new THREE.BoxGeometry(20,10,15);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.z = -165;
+		// mesh.position.y = 5;
+
+
+		// //another box
+		// geometry = new THREE.BoxGeometry(45,25,30);
+		// material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+		// var mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.z = -100;
+		// mesh.position.y = 5;
+		// 
+		
+		function buildAxes( length ) {
+		var axes = new THREE.Object3D();
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+		return axes;
+	}	
+		function buildAxis( src, dst, colorHex, dashed ) {
+		var geom = new THREE.Geometry(),
+		mat;
+		if(dashed) {
+			mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+		} else {
+			mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+		}
+		geom.vertices.push( src.clone() );
+		geom.vertices.push( dst.clone() );
+	geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+	var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+	return axis;
+	}
+
+
+
+		// back fence
+		// geometry = new THREE.BoxGeometry(220,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// mesh = new THREE.Mesh(geometry,material);
+		// mesh.receiveShadow = true;
+		// mesh.castShadow = true;
+		// scene.add(mesh);
+		// mesh.position.y = 2;
+		//mesh.position.x 
+		//mesh.rotation.y = -20 * Math.PI/180;
+		//mesh.position.z = -250;
+
+		//back fence spotlight
+		// var light = new THREE.DirectionalLight(0xEEEEEE, 0.5);
+		// light.position.y = 300;
+		// light.target = mesh;
+		// scene.add(light);
+
+		//right fence
+		// geometry = new THREE.BoxGeometry(193,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// meshRight = new THREE.Mesh(geometry,material);
+		// meshRight.receiveShadow = true;
+		// meshRight.castShadow = true;
+		// scene.add(meshRight);
+		// meshRight.rotation.y = 90 * Math.PI/180;
+		// meshRight.position.x = 121;
+		// meshRight.position.z = -216.39;
+		// meshRight.position.y = 20;
+
+		// //right fence spotlight
+		// var rightLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		// light.position.y = 300;
+		// light.position.x = -10;
+		// light.target = meshRight;
+		// scene.add(rightLight);
+
+		// //left fence
+		// geometry = new THREE.BoxGeometry(193,40,2);
+		// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+		// meshLeft = new THREE.Mesh(geometry,material);
+		// meshLeft.receiveShadow = true;
+		// meshLeft.castShadow = true;
+		// scene.add(meshLeft);
+		// meshLeft.rotation.y = -90 * Math.PI/180;
+		// meshLeft.position.x = -121;
+		// meshLeft.position.z = -216.39;
+		// meshLeft.position.y = 20;
+
+		// //left fence spotlight
+		// var leftLight = new THREE.SpotLight(0xEEEEEE, 0.9);
+		// light.position.y = 300;
+		// light.target = meshLeft;
+		// scene.add(leftLight);
+		renderer = new THREE.WebGLRenderer({clearAlpha: 1});
+		renderer.setClearColor( 0x000000 );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.shadowMapSoft = true;
+		document.body.appendChild( renderer.domElement );
+
+		window.addEventListener( 'resize', onWindowResize, false );
+
+	}
+
+	function onWindowResize() {
+
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+	}
+
+	function animate() {
+		requestAnimationFrame( animate );
+		controls.update();
+		renderer.render( scene, camera );
+	}
+</script>
+</body>
+</html>
