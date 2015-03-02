@@ -4,13 +4,11 @@
 <head>
   <meta charset="utf-8">
   <title>MathBox - VR</title>
-<<<<<<< HEAD
-  <script src="../MathBox/build/mathbox-bundle.min.js"></script>
+  <script src="../MathBox/build/mathbox2-bundle.js"></script>
   <script src = "../threejs.r65/examples/js/loaders/ColladaLoader.js"></script>
-=======
-  <script src="/MathBox/build/mathbox-bundle.min.js"></script>
-  <script src = "/threejs.r74/examples/js/loaders/ColladaLoader.js"></script>
->>>>>>> b4b87442eaeb547b4b8b142651cb31c286ac61f3
+
+  <script src="../MathBox/build/mathbox-bundle.min.js"></script>
+  <script src = "../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 </head>
 <body>
@@ -26,12 +24,36 @@
     });
     three = mathbox.three;
 
+        var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
+
+
     // scene = new THREE.Scene();
     // camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
 
     three.camera.position.set(-5, 0, .001);
     three.renderer.setClearColor(new THREE.Color(0x000000), 1.0);
+
+
+// //random box in backyard
+    geometry = new THREE.BoxGeometry(20,10,15);
+    material = new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading});
+    var mesh = new THREE.Mesh(geometry,material);
+    mesh.receiveShadow = true;
+    mesh.castShadow = true;
+    three.scene.add(mesh);
+    mesh.position.z = -165;
+    mesh.position.y = 5;
+
+
+    // var loader = new THREE.ColladaLoader();
+    //   loader.load('../models/housetest.dae', function (result) {
+    //     three.scene.add(result.scene);
+    //     result.scene.scale.set(.8, .8, .6);
+    //     result.scene.rotation.x = -90 * Math.PI/180;
+    //     result.scene.position.x += -250;
+    //     result.scene.position.z += -200;
+    //   });
 
     // controls = new THREE.PointerLockControls( camera );
     // scene.add( controls.getObject() );
