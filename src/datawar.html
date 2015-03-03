@@ -128,7 +128,11 @@
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 
 var collidableMeshList = [];
+<<<<<<< HEAD
 var cubes = new Array();
+=======
+var time = Date.now();
+>>>>>>> FETCH_HEAD
 
 var cubeGeometry = new THREE.CubeGeometry(10,10,10);
 var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
@@ -200,7 +204,7 @@ function init() {
 	axes = buildAxes( 1000 );
 	scene.add( axes );
 
-	//left fence
+	// left fence
 	geometry = new THREE.CubeGeometry(193,40,2);
 	material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
 	meshLeft = new THREE.Mesh(geometry,material);
@@ -213,7 +217,10 @@ function init() {
 	meshLeft.position.y = 20;
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> FETCH_HEAD
 	function buildAxes( length ) {
 		var axes = new THREE.Object3D();
 		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
@@ -290,6 +297,7 @@ function onWindowResize() {
 function animate() {
 	
 
+<<<<<<< HEAD
 	if(typeof array === 'object' && array.length > 0) {
 		var k = 0;
 		for(var i = 0; i < cubes.length; i++) {
@@ -361,6 +369,40 @@ function randomFairColor() {
 function update()
 {
 
+=======
+	function animate() {
+		requestAnimationFrame( animate );
+		update();
+
+		renderer.render( scene, camera );
+	}
+
+
+function lockDirection() {
+	if (controls.moveForward()) {
+		controls.lockMoveForward(true);
+	}
+	else if (controls.moveBackward()) {
+		controls.lockMoveBackward(true);
+	}
+	else if (controls.moveLeft()) {
+		controls.lockMoveLeft(true);
+	}
+	else if (controls.moveRight()) {
+		controls.lockMoveRight(true);
+	}
+}
+
+function unlockAllDirection(){
+	controls.lockMoveForward(false);
+	controls.lockMoveBackward(false);
+	controls.lockMoveLeft(false);
+	controls.lockMoveRight(false);
+}
+	function update()
+	{
+	unlockAllDirection();
+>>>>>>> FETCH_HEAD
 
 	// collision detection:
 	//   determines if any of the rays from the cube's origin to each vertex
@@ -381,10 +423,10 @@ function update()
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( collidableMeshList );
 		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20) 
-			collided = true;
+			lockDirection();
 	}	
 
-	controls.update(collided);
+	controls.update();
 }
 </script>
 </body>

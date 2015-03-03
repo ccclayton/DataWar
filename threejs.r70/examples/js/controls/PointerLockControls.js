@@ -20,6 +20,11 @@ THREE.PointerLockControls = function ( camera ) {
 	var moveLeft = false;
 	var moveRight = false;
 
+	var lockMoveForward = false;
+	var lockMoveBackward = false;
+	var lockMoveLeft = false;
+	var lockMoveRight = false;
+
 	var isOnObject = false;
 	var canJump = false;
 
@@ -141,11 +146,9 @@ THREE.PointerLockControls = function ( camera ) {
 
 	}();
 
-	this.update = function ( boolean ) {
+	this.update = function ( ) {
 
 		if ( scope.enabled === false ) return;
-
-		var collided = boolean;
 
 		var time = performance.now();
 		var delta = ( time - prevTime ) / 1000;
@@ -155,11 +158,11 @@ THREE.PointerLockControls = function ( camera ) {
 
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-		if ( moveForward && !collided ) velocity.z -= 400.0 * delta;
-		if ( moveBackward && !collided ) velocity.z += 400.0 * delta;
-
-		if ( moveLeft && !collided ) velocity.x -= 400.0 * delta;
-		if ( moveRight && !collided ) velocity.x += 400.0 * delta;
+		if ( moveForward && !lockMoveForward ) velocity.z -= 400 * delta;
+		if ( moveBackward && !lockMoveBackward ) velocity.z += 400 * delta;
+		
+		if ( moveLeft && !lockMoveLeft ) velocity.x -= 400 * delta;
+		if ( moveRight && !lockMoveRight ) velocity.x += 400 * delta;
 
 		if ( isOnObject === true ) {
 
@@ -182,6 +185,39 @@ THREE.PointerLockControls = function ( camera ) {
 
 		prevTime = time;
 
+	};
+
+
+	this.moveLeft = function() {
+		return moveLeft;
+	};
+	
+	this.moveRight = function() {
+		return moveRight;
+	};
+	
+	this.moveForward = function() {
+		return moveForward;
+	};
+	
+	this.moveBackward = function() {
+		return moveBackward;
+	};
+	
+	this.lockMoveForward = function(boolean){
+		lockMoveForward = boolean;
+	};
+	
+	this.lockMoveBackward = function(boolean){
+		lockMoveBackward = boolean;
+	};
+	
+	this.lockMoveLeft = function(boolean){
+		lockMoveLeft = boolean;
+	};
+	
+	this.lockMoveRight = function(boolean){
+		lockMoveRight = boolean;
 	};
 
 };
