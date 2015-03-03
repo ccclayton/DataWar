@@ -122,16 +122,17 @@
 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
 }
+var time = Date.now();
 
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 
 var collidableMeshList = [];
 var time = Date.now();
 
-var cubeGeometry = new THREE.CubeGeometry(10,10,10);
-	var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-	MovingCube = new THREE.Mesh( cubeGeometry, material );
-	MovingCube.position.set(0,0,0);
+// var cubeGeometry = new THREE.CubeGeometry(10,10,10);
+// var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+// MovingCube = new THREE.Mesh( cubeGeometry, material );
+// MovingCube.position.set(0,0,0);
 
 
 init();
@@ -146,7 +147,7 @@ function init() {
 	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 	// scene.updateMatrixWorld(true);
 
-	scene.add(MovingCube);
+	// scene.add(MovingCube);
 
 	var loader = new THREE.ColladaLoader();
 	loader.load('../models/housetest.dae', function (result) {
@@ -256,9 +257,11 @@ function init() {
 
 	function animate() {
 		requestAnimationFrame( animate );
-		update();
+		var delta = (Date.now() - time) *2;
+		update( delta );
 
 		renderer.render( scene, camera );
+		time = Date.now();
 	}
 
 
@@ -271,9 +274,16 @@ function lockDirection() {
 	}
 	else if (controls.moveLeft()) {
 		controls.lockMoveLeft(true);
+		controls.getObject().onKeyDown(65);
 	}
 	else if (controls.moveRight()) {
 		controls.lockMoveRight(true);
+		// for (var i = 0; i < 10000; i++) {
+			controls.getObject().onKeyDown(83);
+		// }
+	}
+	else {
+		unlockAllDirection();
 	}
 }
 
@@ -283,8 +293,51 @@ function unlockAllDirection(){
 	controls.lockMoveLeft(false);
 	controls.lockMoveRight(false);
 }
+
 	function update()
 	{
+		// unlockAllDirection();
+	
+		// var rotationMatrix;
+		// var cameraDirection = controls.getDirection(new THREE.Vector3(0, 0, 0)).clone();
+		
+		// if (controls.moveForward()) {
+		// 	// Nothing to do!
+		// }
+		// else if (controls.moveBackward()) {
+		// 	rotationMatrix = new THREE.Matrix4();
+		// 	rotationMatrix.makeRotationY(180 * Math.PI / 180);
+		// }
+		// else if (controls.moveLeft()) {
+		// 	rotationMatrix = new THREE.Matrix4();
+		// 	rotationMatrix.makeRotationY(90 * Math.PI / 180);
+		// }
+		// else if (controls.moveRight()) {
+		// 	rotationMatrix = new THREE.Matrix4();
+		// 	rotationMatrix.makeRotationY((360-90) * Math.PI / 180);
+		// }
+		// else return;
+		
+		// if (rotationMatrix !== undefined){
+		// 	cameraDirection.applyMatrix4(rotationMatrix);
+		// }
+		// document.write("ASDFSDF");
+		// var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);	
+		// var intersects = rayCaster.intersectObject(meshLeft, true);	
+		
+		// // $("#status").html("camera direction x: " + cameraDirection.x + " , z: " + cameraDirection.z);
+		
+		// if ((intersects.length > 0 && intersects[0].distance < 25)) {
+		// 	lockDirection();
+		// 	// $("#status").append("<br />Collision detected @ " + intersects[0].distance);
+			
+		// 	var geometry = new THREE.Geometry();
+		// 	geometry.vertices.push(intersects[0].point);
+		// 	geometry.vertices.push(controls.getObject().position);
+		// 	scene.remove(rayLine);
+		// 	rayLine = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0xFF00FF, linewidth: 2}));
+		// 	scene.add(rayLine);
+		// }
 	unlockAllDirection();
 
 	// collision detection:
