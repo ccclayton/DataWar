@@ -123,12 +123,14 @@
 
 }
 
-var collidableMesh = [];
+var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 
-var cubeGeometry = new THREE.CubeGeometry(50,50,50,1,1,1);
-	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
-	MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
-	MovingCube.position.set(0,10,0);
+var collidableMeshList = [];
+
+var cubeGeometry = new THREE.CubeGeometry(10,10,10);
+	var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+	MovingCube = new THREE.Mesh( cubeGeometry, material );
+	MovingCube.position.set(0,0,0);
 
 
 init();
@@ -142,6 +144,8 @@ function init() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 	// scene.updateMatrixWorld(true);
+
+	scene.add(MovingCube);
 
 	var loader = new THREE.ColladaLoader();
 	loader.load('../models/housetest.dae', function (result) {
@@ -191,9 +195,6 @@ function init() {
 	axes = buildAxes( 1000 );
 	scene.add( axes );
 
-	//box texture
-	var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
-
 	//left fence
 	geometry = new THREE.CubeGeometry(193,40,2);
 	material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
@@ -201,7 +202,7 @@ function init() {
 	meshLeft.receiveShadow = true;
 	meshLeft.castShadow = true;
 	scene.add(meshLeft);
-	collidableMesh.push(meshLeft);
+	collidableMeshList.push(meshLeft);
 	meshLeft.position.x = -150;
 	meshLeft.position.z = -235;
 	meshLeft.position.y = 20;
@@ -253,25 +254,81 @@ function init() {
 
 	function animate() {
 		requestAnimationFrame( animate );
-		controls.update();
-		MovingCube.position.set(controls.getObject().position);
-
-		var originPoint = MovingCube.position.clone();
-
-		for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++)
-		{		
-			var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
-			var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
-			var directionVector = globalVertex.sub( MovingCube.position );
-			
-			var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-			var collisionResults = ray.intersectObjects( collidableMesh );
-			if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-				window.alert("HIT");
-		}	
-
+		update();
 		renderer.render( scene, camera );
 	}
+
+// 	function detectCollision() {
+// 	unlockAllDirection();
+	
+// 	var rotationMatrix;
+// 	var cameraDirection = controls.getDirection(new THREE.Vector3(0, 0, 0)).clone();
+	
+// 	if (controls.moveForward()) {
+// 		// Nothing to do!
+// 	}
+// 	else if (controls.moveBackward()) {
+// 		rotationMatrix = new THREE.Matrix4();
+// 		rotationMatrix.makeRotationY(180 * Math.PI / 180);
+// 	}
+// 	else if (controls.moveLeft()) {
+// 		rotationMatrix = new THREE.Matrix4();
+// 		rotationMatrix.makeRotationY(90 * Math.PI / 180);
+// 	}
+// 	else if (controls.moveRight()) {
+// 		rotationMatrix = new THREE.Matrix4();
+// 		rotationMatrix.makeRotationY((360-90) * Math.PI / 180);
+// 	}
+// 	else return;
+	
+// 	if (rotationMatrix !== undefined){
+// 		cameraDirection.applyMatrix4(rotationMatrix);
+// 	}
+// 	var rayCaster = new THREE.Raycaster(controls.getObject().position, cameraDirection);	
+// 	var intersects = rayCaster.intersectObject(hitMesh, true);	
+	
+// 	$("#status").html("camera direction x: " + cameraDirection.x + " , z: " + cameraDirection.z);
+	
+// 	if ((intersects.length > 0 && intersects[0].distance < 25)) {
+// 		lockDirection();
+// 		$("#status").append("<br />Collision detected @ " + intersects[0].distance);
+		
+// 		var geometry = new THREE.Geometry();
+// 		geometry.vertices.push(intersects[0].point);
+// 		geometry.vertices.push(controls.getObject().position);
+// 		scene.remove(rayLine);
+// 		rayLine = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0xFF00FF, linewidth: 2}));
+// 		scene.add(rayLine);
+// 	}
+// }
+
+	function update()
+	{
+
+	// collision detection:
+	//   determines if any of the rays from the cube's origin to each vertex
+	//		intersects any face of a mesh in the array of target meshes
+	//   for increased collision accuracy, add more vertices to the cube;
+	//		for example, new THREE.CubeGeometry( 64, 64, 64, 8, 8, 8, wireMaterial )
+	//   HOWEVER: when the origin of the ray is within the target mesh, collisions do not occur
+	MovingCube.position.set(controls.getObject().position.x, 0, controls.getObject().position.z);
+	var originPoint = MovingCube.position.clone();
+	var collided = false;
+	
+	for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++)
+	{		
+		var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
+		var directionVector = globalVertex.sub( MovingCube.position );
+		
+		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		var collisionResults = ray.intersectObjects( collidableMeshList );
+		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20) 
+			collided = true;
+	}	
+
+	controls.update(collided);
+}
 </script>
 </body>
 </html>

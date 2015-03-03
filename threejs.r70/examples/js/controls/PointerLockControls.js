@@ -141,9 +141,11 @@ THREE.PointerLockControls = function ( camera ) {
 
 	}();
 
-	this.update = function () {
+	this.update = function ( boolean ) {
 
 		if ( scope.enabled === false ) return;
+
+		var collided = boolean;
 
 		var time = performance.now();
 		var delta = ( time - prevTime ) / 1000;
@@ -153,11 +155,11 @@ THREE.PointerLockControls = function ( camera ) {
 
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-		if ( moveForward ) velocity.z -= 400.0 * delta;
-		if ( moveBackward ) velocity.z += 400.0 * delta;
+		if ( moveForward && !collided ) velocity.z -= 400.0 * delta;
+		if ( moveBackward && !collided ) velocity.z += 400.0 * delta;
 
-		if ( moveLeft ) velocity.x -= 400.0 * delta;
-		if ( moveRight ) velocity.x += 400.0 * delta;
+		if ( moveLeft && !collided ) velocity.x -= 400.0 * delta;
+		if ( moveRight && !collided ) velocity.x += 400.0 * delta;
 
 		if ( isOnObject === true ) {
 
