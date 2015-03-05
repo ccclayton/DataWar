@@ -7,12 +7,7 @@ var collidableMeshList = [];
 var cubes = new Array();
 var time = Date.now();
 
-var cubeGeometry = new THREE.CubeGeometry(10,10,10);
-var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-PlayerCube = new THREE.Mesh( cubeGeometry, material );
-PlayerCube.position.set(0,0,0);
-
-var charposition;
+var PlayerCube;
 
 
 function init() {
@@ -102,6 +97,8 @@ function init() {
 
 	}
 
+	Physijs.scripts.worker = '../Physijs/physijs_worker.js';
+	Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
@@ -118,7 +115,22 @@ function init() {
 			}
 		);
 
-	scene.add(PlayerCube);
+	var playerCubeMaterial = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
+		.8, // high friction
+		.4 // low restitution
+	);
+	playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
+	playerCubeMaterial.map.repeat.set(3,3);
+
+	PlayerCube = new Physijs.BoxMesh(
+		new THREE.CubeGeometry(20,10,20),
+		playerCubeMaterial,
+		0
+	);
+
+	scene.add(PlayerCube)
+	PlayerCube.position.set(0,0,0);
 
 	var loader = new THREE.ColladaLoader();
 	loader.load('../models/housetest.dae', function (result) {
@@ -159,6 +171,28 @@ function init() {
 	// Add ADDS
 	buildADDS();
 
+
+	// Materials
+	ground_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
+		.8, // high friction
+		.4 // low restitution
+	);
+	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	ground_material.map.repeat.set( 3, 3 );
+	
+	// Ground
+	ground = new Physijs.BoxMesh(
+		new THREE.CubeGeometry(193, 40, 2),
+		ground_material,
+		0 // mass
+	);
+	ground.receiveShadow = true;
+	scene.add( ground );
+	ground.position.x = -150;
+	ground.position.z = -235;
+	ground.position.y = 20;
+
 	// left fence
 	// geometry = new THREE.CubeGeometry(193,40,2);
 	// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
@@ -170,6 +204,8 @@ function init() {
 	// meshLeft.position.x = -150;
 	// meshLeft.position.z = -235;
 	// meshLeft.position.y = 20;
+
+
 
 	renderer = new THREE.WebGLRenderer({clearAlpha: 1});
 	renderer.setClearColor( 0x000000 );
@@ -257,7 +293,7 @@ function animate() {
 		}
 	}
 
-	charposition = controls.getObject().position;
+	// charposition = controls.getObject().position;
 	// console.log(charposition);
 	update();
 
@@ -273,38 +309,38 @@ function randomFairColor() {
 	return r + g + b;
 }
 
-function lockDirection() {
-	if (controls.moveForward()) {
-		controls.lockMoveForward(true);
-	}
-	else if (controls.moveBackward()) {
-		controls.lockMoveBackward(true);
-	}
-	else if (controls.moveLeft()) {
-		controls.lockMoveLeft(true);
-		// controls.getObject().onKeyDown(65);
-	}
-	else if (controls.moveRight()) {
-		controls.lockMoveRight(true);
-		// for (var i = 0; i < 10000; i++) {
-			// controls.getObject().onKeyDown(83);
-		// }
-	}
-	else {
-		unlockAllDirection();
-	}
-}
-
-function unlockAllDirection(){
-	controls.lockMoveForward(false);
-	controls.lockMoveBackward(false);
-	controls.lockMoveLeft(false);
-	controls.lockMoveRight(false);
-}
+// function lockDirection() {
+// 	if (controls.moveForward()) {
+// 		controls.lockMoveForward(true);
+// 	}
+// 	else if (controls.moveBackward()) {
+// 		controls.lockMoveBackward(true);
+// 	}
+// 	else if (controls.moveLeft()) {
+// 		controls.lockMoveLeft(true);
+// 		// controls.getObject().onKeyDown(65);
+// 	}
+// 	else if (controls.moveRight()) {
+// 		controls.lockMoveRight(true);
+// 		// for (var i = 0; i < 10000; i++) {
+// 			// controls.getObject().onKeyDown(83);
+// 		// }
+// 	}
+// 	else {
+// 		unlockAllDirection();
+// 	}
+// }
+// 
+// function unlockAllDirection(){
+// 	controls.lockMoveForward(false);
+// 	controls.lockMoveBackward(false);
+// 	controls.lockMoveLeft(false);
+// 	controls.lockMoveRight(false);
+// }
 
 function update()
 	{
-	unlockAllDirection();
+	// unlockAllDirection();
 
 	// collision detection:
 	//   determines if any of the rays from the cube's origin to each vertex
@@ -313,20 +349,20 @@ function update()
 	//		for example, new THREE.CubeGeometry( 64, 64, 64, 8, 8, 8, wireMaterial )
 	//   HOWEVER: when the origin of the ray is within the target mesh, collisions do not occur
 	PlayerCube.position.set(controls.getObject().position.x, 0, controls.getObject().position.z);
-	var originPoint = PlayerCube.position.clone();
-	var collided = false;
+	// var originPoint = PlayerCube.position.clone();
+	// var collided = false;
 	
-	for (var vertexIndex = 0; vertexIndex < PlayerCube.geometry.vertices.length; vertexIndex++)
-	{		
-		var localVertex = PlayerCube.geometry.vertices[vertexIndex].clone();
-		var globalVertex = localVertex.applyMatrix4( PlayerCube.matrix );
-		var directionVector = globalVertex.sub( PlayerCube.position );
+	// for (var vertexIndex = 0; vertexIndex < PlayerCube.geometry.vertices.length; vertexIndex++)
+	// {		
+	// 	var localVertex = PlayerCube.geometry.vertices[vertexIndex].clone();
+	// 	var globalVertex = localVertex.applyMatrix4( PlayerCube.matrix );
+	// 	var directionVector = globalVertex.sub( PlayerCube.position );
 		
-		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-		var collisionResults = ray.intersectObjects( collidableMeshList );
-		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20)
-			controls.getObject().position.set(charposition.x, charposition.y, charposition.z);
-	}	
+	// 	var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+	// 	var collisionResults = ray.intersectObjects( collidableMeshList );
+	// 	if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20)
+	// 		controls.getObject().position.set(charposition.x, charposition.y, charposition.z);
+	// }	
 
 	controls.update();
 }
