@@ -105,9 +105,18 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
-	scene = new THREE.Scene();
-	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+	// scene = new THREE.Scene();
+	// scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 	// scene.updateMatrixWorld(true);
+
+	scene = new Physijs.Scene;
+		scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+		scene.addEventListener(
+			'update',
+			function() {
+				scene.simulate( undefined, 1 );
+			}
+		);
 
 	scene.add(PlayerCube);
 
@@ -151,16 +160,16 @@ function init() {
 	buildADDS();
 
 	// left fence
-	geometry = new THREE.CubeGeometry(193,40,2);
-	material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-	meshLeft = new THREE.Mesh(geometry,material);
-	meshLeft.receiveShadow = true;
-	meshLeft.castShadow = true;
-	scene.add(meshLeft);
-	collidableMeshList.push(meshLeft);
-	meshLeft.position.x = -150;
-	meshLeft.position.z = -235;
-	meshLeft.position.y = 20;
+	// geometry = new THREE.CubeGeometry(193,40,2);
+	// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+	// meshLeft = new THREE.Mesh(geometry,material);
+	// meshLeft.receiveShadow = true;
+	// meshLeft.castShadow = true;
+	// scene.add(meshLeft);
+	// collidableMeshList.push(meshLeft);
+	// meshLeft.position.x = -150;
+	// meshLeft.position.z = -235;
+	// meshLeft.position.y = 20;
 
 	renderer = new THREE.WebGLRenderer({clearAlpha: 1});
 	renderer.setClearColor( 0x000000 );

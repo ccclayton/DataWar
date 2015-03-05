@@ -1,7 +1,7 @@
 var context;
 var source, sourceJs;
 var analyser;
-var url = '../data/coyote_kisses-six_shooter.mp3';
+var url = '../data/O_Fortuna.mp3';
 var array = new Array();
 var boost = 0;
 
