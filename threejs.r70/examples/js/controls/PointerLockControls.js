@@ -28,6 +28,8 @@ THREE.PointerLockControls = function ( camera ) {
 	var isOnObject = false;
 	var canJump = false;
 
+	var lastKey = null;
+
 	var prevTime = performance.now();
 
 	var velocity = new THREE.Vector3();
@@ -54,21 +56,25 @@ THREE.PointerLockControls = function ( camera ) {
 
 			case 38: // up
 			case 87: // w
+				lastKey = "up";
 				moveForward = true;
 				break;
 
 			case 37: // left
 			case 65: // a
+				lastKey = "left";
 				moveLeft = true;
 				break;
 
 			case 40: // down
 			case 83: // s
+				lastKey = "down";
 				moveBackward = true;
 				break;
 
 			case 39: // right
 			case 68: // d
+				lastKey = "right";
 				moveRight = true;
 				break;
 
@@ -88,21 +94,49 @@ THREE.PointerLockControls = function ( camera ) {
 			case 38: // up
 			case 87: // w
 				moveForward = false;
+				if (moveBackward) {
+					lastKey = "down";
+				} else if (moveRight) {
+					lastKey = "right";
+				} else if (moveLeft) {
+					lastKey = "left";
+				}
 				break;
 
 			case 37: // left
 			case 65: // a
 				moveLeft = false;
+				if (moveForward) {
+					lastKey = "up";
+				} else if (moveRight) {
+					lastKey = "right";
+				} else if (moveBackward) {
+					lastKey = "down";
+				}
 				break;
 
 			case 40: // down
 			case 83: // s
 				moveBackward = false;
+				if (moveForward) {
+					lastKey = "up";
+				} else if (moveRight) {
+					lastKey = "right";
+				} else if (moveLeft) {
+					lastKey = "left";
+				}
 				break;
 
 			case 39: // right
 			case 68: // d
 				moveRight = false;
+				if (moveForward) {
+					lastKey = "up";
+				} else if (moveBackward) {
+					lastKey = "down";
+				} else if (moveLeft) {
+					lastKey = "left";
+				}
 				break;
 
 		}
@@ -154,16 +188,18 @@ THREE.PointerLockControls = function ( camera ) {
 		var time = performance.now();
 		var delta = ( time - prevTime ) / 1000;
 
-		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
+		// velocity.x -= velocity.x * 10.0 * delta;
+		// velocity.z -= velocity.z * 10.0 * delta;
+		velocity.z = 0;
+		velocity.x = 0;
 
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-		if ( moveForward && !lockMoveForward ) velocity.z -= 400 * delta;
-		if ( moveBackward && !lockMoveBackward ) velocity.z += 400 * delta;
+		if ( moveForward && !lockMoveForward ) velocity.z -= 2000 * delta;
+		if ( moveBackward && !lockMoveBackward ) velocity.z += 2000 * delta;
 		
-		if ( moveLeft && !lockMoveLeft ) velocity.x -= 400 * delta;
-		if ( moveRight && !lockMoveRight ) velocity.x += 400 * delta;
+		if ( moveLeft && !lockMoveLeft ) velocity.x -= 2000 * delta;
+		if ( moveRight && !lockMoveRight ) velocity.x += 2000 * delta;
 
 		if ( isOnObject === true ) {
 
@@ -220,5 +256,9 @@ THREE.PointerLockControls = function ( camera ) {
 	this.lockMoveRight = function(boolean){
 		lockMoveRight = boolean;
 	};
+
+	this.getLastKey = function() {
+		return lastKey;
+	}
 
 };

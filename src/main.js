@@ -7,7 +7,12 @@ var collidableMeshList = [];
 var cubes = new Array();
 var time = Date.now();
 
-var PlayerCube;
+var cubeGeometry = new THREE.CubeGeometry(10,10,10);
+var material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+PlayerCube = new THREE.Mesh( cubeGeometry, material );
+PlayerCube.position.set(0,0,0);
+
+var charposition;
 
 
 function init() {
@@ -97,40 +102,14 @@ function init() {
 
 	}
 
-	Physijs.scripts.worker = '../Physijs/physijs_worker.js';
-	Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
-	// scene = new THREE.Scene();
-	// scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+	scene = new THREE.Scene();
+	scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 	// scene.updateMatrixWorld(true);
 
-	scene = new Physijs.Scene;
-		scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
-		scene.addEventListener(
-			'update',
-			function() {
-				scene.simulate( undefined, 1 );
-			}
-		);
-
-	var playerCubeMaterial = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
-		.8, // high friction
-		.4 // low restitution
-	);
-	playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
-	playerCubeMaterial.map.repeat.set(3,3);
-
-	PlayerCube = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(20,10,20),
-		playerCubeMaterial,
-		0
-	);
-
-	scene.add(PlayerCube)
-	PlayerCube.position.set(0,0,0);
+	scene.add(PlayerCube);
 
 	var loader = new THREE.ColladaLoader();
 	loader.load('../models/housetest.dae', function (result) {
@@ -171,41 +150,17 @@ function init() {
 	// Add ADDS
 	buildADDS();
 
-
-	// Materials
-	ground_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
-		.8, // high friction
-		.4 // low restitution
-	);
-	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	ground_material.map.repeat.set( 3, 3 );
-	
-	// Ground
-	ground = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(193, 40, 2),
-		ground_material,
-		0 // mass
-	);
-	ground.receiveShadow = true;
-	scene.add( ground );
-	ground.position.x = -150;
-	ground.position.z = -235;
-	ground.position.y = 20;
-
 	// left fence
-	// geometry = new THREE.CubeGeometry(193,40,2);
-	// material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
-	// meshLeft = new THREE.Mesh(geometry,material);
-	// meshLeft.receiveShadow = true;
-	// meshLeft.castShadow = true;
-	// scene.add(meshLeft);
-	// collidableMeshList.push(meshLeft);
-	// meshLeft.position.x = -150;
-	// meshLeft.position.z = -235;
-	// meshLeft.position.y = 20;
-
-
+	geometry = new THREE.CubeGeometry(193,40,2);
+	material = new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading});
+	meshLeft = new THREE.Mesh(geometry,material);
+	meshLeft.receiveShadow = true;
+	meshLeft.castShadow = true;
+	scene.add(meshLeft);
+	collidableMeshList.push(meshLeft);
+	meshLeft.position.x = -150;
+	meshLeft.position.z = -235;
+	meshLeft.position.y = 20;
 
 	renderer = new THREE.WebGLRenderer({clearAlpha: 1});
 	renderer.setClearColor( 0x000000 );
@@ -293,7 +248,7 @@ function animate() {
 		}
 	}
 
-	// charposition = controls.getObject().position;
+	charposition = controls.getObject().position;
 	// console.log(charposition);
 	update();
 
@@ -309,38 +264,79 @@ function randomFairColor() {
 	return r + g + b;
 }
 
-// function lockDirection() {
-// 	if (controls.moveForward()) {
-// 		controls.lockMoveForward(true);
-// 	}
-// 	else if (controls.moveBackward()) {
-// 		controls.lockMoveBackward(true);
-// 	}
-// 	else if (controls.moveLeft()) {
-// 		controls.lockMoveLeft(true);
-// 		// controls.getObject().onKeyDown(65);
-// 	}
-// 	else if (controls.moveRight()) {
-// 		controls.lockMoveRight(true);
-// 		// for (var i = 0; i < 10000; i++) {
-// 			// controls.getObject().onKeyDown(83);
-// 		// }
-// 	}
-// 	else {
-// 		unlockAllDirection();
-// 	}
-// }
-// 
-// function unlockAllDirection(){
-// 	controls.lockMoveForward(false);
-// 	controls.lockMoveBackward(false);
-// 	controls.lockMoveLeft(false);
-// 	controls.lockMoveRight(false);
-// }
+function lockDirection() {
+	var f_vector = new THREE.Vector3( 0, 0, -1 );
+	var b_vector = new THREE.Vector3( 0, 0, 1 );
+	var l_vector = new THREE.Vector3( -1, 0, 0 );
+	var r_vector = new THREE.Vector3( 1, 0, 0 );
+
+	var left = new THREE.Vector3( controls.getObject().position.x-halfSize, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z );
+	var right = new THREE.Vector3( controls.getObject().position.x+halfSize, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z );
+	var front = new THREE.Vector3( controls.getObject().position.x, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z+halfSize );
+	var back = new THREE.Vector3( controls.getObject().position.x, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z-halfSize );
+	// console.log("Locking " + controls.getLastKey());
+	if (controls.getLastKey() == "up") {
+		controls.lockMoveForward(true);
+		var left_ray = new THREE.Raycaster( left, f_vector );
+		var left_intersects = left_ray.intersectObjects( collidableMeshList );
+		if ( left_intersects.length > 0 && left_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = left_intersects[0].point.z+halfSize+1;
+		}
+		var right_ray = new THREE.Raycaster( right, f_vector );
+		var right_intersects = right_ray.intersectObjects( collidableMeshList );
+		if ( right_intersects.length > 0 && right_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = right_intersects[0].point.z+halfSize+1;
+		}
+	} else if (controls.getLastKey() == "down") {
+		controls.lockMoveBackward(true);
+		var left_ray = new THREE.Raycaster( left, b_vector );
+		var left_intersects = left_ray.intersectObjects( collidableMeshList );
+		if ( left_intersects.length > 0 && left_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = left_intersects[0].point.z-halfSize-1;
+		}
+		var right_ray = new THREE.Raycaster( right, b_vector );
+		var right_intersects = right_ray.intersectObjects( collidableMeshList );
+		if ( right_intersects.length > 0 && right_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = right_intersects[0].point.z-halfSize-1;
+		}
+	} else if (controls.getLastKey() == "left") {
+		controls.lockMoveLeft(true);
+		var back_ray = new THREE.Raycaster( back, r_vector );
+		var back_intersects = back_ray.intersectObjects( collidableMeshList );
+		if ( back_intersects.length > 0 && back_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = back_intersects[0].point.x-halfSize-1;
+		}
+		var front_ray = new THREE.Raycaster( front, r_vector );
+		var front_intersects = front_ray.intersectObjects( collidableMeshList );
+		if ( front_intersects.length > 0 && front_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = front_intersects[0].point.x-halfSize-1;
+		}
+	} else if (controls.getLastKey() == "right") {
+		controls.lockMoveRight(true);
+		var back_ray = new THREE.Raycaster( back, l_vector );
+		var back_intersects = back_ray.intersectObjects( collidableMeshList );
+		if ( back_intersects.length > 0 && back_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = back_intersects[0].point.x+halfSize+1;
+		}
+		var front_ray = new THREE.Raycaster( front, l_vector );
+		var front_intersects = front_ray.intersectObjects( collidableMeshList );
+		if ( front_intersects.length > 0 && front_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = front_intersects[0].point.x+halfSize+1;
+		}
+	}
+
+}
+
+function unlockAllDirection(){
+	controls.lockMoveForward(false);
+	controls.lockMoveBackward(false);
+	controls.lockMoveLeft(false);
+	controls.lockMoveRight(false);
+}
 
 function update()
 	{
-	// unlockAllDirection();
+	unlockAllDirection();
 
 	// collision detection:
 	//   determines if any of the rays from the cube's origin to each vertex
@@ -349,20 +345,88 @@ function update()
 	//		for example, new THREE.CubeGeometry( 64, 64, 64, 8, 8, 8, wireMaterial )
 	//   HOWEVER: when the origin of the ray is within the target mesh, collisions do not occur
 	PlayerCube.position.set(controls.getObject().position.x, 0, controls.getObject().position.z);
-	// var originPoint = PlayerCube.position.clone();
-	// var collided = false;
+	var originPoint = PlayerCube.position.clone();
+	var collided = false;
 	
-	// for (var vertexIndex = 0; vertexIndex < PlayerCube.geometry.vertices.length; vertexIndex++)
-	// {		
-	// 	var localVertex = PlayerCube.geometry.vertices[vertexIndex].clone();
-	// 	var globalVertex = localVertex.applyMatrix4( PlayerCube.matrix );
-	// 	var directionVector = globalVertex.sub( PlayerCube.position );
+	for (var vertexIndex = 0; vertexIndex < PlayerCube.geometry.vertices.length; vertexIndex++)
+	{		
+		var localVertex = PlayerCube.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( PlayerCube.matrix );
+		var directionVector = globalVertex.sub( PlayerCube.position );
 		
-	// 	var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-	// 	var collisionResults = ray.intersectObjects( collidableMeshList );
-	// 	if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20)
-	// 		controls.getObject().position.set(charposition.x, charposition.y, charposition.z);
-	// }	
+		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		var collisionResults = ray.intersectObjects( collidableMeshList );
+		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() + 20) {
+			lockDirection();
 
+		}
+	}	
+	/*
+	var f_vector = new THREE.Vector3( 0, 0, -1 );
+	var b_vector = new THREE.Vector3( 0, 0, 1 );
+	var l_vector = new THREE.Vector3( -1, 0, 0 );
+	var r_vector = new THREE.Vector3( 1, 0, 0 );
+
+	var left = new THREE.Vector3( controls.getObject().position.x-halfSize, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z );
+	var right = new THREE.Vector3( controls.getObject().position.x+halfSize, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z );
+	var front = new THREE.Vector3( controls.getObject().position.x, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z+halfSize );
+	var back = new THREE.Vector3( controls.getObject().position.x, controls.getObject().position.y-nearHalfSize, controls.getObject().position.z-halfSize );
+
+	// front
+	if (controls.getLastKey() == "up") {
+		console.log("GO");
+		var left_ray = new THREE.Raycaster( left, f_vector );
+		var left_intersects = left_ray.intersectObjects( collidableMeshList );
+		if ( left_intersects.length > 0 && left_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = left_intersects[0].point.z+halfSize+1;
+		}
+		var right_ray = new THREE.Raycaster( right, f_vector );
+		var right_intersects = right_ray.intersectObjects( collidableMeshList );
+		if ( right_intersects.length > 0 && right_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = right_intersects[0].point.z+halfSize+1;
+		}
+	}
+	// back
+	if (controls.moveBackward) {
+		var left_ray = new THREE.Raycaster( left, b_vector );
+		var left_intersects = left_ray.intersectObjects( collidableMeshList );
+		if ( left_intersects.length > 0 && left_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = left_intersects[0].point.z-halfSize-1;
+		}
+		var right_ray = new THREE.Raycaster( right, b_vector );
+		var right_intersects = right_ray.intersectObjects( collidableMeshList );
+		if ( right_intersects.length > 0 && right_intersects[0].distance < halfSize ) {
+			controls.getObject().position.z = right_intersects[0].point.z-halfSize-1;
+		}
+	}				
+	// right
+	if (controls.moveRight) {
+		var back_ray = new THREE.Raycaster( back, r_vector );
+		var back_intersects = back_ray.intersectObjects( collidableMeshList );
+		if ( back_intersects.length > 0 && back_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = back_intersects[0].point.x-halfSize-1;
+		}
+		var front_ray = new THREE.Raycaster( front, r_vector );
+		var front_intersects = front_ray.intersectObjects( collidableMeshList );
+		if ( front_intersects.length > 0 && front_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = front_intersects[0].point.x-halfSize-1;
+		}
+	}
+	// left
+	if (controls.moveLeft) {
+		var back_ray = new THREE.Raycaster( back, l_vector );
+		var back_intersects = back_ray.intersectObjects( collidableMeshList );
+		if ( back_intersects.length > 0 && back_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = back_intersects[0].point.x+halfSize+1;
+		}
+		var front_ray = new THREE.Raycaster( front, l_vector );
+		var front_intersects = front_ray.intersectObjects( collidableMeshList );
+		if ( front_intersects.length > 0 && front_intersects[0].distance < halfSize ) {
+			controls.getObject().position.x = front_intersects[0].point.x+halfSize+1;
+			}
+	}
+	controls.getObject().updateMatrix();
+	// collideMesh.position.y += 100;	
+	*/
 	controls.update();
 }
