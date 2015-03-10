@@ -265,6 +265,10 @@ function randomFairColor() {
 }
 
 function lockDirection() {
+
+	var halfSize = 50;
+	var nearHalfSize = halfSize-5;
+	
 	var f_vector = new THREE.Vector3( 0, 0, -1 );
 	var b_vector = new THREE.Vector3( 0, 0, 1 );
 	var l_vector = new THREE.Vector3( -1, 0, 0 );
