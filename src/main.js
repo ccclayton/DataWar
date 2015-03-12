@@ -53,7 +53,7 @@ function init() {
  PlayerCube = new Physijs.SphereMesh(
  	new THREE.SphereGeometry(10),
  	playerCubeMaterial,
- 	40
+ 	0
  	);
 
  
@@ -115,7 +115,7 @@ function init() {
 		Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0.3
 			),
-			30
+			1000000
 		);
 	
 	scene.add(fence);
