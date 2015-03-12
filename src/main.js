@@ -2,7 +2,7 @@
 
 var renderer, scene, camera, cube1, cube2;
 
-var geometry, material, mesh, fence, cube1, cube2, ground,PlayerCube;
+var geometry, material, mesh, fence, cube1, cube2, ground,PlayerCube, yawObject;
 var controls;
 var materials = [];
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
@@ -30,42 +30,69 @@ function init() {
 	// renderer.shadowMapSoft = true;
  //  document.body.appendChild(renderer.domElement);
 
- scene = new Physijs.Scene;
- scene.setGravity(
- 	new THREE.Vector3(0,-250,0)
- 	);
+	 scene = new Physijs.Scene;
+	 scene.setGravity(
+	 	new THREE.Vector3(0,-250,0)
+	 	);
 
 
- camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
- camera.position.z = 100;
- scene.add(camera);
+	 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+	 camera.position.z = 100;
+	 scene.add(camera);
 
 
+	// var playerCubeMaterial = Physijs.createMaterial(
+	// 	new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
+	// 	0.2, //friction
+	// 	0.1  //bounceness
+	// 	);
+	// playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
+	// playerCubeMaterial.visible = false;
 
- var playerCubeMaterial = Physijs.createMaterial(
- 	new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
- 	0.2,
- 	0.1 
- 	);
- playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
- playerCubeMaterial.visible = false;
+	// yawObject = new Physijs.SphereMesh(
+	// 	new THREE.SphereGeometry(10),
+	// 	playerCubeMaterial,
+	// 	0
+	// 	);
 
- PlayerCube = new Physijs.SphereMesh(
- 	new THREE.SphereGeometry(10),
- 	playerCubeMaterial,
- 	0
- 	);
+	yawObject = new Physijs.BoxMesh(
+ 		new THREE.CubeGeometry(20, 20, 20),
+ 		Physijs.createMaterial(
+ 			new THREE.MeshNormalMaterial(), 
+ 			0.2, 
+ 			0.9
+ 			)
+ 		);
 
- 
- scene.add(PlayerCube)
- PlayerCube.position.set(-50,0,-70);
+	scene.add(yawObject);
+	yawObject.position.set(0,0,150);
+	// window.PlayerCube = pitchObject;
+	yawObject.addEventListener('collision', function(object) {
+ 		console.log("Object " + this.id + " collided with " + object.id);
+ 		if (object.id == fence.id) {
+ 			console.log("PLAYER HIT WALL");
+ 		}
+ 	});
+
+	 // var playerCubeMaterial = Physijs.createMaterial(
+	 // 	new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
+	 // 	0.2,
+	 // 	0.1 
+	 // 	);
+	 // playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
+	 // playerCubeMaterial.visible = false;
+
+	 // PlayerCube = new Physijs.SphereMesh(
+	 // 	new THREE.SphereGeometry(10),
+	 // 	playerCubeMaterial,
+	 // 	0
+	 // 	);
+
+	 
+	 // scene.add(PlayerCube)
+	 // PlayerCube.position.set(-50,0,-70);
 
 
- 	//controls
- 	controls = new THREE.PointerLockControls(camera);
- 	scene.add( controls.getObject() );
- 	camera.position.set(0,10,0);
- 	console.log("Player cube: " + PlayerCube.id);
 
 
  	cube1 = new Physijs.BoxMesh(
@@ -92,10 +119,18 @@ function init() {
  		console.log("Object " + this.id + " collided with " + object.id);
  	});
 
+
+
+ 	//controls
+ 	controls = new THREE.PointerLockControls(yawObject, camera);
+ 	scene.add( controls.getObject() );
+ 	camera.position.set(0,10,0);
+ 	// console.log("Player cube: " + PlayerCube.id);
+
  	// Ground
 		ground_material = Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
-			.8, // high friction
+			.4, // high friction
 			.3 // low restitution
 		);
 		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
@@ -122,13 +157,14 @@ function init() {
 	fence.position.x = -150;
 	fence.position.z = -235;
 	fence.position.y = 20;
+	fence.__dirtyPosition = true;
 
-	PlayerCube.addEventListener('collision', function(object) {
- 		console.log("Object " + this.id + " collided with " + object.id);
- 		if (object.id == fence.id) {
- 			console.log("PLAYER HIT WALL");
- 		}
- 	});
+	// PlayerCube.addEventListener('collision', function(object) {
+ // 		console.log("Object " + this.id + " collided with " + object.id);
+ // 		if (object.id == fence.id) {
+ // 			console.log("PLAYER HIT WALL");
+ // 		}
+ // 	});
 
 	var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
 	light.position.set( 0.5, 1, 0.75 );
@@ -185,18 +221,21 @@ function init() {
 
 function animate() {
 	// mesh.__dirtyPosition = true;
-	ground.__dirtyPosition = true;
-	fence.__dirtyPosition = true;
-	cube2.__dirtyPosition = true;
-	cube1.__dirtyPosition = true;
-	PlayerCube.__dirtyPosition = true;
-	PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
+	// yawObject.__dirtyPosition = true;
+	// PlayerCube.__dirtyPosition = true;
+	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
 
 	controls.update();
 	animate_sound();
 	requestAnimationFrame(animate);
-  scene.simulate(); // run physics
-  render();
+
+	// ground.__dirtyPosition = true;
+	// fence.__dirtyPosition = true;
+	// cube2.__dirtyPosition = true;
+	// cube1.__dirtyPosition = true;
+
+	scene.simulate(); // run physics
+	render();
 }
 
 function render() {
