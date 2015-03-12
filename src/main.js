@@ -32,7 +32,7 @@ function init() {
 
  scene = new Physijs.Scene;
  scene.setGravity(
- 	new THREE.Vector3(0,-200,0)
+ 	new THREE.Vector3(0,-250,0)
  	);
 
 
@@ -45,16 +45,15 @@ function init() {
  var playerCubeMaterial = Physijs.createMaterial(
  	new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
  	0.2,
- 	0.9 
+ 	0.1 
  	);
  playerCubeMaterial.map.wrapS = playerCubeMaterial.map.wrapT = THREE.RepeatWrapping;
- playerCubeMaterial.map.repeat.set(3,3);
  playerCubeMaterial.visible = false;
 
- PlayerCube = new Physijs.BoxMesh(
- 	new THREE.CubeGeometry(20,10,20),
+ PlayerCube = new Physijs.SphereMesh(
+ 	new THREE.SphereGeometry(10),
  	playerCubeMaterial,
- 	0
+ 	40
  	);
 
  
@@ -116,7 +115,7 @@ function init() {
 		Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0.3
 			),
-			100
+			30
 		);
 	
 	scene.add(fence);
@@ -191,7 +190,7 @@ function animate() {
 	cube2.__dirtyPosition = true;
 	cube1.__dirtyPosition = true;
 	PlayerCube.__dirtyPosition = true;
-	PlayerCube.position.set(controls.getObject().position.x, 0, controls.getObject().position.z);
+	PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
 
 	controls.update();
 	animate_sound();
