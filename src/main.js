@@ -32,7 +32,7 @@ function init() {
 
  scene = new Physijs.Scene;
  scene.setGravity(
- 	new THREE.Vector3(0,0,0)
+ 	new THREE.Vector3(0,-200,0)
  	);
 
 
@@ -68,9 +68,6 @@ function init() {
  	camera.position.set(0,10,0);
  	console.log("Player cube: " + PlayerCube.id);
 
- 	PlayerCube.addEventListener('collision', function(object) {
- 		console.log("Object " + this.id + " collided with " + object.id);
- 	});
 
  	cube1 = new Physijs.BoxMesh(
  		new THREE.CubeGeometry(10, 10, 10),
@@ -96,26 +93,43 @@ function init() {
  		console.log("Object " + this.id + " collided with " + object.id);
  	});
 
- 	var geometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
- 	geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
-
- 	material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
-
- 	mesh = new THREE.Mesh( geometry, material );
-	//mesh.rotation.y = Math.PI/2;
-	scene.add( mesh );
+ 	// Ground
+		ground_material = Physijs.createMaterial(
+			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
+			.8, // high friction
+			.3 // low restitution
+		);
+		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+		ground_material.map.repeat.set( 10, 10);
+		
+		ground = new Physijs.BoxMesh(
+			new THREE.CubeGeometry(1000, 1, 1000),
+			ground_material,
+			0 // mass
+		);
+		ground.receiveShadow = true;
+		ground.position.setY(-1);
+		scene.add( ground );
 
 	fence = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(193, 40, 2),
 		Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.2, 0.9
-			)
+			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0.3
+			),
+			100
 		);
 	
 	scene.add(fence);
 	fence.position.x = -150;
 	fence.position.z = -235;
 	fence.position.y = 20;
+
+	PlayerCube.addEventListener('collision', function(object) {
+ 		console.log("Object " + this.id + " collided with " + object.id);
+ 		if (object.id == fence.id) {
+ 			console.log("PLAYER HIT WALL");
+ 		}
+ 	});
 
 	var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
 	light.position.set( 0.5, 1, 0.75 );
@@ -171,8 +185,8 @@ function init() {
 }
 
 function animate() {
-	mesh.__dirtyPosition = true;
-	// ground.__dirtyPosition = true;
+	// mesh.__dirtyPosition = true;
+	ground.__dirtyPosition = true;
 	fence.__dirtyPosition = true;
 	cube2.__dirtyPosition = true;
 	cube1.__dirtyPosition = true;
