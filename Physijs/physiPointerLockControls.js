@@ -24,15 +24,9 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	var rotateX=0;
 	var rotateY=0;
 
-	var lockMoveForward = false;
-	var lockMoveBackward = false;
-	var lockMoveLeft = false;
-	var lockMoveRight = false;
-
 	var isOnObject = false;
 	var canJump = false;
 
-	var lastKey = null;
 
 	var prevTime = performance.now();
 
@@ -57,31 +51,26 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	};
 
 	var onKeyDown = function ( event ) {
-
-		console.log(event.keyCode);
+		// console.log(event.keyCode);
+		pitchObject.getDirection;
 		switch ( event.keyCode ) {
-
 			case 38: // up
 			case 87: // w
-				lastKey = "up";
 				moveForward = true;
 				break;
 
 			case 37: // left
 			case 65: // a
-				lastKey = "left";
 				moveLeft = true;
 				break;
 
 			case 40: // down
 			case 83: // s
-				lastKey = "down";
 				moveBackward = true;
 				break;
 
 			case 39: // right
 			case 68: // d
-				lastKey = "right";
 				moveRight = true;
 				break;
 
@@ -104,49 +93,21 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 			case 38: // up
 			case 87: // w
 				moveForward = false;
-				if (moveBackward) {
-					lastKey = "down";
-				} else if (moveRight) {
-					lastKey = "right";
-				} else if (moveLeft) {
-					lastKey = "left";
-				}
 				break;
 
 			case 37: // left
 			case 65: // a
 				moveLeft = false;
-				if (moveForward) {
-					lastKey = "up";
-				} else if (moveRight) {
-					lastKey = "right";
-				} else if (moveBackward) {
-					lastKey = "down";
-				}
 				break;
 
 			case 40: // down
 			case 83: // s
 				moveBackward = false;
-				if (moveForward) {
-					lastKey = "up";
-				} else if (moveRight) {
-					lastKey = "right";
-				} else if (moveLeft) {
-					lastKey = "left";
-				}
 				break;
 
 			case 39: // right
 			case 68: // d
 				moveRight = false;
-				if (moveForward) {
-					lastKey = "up";
-				} else if (moveBackward) {
-					lastKey = "down";
-				} else if (moveLeft) {
-					lastKey = "left";
-				}
 				break;
 
 		}
@@ -185,6 +146,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
 
 			v.copy( direction ).applyEuler( rotation );
+			console.log(v);
 
 			return v;
 
@@ -204,13 +166,13 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 		// velocity.z = 0;
 		// velocity.x = 0;
 
-		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+		// velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-		if ( moveForward && !lockMoveForward ) velocity.z -= 2000 * delta;
-		if ( moveBackward && !lockMoveBackward ) velocity.z += 2000 * delta;
+		if ( moveForward ) velocity.z -= 500 * delta;
+		if ( moveBackward ) velocity.z += 500 * delta;
 		
-		if ( moveLeft && !lockMoveLeft ) velocity.x -= 2000 * delta;
-		if ( moveRight && !lockMoveRight ) velocity.x += 2000 * delta;
+		if ( moveLeft ) velocity.x -= 500 * delta;
+		if ( moveRight ) velocity.x += 500 * delta;
 
 		if ( isOnObject === true ) {
 
@@ -225,10 +187,10 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 			doRotate = false;
 		}
 
-		// yawObject.translateX( velocity.x * delta );
-		// yawObject.translateY( velocity.y * delta ); 
-		// yawObject.translateZ( velocity.z * delta );
-		// yawObject.__dirtyPosition = true;
+		yawObject.translateX( velocity.x * delta );
+		yawObject.translateY( velocity.y * delta ); 
+		yawObject.translateZ( velocity.z * delta );
+		yawObject.__dirtyPosition = true;
 
 		// if ( yawObject.position.y < 10 ) {
 
@@ -259,25 +221,4 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	this.moveBackward = function() {
 		return moveBackward;
 	};
-	
-	this.lockMoveForward = function(boolean){
-		lockMoveForward = boolean;
-	};
-	
-	this.lockMoveBackward = function(boolean){
-		lockMoveBackward = boolean;
-	};
-	
-	this.lockMoveLeft = function(boolean){
-		lockMoveLeft = boolean;
-	};
-	
-	this.lockMoveRight = function(boolean){
-		lockMoveRight = boolean;
-	};
-
-	this.getLastKey = function() {
-		return lastKey;
-	}
-
 };

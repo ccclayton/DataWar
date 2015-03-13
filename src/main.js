@@ -6,7 +6,6 @@ var geometry, material, mesh, fence, cube1, cube2, ground,PlayerCube, yawObject;
 var controls;
 var materials = [];
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
-//  var collidableMeshList = [];
 var cubes = new Array();
 
 init();
@@ -65,7 +64,7 @@ function init() {
  		);
 
 	scene.add(yawObject);
-	yawObject.position.set(0,0,150);
+	yawObject.position.set(0,5,150);
 	// window.PlayerCube = pitchObject;
 	yawObject.addEventListener('collision', function(object) {
  		console.log("Object " + this.id + " collided with " + object.id);
