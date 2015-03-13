@@ -20,6 +20,9 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	var moveBackward = false;
 	var moveLeft = false;
 	var moveRight = false;
+	var doRotate = false;
+	var rotateX=0;
+	var rotateY=0;
 
 	var lockMoveForward = false;
 	var lockMoveBackward = false;
@@ -45,11 +48,10 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
 		// yawObject.rotation.y -= movementX * 0.002;
-		console.log("rotating Y "+(-movementX * 0.002));
-		yawObject.rotateY(-movementX * 0.002);
-		yawObject._dirtyRotation = true;
-		pitchObject.rotation.x -= movementY * 0.002;
+		rotateY = -movementX * 0.002;
+		rotateX = -movementY * 0.002;
 
+		doRotate = true;
 		// pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
 	};
@@ -214,6 +216,13 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 			velocity.y = Math.max( 0, velocity.y );
 
+		}
+		if(doRotate){
+			// console.log("rotating Y "+rotateY);
+			yawObject.rotateY(rotateY);
+			yawObject.__dirtyRotation = true;
+			pitchObject.rotation.x += rotateX;
+			doRotate = false;
 		}
 
 		// yawObject.translateX( velocity.x * delta );
