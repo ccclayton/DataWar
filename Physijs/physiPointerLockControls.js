@@ -161,8 +161,8 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 		var time = performance.now();
 		var delta = ( time - prevTime ) / 1000;
 
-		velocity.x -= velocity.x * 5.0 * delta;
-		velocity.z -= velocity.z * 5.0 * delta;
+		velocity.x -= velocity.x * 10.0 * delta;
+		velocity.z -= velocity.z * 10.0 * delta;
 		// velocity.z = 0;
 		// velocity.x = 0;
 

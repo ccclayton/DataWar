@@ -55,14 +55,15 @@ function init() {
 	// 	);
 
 	yawObject = new Physijs.BoxMesh(
- 		new THREE.CubeGeometry(20, 20, 20),
+ 		new THREE.CubeGeometry(20, 10, 20),
  		Physijs.createMaterial(
  			new THREE.MeshNormalMaterial(), 
- 			0.2, 
- 			0.9
- 			)
+ 			1, 
+ 			0.1
+ 			),
+ 		1000
  		);
-
+	yawObject.visible = false;
 	scene.add(yawObject);
 	yawObject.position.set(0,5,150);
 	// window.PlayerCube = pitchObject;
@@ -129,7 +130,7 @@ function init() {
  	// Ground
 		ground_material = Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
-			.4, // high friction
+			.8, // high friction
 			.3 // low restitution
 		);
 		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
@@ -147,7 +148,7 @@ function init() {
 	fence = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(193, 40, 2),
 		Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0.3
+			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
 			),
 			1000000
 		);
