@@ -59,13 +59,13 @@ function init() {
  		Physijs.createMaterial(
  			new THREE.MeshNormalMaterial(), 
  			1, 
- 			0.1
+ 			.1
  			),
  		1000
  		);
 	yawObject.visible = false;
 	scene.add(yawObject);
-	yawObject.position.set(0,5,150);
+	yawObject.position.set(0,10,150);
 	// window.PlayerCube = pitchObject;
 	yawObject.addEventListener('collision', function(object) {
  		console.log("Object " + this.id + " collided with " + object.id);
