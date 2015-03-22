@@ -9,14 +9,18 @@
 
 	</head>
 	<body>
-		<script src ="../threejs.r65/build/three.js"></script>
+		<script src ="../threejs.r70/build/three.js"></script>
 		<script src = "../Physijs/physi.js"></script>
 		<script src = "../Physijs/physiPointerLockControls.js"></script>
 		<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
-		<script src ="../threejs.r65/src/loaders/JSONLoader.js"> </script>
-		<script src ="../threejs.r65/examples/js/loaders/ColladaLoader.js"></script>
+		<script src ="../threejs.r70/src/loaders/JSONLoader.js"> </script>
+		<script src ="../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
 		<script src = "../src/jquery-2.0.0.min.js"> </script>
 		<script src = "../src/audio.js"> </script>
+		<script src = "../threejs.r70/examples/js/Mirror.js"></script>
+		<script src = "../threejs.r70/examples/js/WaterShader.js"></script>
+
+		
 		
 		
 
@@ -33,14 +37,14 @@
 		<script type="text/javascript">
 			var renderer, scene, camera, cube1, cube2;
 
- var geometry, material, mesh;
- var controls;
- var materials = [];
- var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
- var collidableMeshList = [];
-  var cubes = new Array();
-  var blocker = document.getElementById( 'blocker' );
-	var instructions = document.getElementById( 'instructions' );
+			var geometry, material, mesh;
+			var controls;
+			var materials = [];
+			var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
+			var collidableMeshList = [];
+			var cubes = new Array();
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'instructions' );
 
 	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
@@ -118,12 +122,12 @@
 
 		}, false );
 
-	} else {
+} else {
 
-		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
-	}
-		</script> 
-		<script src = "main.js"> </script>
-	</body>
+}
+</script> 
+<script src = "main.js"> </script>
+</body>
 </html>

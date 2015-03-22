@@ -1,22 +1,37 @@
 //------------LATEST REVISION:
 
-var renderer, scene, camera, cube1, cube2;
+var renderer, scene, camera, cube1, cube2, directionalLight, water;
 
-var geometry, material, mesh, fence, cube1, cube2, ground,PlayerCube, yawObject;
+var geometry, material, mesh, fence, cube1, cube2, ground, PlayerCube, yawObject;
 var controls;
 var materials = [];
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
+var waterNormals;
+
+var parameters = {
+	width: 2000,
+	height: 2000,
+	widthSegments: 250,
+	heightSegments: 250,
+	depth: 1500,
+	param: 4,
+	filterparam: 1
+};	
+
+
 
 init();
 animate();
-//});
+
 
 function init() {
 	
 	console.log("Beginning of Init..");
 	Physijs.scripts.worker = '../Physijs/physijs_worker.js';
 	Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
+
+
 
 	
   // renderer = new THREE.WebGLRenderer();
@@ -29,15 +44,22 @@ function init() {
 	// renderer.shadowMapSoft = true;
  //  document.body.appendChild(renderer.domElement);
 
-	 scene = new Physijs.Scene;
-	 scene.setGravity(
-	 	new THREE.Vector3(0,-250,0)
-	 	);
+ scene = new Physijs.Scene;
+ scene.setGravity(
+ 	new THREE.Vector3(0,-250,0)
+ 	);
 
 
-	 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-	 camera.position.z = 100;
-	 scene.add(camera);
+ camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+ camera.position.z = 100;
+ scene.add(camera);
+
+ directionalLight = new THREE.DirectionalLight( 0xffff55, 1 );
+ directionalLight.position.set( - 1, 0.4, - 1 );
+ scene.add( directionalLight );
+
+ waterNormals = new THREE.ImageUtils.loadTexture( '../threejs.r65/examples/textures/waternormals.jpg' );
+ waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping; 
 
 
 	// var playerCubeMaterial = Physijs.createMaterial(
@@ -54,25 +76,25 @@ function init() {
 	// 	0
 	// 	);
 
-	yawObject = new Physijs.BoxMesh(
- 		new THREE.CubeGeometry(20, 10, 20),
- 		Physijs.createMaterial(
- 			new THREE.MeshNormalMaterial(), 
- 			1, 
- 			.1
- 			),
- 		1000
- 		);
-	yawObject.visible = false;
-	scene.add(yawObject);
-	yawObject.position.set(0,10,150);
+yawObject = new Physijs.BoxMesh(
+	new THREE.CubeGeometry(20, 10, 20),
+	Physijs.createMaterial(
+		new THREE.MeshNormalMaterial(), 
+		1, 
+		.1
+		),
+	1000
+	);
+yawObject.visible = false;
+scene.add(yawObject);
+yawObject.position.set(0,10,150);
 	// window.PlayerCube = pitchObject;
 	yawObject.addEventListener('collision', function(object) {
- 		console.log("Object " + this.id + " collided with " + object.id);
- 		if (object.id == fence.id) {
- 			console.log("PLAYER HIT WALL");
- 		}
- 	});
+		console.log("Object " + this.id + " collided with " + object.id);
+		if (object.id == fence.id) {
+			console.log("PLAYER HIT WALL");
+		}
+	});
 
 	 // var playerCubeMaterial = Physijs.createMaterial(
 	 // 	new THREE.MeshLambertMaterial({map:boxText, shading: THREE.FlatShading}),
@@ -88,36 +110,36 @@ function init() {
 	 // 	0
 	 // 	);
 
-	 
+
 	 // scene.add(PlayerCube)
 	 // PlayerCube.position.set(-50,0,-70);
 
 
 
 
- 	cube1 = new Physijs.BoxMesh(
- 		new THREE.CubeGeometry(10, 10, 10),
- 		Physijs.createMaterial(
- 			new THREE.MeshNormalMaterial(), 0.2, 0.9
- 			)
- 		);
- 	cube1.position.x = -50;
- 	scene.add(cube1);
- 	console.log("cube 1: " + cube1.id);
+	 cube1 = new Physijs.BoxMesh(
+	 	new THREE.CubeGeometry(10, 10, 10),
+	 	Physijs.createMaterial(
+	 		new THREE.MeshNormalMaterial(), 0.2, 0.9
+	 		)
+	 	);
+	 cube1.position.x = -50;
+	 scene.add(cube1);
+	 console.log("cube 1: " + cube1.id);
 
- 	cube2 = new Physijs.BoxMesh(
- 		new THREE.CubeGeometry(10, 10, 10),
- 		Physijs.createMaterial(
- 			new THREE.MeshNormalMaterial(), 0.2, 0.9
- 			)
- 		);
- 	cube2.position.x = 50;
- 	scene.add(cube2);
- 	console.log("cube 2: " + cube2.id);
+	 cube2 = new Physijs.BoxMesh(
+	 	new THREE.CubeGeometry(10, 10, 10),
+	 	Physijs.createMaterial(
+	 		new THREE.MeshNormalMaterial(), 0.2, 0.9
+	 		)
+	 	);
+	 cube2.position.x = 50;
+	 scene.add(cube2);
+	 console.log("cube 2: " + cube2.id);
 
- 	cube2.addEventListener('collision', function(object) {
- 		console.log("Object " + this.id + " collided with " + object.id);
- 	});
+	 cube2.addEventListener('collision', function(object) {
+	 	console.log("Object " + this.id + " collided with " + object.id);
+	 });
 
 
 
@@ -128,36 +150,36 @@ function init() {
  	// console.log("Player cube: " + PlayerCube.id);
 
  	// Ground
-		ground_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
+ 	ground_material = Physijs.createMaterial(
+ 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
 			.8, // high friction
 			.3 // low restitution
-		);
-		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		ground_material.map.repeat.set( 10, 10);
-		
-		ground = new Physijs.BoxMesh(
-			new THREE.CubeGeometry(1000, 1, 1000),
-			ground_material,
-			0 // mass
-		);
-		ground.receiveShadow = true;
-		ground.position.setY(-1);
-		scene.add( ground );
+			);
+ 	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+ 	ground_material.map.repeat.set( 10, 10);
 
-	fence = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(193, 40, 2),
-		Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
-			),
-			1000000
-		);
-	
-	scene.add(fence);
-	fence.position.x = -150;
-	fence.position.z = -235;
-	fence.position.y = 20;
-	fence.__dirtyPosition = true;
+ 	ground = new Physijs.BoxMesh(
+ 		new THREE.CubeGeometry(1000, 1, 1000),
+ 		ground_material,
+			0 // mass
+			);
+ 	ground.receiveShadow = true;
+ 	ground.position.setY(-1);
+ 	scene.add( ground );
+
+ 	fence = new Physijs.BoxMesh(
+ 		new THREE.CubeGeometry(193, 40, 2),
+ 		Physijs.createMaterial(
+ 			new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
+ 			),
+ 		1000000
+ 		);
+
+ 	scene.add(fence);
+ 	fence.position.x = -150;
+ 	fence.position.z = -235;
+ 	fence.position.y = 20;
+ 	fence.__dirtyPosition = true;
 
 	// PlayerCube.addEventListener('collision', function(object) {
  // 		console.log("Object " + this.id + " collided with " + object.id);
@@ -166,16 +188,16 @@ function init() {
  // 		}
  // 	});
 
-	var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-	light.position.set( 0.5, 1, 0.75 );
-	scene.add( light );
+var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+light.position.set( 0.5, 1, 0.75 );
+scene.add( light );
 
-	var light = new THREE.SpotLight(0xffffff, 1);
-	light.position.set( 0, 50, 0);
-	scene.add(light);
+var light = new THREE.SpotLight(0xffffff, 1);
+light.position.set( 0, 50, 0);
+scene.add(light);
 
 
-	
+
 
 
 	// Add axes
@@ -212,11 +234,34 @@ function init() {
 	renderer.setClearColor( 0x000000 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMapSoft = true;
+	
+	//WATER FROM WATER EXAMPLE THREEJS 65
+	water = new THREE.Water( renderer, camera, scene, {
+		textureWidth: 512, 
+		textureHeight: 512,
+		waterNormals: waterNormals,
+		alpha: 	1.0,
+		sunDirection: directionalLight.position.normalize(),
+		sunColor: 0xffffff,
+		waterColor: 0x001e0f,
+		distortionScale: 50.0,
+	} );
+
+
+
+	mirrorMesh = new THREE.Mesh(
+		new THREE.PlaneGeometry( parameters.width * 500, parameters.height * 500, 50, 50 ), 
+		water.material
+		);
+
+
+	mirrorMesh.add( water );
+	mirrorMesh.rotation.x = (- Math.PI * 0.5);
+	scene.add( mirrorMesh );
+
+
 	document.body.appendChild(renderer.domElement);
 	window.addEventListener( 'resize', onWindowResize, false );
-
-
-	
 }
 
 function animate() {
@@ -224,8 +269,9 @@ function animate() {
 	// yawObject.__dirtyPosition = true;
 	// PlayerCube.__dirtyPosition = true;
 	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
-
+	water.material.uniforms.time.value += 1.0 / 60.0;
 	controls.update();
+	water.render();
 	animate_sound();
 	requestAnimationFrame(animate);
 

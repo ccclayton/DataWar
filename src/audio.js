@@ -1,3 +1,7 @@
+//Provided by: Sann-Remy Chea
+//https://github.com/srchea/Sound-Visualizer/
+
+
 var context;
 var source, sourceJs;
 var analyser;
