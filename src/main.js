@@ -113,33 +113,59 @@ yawObject.position.set(0,10,150);
 
 	 // scene.add(PlayerCube)
 	 // PlayerCube.position.set(-50,0,-70);
+// ------------------------------------------------------------------------------
+	 //SETTING UP AND ADDING SKYBOX TO SCENE
+	 var prefix = "../textures/stars/";
+	 var urls = [ prefix + "stars_back.jpg", prefix + "stars_front.jpg",
+	 prefix + "stars_top.jpg", prefix + "stars_top.jpg",
+	 prefix + "stars_left.jpg", prefix + "stars_right.jpg" ];
+	    var skybox = THREE.ImageUtils.loadTextureCube(urls); // load textures
+	    skybox.format = THREE.RGBFormat;
+	    var shader = THREE.ShaderLib['cube']; 
+	    shader.uniforms['tCube'].value = skybox; 
+
+
+	    var skyMaterial = new THREE.ShaderMaterial( {
+	    	fragmentShader: shader.fragmentShader,
+	    	vertexShader: shader.vertexShader,
+	    	uniforms: shader.uniforms,
+	    	depthWrite: false,
+	    	side: THREE.BackSide
+	    });
+
+
+	    var skyMesh = new THREE.Mesh(
+	    	new THREE.CubeGeometry(1000, 1000, 1000),
+	    	skyMaterial
+	    	);
+
+	    scene.add(skyMesh);
 
 
 
+	    cube1 = new Physijs.BoxMesh(
+	    	new THREE.CubeGeometry(10, 10, 10),
+	    	Physijs.createMaterial(
+	    		new THREE.MeshNormalMaterial(), 0.2, 0.9
+	    		)
+	    	);
+	    cube1.position.x = -50;
+	    scene.add(cube1);
+	    console.log("cube 1: " + cube1.id);
 
-	 cube1 = new Physijs.BoxMesh(
-	 	new THREE.CubeGeometry(10, 10, 10),
-	 	Physijs.createMaterial(
-	 		new THREE.MeshNormalMaterial(), 0.2, 0.9
-	 		)
-	 	);
-	 cube1.position.x = -50;
-	 scene.add(cube1);
-	 console.log("cube 1: " + cube1.id);
+	    cube2 = new Physijs.BoxMesh(
+	    	new THREE.CubeGeometry(10, 10, 10),
+	    	Physijs.createMaterial(
+	    		new THREE.MeshNormalMaterial(), 0.2, 0.9
+	    		)
+	    	);
+	    cube2.position.x = 50;
+	    scene.add(cube2);
+	    console.log("cube 2: " + cube2.id);
 
-	 cube2 = new Physijs.BoxMesh(
-	 	new THREE.CubeGeometry(10, 10, 10),
-	 	Physijs.createMaterial(
-	 		new THREE.MeshNormalMaterial(), 0.2, 0.9
-	 		)
-	 	);
-	 cube2.position.x = 50;
-	 scene.add(cube2);
-	 console.log("cube 2: " + cube2.id);
-
-	 cube2.addEventListener('collision', function(object) {
-	 	console.log("Object " + this.id + " collided with " + object.id);
-	 });
+	    cube2.addEventListener('collision', function(object) {
+	    	console.log("Object " + this.id + " collided with " + object.id);
+	    });
 
 
 
@@ -195,9 +221,6 @@ scene.add( light );
 var light = new THREE.SpotLight(0xffffff, 1);
 light.position.set( 0, 50, 0);
 scene.add(light);
-
-
-
 
 
 	// Add axes
@@ -265,28 +288,28 @@ scene.add(light);
 }
 
 function animate() {
-	// mesh.__dirtyPosition = true;
-	// yawObject.__dirtyPosition = true;
-	// PlayerCube.__dirtyPosition = true;
-	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
-	water.material.uniforms.time.value += 1.0 / 60.0;
-	controls.update();
-	water.render();
-	animate_sound();
-	requestAnimationFrame(animate);
+		// mesh.__dirtyPosition = true;
+		// yawObject.__dirtyPosition = true;
+		// PlayerCube.__dirtyPosition = true;
+		// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
+		water.material.uniforms.time.value += 1.0 / 60.0;
+		controls.update();
+		water.render();
+		animate_sound();
+		requestAnimationFrame(animate);
 
-	// ground.__dirtyPosition = true;
-	// fence.__dirtyPosition = true;
-	// cube2.__dirtyPosition = true;
-	// cube1.__dirtyPosition = true;
+		// ground.__dirtyPosition = true;
+		// fence.__dirtyPosition = true;
+		// cube2.__dirtyPosition = true;
+		// cube1.__dirtyPosition = true;
 
-	scene.simulate(); // run physics
-	render();
-}
+		scene.simulate(); // run physics
+		render();
+	}
 
-function render() {
-	renderer.render(scene, camera);
-}
+	function render() {
+		renderer.render(scene, camera);
+	}
 
 
 
@@ -358,6 +381,7 @@ loader.load('../models/housetest.dae', function (result) {
 	result.scene.position.x += -250;
 	result.scene.position.z += -200;
 });
+
 
 // 	//controls
 // 	controls = new THREE.PointerLockControls( camera );
@@ -434,82 +458,82 @@ loader.load('../models/housetest.dae', function (result) {
 
 // 	animate();
 // }
-
-function buildAxes( length ) {
-	var axes = new THREE.Object3D();
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
-	return axes;
-}
-
-function buildAxis( src, dst, colorHex, dashed ) {
-	var geom = new THREE.Geometry(),
-	mat;
-	if(dashed) {
-		mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
-	} else {
-		mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+	// Temporary for debugging while building virtual world.
+	function buildAxes( length ) {
+		var axes = new THREE.Object3D();
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+		return axes;
 	}
-	geom.vertices.push( src.clone() );
-	geom.vertices.push( dst.clone() );
-	geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
-	var axis = new THREE.Line( geom, mat, THREE.LinePieces );
-	return axis;
-}
-
-function buildADDS() {
-	//ADDS Data Sculpture
-	var i = 0;
-	for(var x = 20; x < 400; x += 20) {
-		var j = 0;
-		cubes[i] = new Array();
-		for(var y = 0; y < 60; y += 2) {
-			var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
-			
-			var material = new THREE.MeshPhongMaterial({
-				color: randomFairColor(),
-				ambient: 0x808080,
-				specular: 0xffffff,
-				shininess: 20,
-				reflectivity: 5.5 
-			});
-
-			cubes[i][j] = new THREE.Mesh(geometry, material);
-			cubes[i][j].position = new THREE.Vector3(x-100, y, -400);
-			cubes[i][j].rotation.y = Math.PI/2;
-			
-			scene.add(cubes[i][j]);
-			j++;
+	//Temporary for debugging while building virtual world.
+	function buildAxis( src, dst, colorHex, dashed ) {
+		var geom = new THREE.Geometry(),
+		mat;
+		if(dashed) {
+			mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+		} else {
+			mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
 		}
-		i++;
+		geom.vertices.push( src.clone() );
+		geom.vertices.push( dst.clone() );
+		geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+		var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+		return axis;
 	}
-}
+	//Temporary, from Tutorial.
+	function buildADDS() {
+		//ADDS Data Sculpture
+		var i = 0;
+		for(var x = 20; x < 400; x += 20) {
+			var j = 0;
+			cubes[i] = new Array();
+			for(var y = 0; y < 60; y += 2) {
+				var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
+				
+				var material = new THREE.MeshPhongMaterial({
+					color: randomFairColor(),
+					ambient: 0x808080,
+					specular: 0xffffff,
+					shininess: 20,
+					reflectivity: 5.5 
+				});
 
-function onWindowResize() {
+				cubes[i][j] = new THREE.Mesh(geometry, material);
+				cubes[i][j].position = new THREE.Vector3(x-100, y, -400);
+				cubes[i][j].rotation.y = Math.PI/2;
+				
+				scene.add(cubes[i][j]);
+				j++;
+			}
+			i++;
+		}
+	}
 
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
+	function onWindowResize() {
 
-	renderer.setSize( window.innerWidth, window.innerHeight );
-}
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
 
-function animate_sound() {
-	
-	if(typeof array === 'object' && array.length > 0) {
-		var k = 0;
-		for(var i = 0; i < cubes.length; i++) {
-			for(var j = 0; j < cubes[i].length; j++) {
-				var scale = (array[k] + boost) / 30;
-				cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
-				k += (k < array.length ? 1 : 0);
+		renderer.setSize( window.innerWidth, window.innerHeight );
+	}
+	//Temporary Animation function for sound visualization.
+	function animate_sound() {
+		
+		if(typeof array === 'object' && array.length > 0) {
+			var k = 0;
+			for(var i = 0; i < cubes.length; i++) {
+				for(var j = 0; j < cubes[i].length; j++) {
+					var scale = (array[k] + boost) / 30;
+					cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
+					k += (k < array.length ? 1 : 0);
+				}
 			}
 		}
 	}
-}
 
 // 	// charposition = controls.getObject().position;
 // 	// console.log(charposition);
@@ -518,6 +542,7 @@ function animate_sound() {
 // 	requestAnimationFrame( animate );
 // 	renderer.render( scene, camera );
 // }
+// Temporary Random Color Generator for temp data sculpture.
 function randomFairColor() {
 	var min = 64;
 	var max = 224;
