@@ -288,28 +288,28 @@ scene.add(light);
 }
 
 function animate() {
-		// mesh.__dirtyPosition = true;
-		// yawObject.__dirtyPosition = true;
-		// PlayerCube.__dirtyPosition = true;
-		// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
-		water.material.uniforms.time.value += 1.0 / 60.0;
-		controls.update();
-		water.render();
-		animate_sound();
-		requestAnimationFrame(animate);
+	// mesh.__dirtyPosition = true;
+	// yawObject.__dirtyPosition = true;
+	// PlayerCube.__dirtyPosition = true;
+	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
+	water.material.uniforms.time.value += 1.0 / 60.0;
+	controls.update();
+	water.render();
+	animate_sound();
+	requestAnimationFrame(animate);
 
-		// ground.__dirtyPosition = true;
-		// fence.__dirtyPosition = true;
-		// cube2.__dirtyPosition = true;
-		// cube1.__dirtyPosition = true;
+	// ground.__dirtyPosition = true;
+	// fence.__dirtyPosition = true;
+	// cube2.__dirtyPosition = true;
+	// cube1.__dirtyPosition = true;
 
-		scene.simulate(); // run physics
-		render();
-	}
+	scene.simulate(); // run physics
+	render();
+}
 
-	function render() {
-		renderer.render(scene, camera);
-	}
+function render() {
+	renderer.render(scene, camera);
+}
 
 
 
@@ -373,14 +373,14 @@ function animate() {
 // 	// scene.add(PlayerCube)
 // 	// PlayerCube.position.set(0,0,0);
 
-var loader = new THREE.ColladaLoader();
-loader.load('../models/housetest.dae', function (result) {
-	scene.add(result.scene);
-	result.scene.scale.set(.8, .8, .6);
-	result.scene.rotation.x = -90 * Math.PI/180;
-	result.scene.position.x += -250;
-	result.scene.position.z += -200;
-});
+// var loader = new THREE.ColladaLoader();
+// loader.load('../models/housetest.dae', function (result) {
+// 	scene.add(result.scene);
+// 	result.scene.scale.set(.8, .8, .6);
+// 	result.scene.rotation.x = -90 * Math.PI/180;
+// 	result.scene.position.x += -250;
+// 	result.scene.position.z += -200;
+// });
 
 
 // 	//controls
@@ -484,7 +484,7 @@ loader.load('../models/housetest.dae', function (result) {
 		var axis = new THREE.Line( geom, mat, THREE.LinePieces );
 		return axis;
 	}
-	//Temporary, from Tutorial.
+	//Temporary, from Tutorial: https://github.com/srchea/Sound-Visualizer
 	function buildADDS() {
 		//ADDS Data Sculpture
 		var i = 0;
@@ -520,7 +520,7 @@ loader.load('../models/housetest.dae', function (result) {
 
 		renderer.setSize( window.innerWidth, window.innerHeight );
 	}
-	//Temporary Animation function for sound visualization.
+	//Temporary Animation function for sound visualization: https://github.com/srchea/Sound-Visualizer.
 	function animate_sound() {
 		
 		if(typeof array === 'object' && array.length > 0) {
