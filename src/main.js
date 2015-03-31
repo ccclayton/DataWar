@@ -9,6 +9,7 @@ var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
 var waterNormals;
 
+//From Three.js ocean example that is included with the library.
 var parameters = {
 	width: 2000,
 	height: 2000,
@@ -119,12 +120,12 @@ yawObject.position.set(0,10,150);
 	 var urls = [ prefix + "stars_back.jpg", prefix + "stars_front.jpg",
 	 prefix + "stars_top.jpg", prefix + "stars_top.jpg",
 	 prefix + "stars_left.jpg", prefix + "stars_right.jpg" ];
-	    var skybox = THREE.ImageUtils.loadTextureCube(urls); // load textures
-	    skybox.format = THREE.RGBFormat;
-	    var shader = THREE.ShaderLib['cube']; 
-	    shader.uniforms['tCube'].value = skybox; 
+	 var skybox = THREE.ImageUtils.loadTextureCube(urls); // load textures
+	 skybox.format = THREE.RGBFormat;
+	 var shader = THREE.ShaderLib['cube']; 
+	 shader.uniforms['tCube'].value = skybox; 
 
-
+	 	//Uses the built in THREE.js fragment and vertex shaders.
 	    var skyMaterial = new THREE.ShaderMaterial( {
 	    	fragmentShader: shader.fragmentShader,
 	    	vertexShader: shader.vertexShader,
@@ -135,7 +136,7 @@ yawObject.position.set(0,10,150);
 
 
 	    var skyMesh = new THREE.Mesh(
-	    	new THREE.CubeGeometry(1000, 1000, 1000),
+	    	new THREE.CubeGeometry(2000, 2000, 1000),
 	    	skyMaterial
 	    	);
 
@@ -223,11 +224,11 @@ light.position.set( 0, 50, 0);
 scene.add(light);
 
 
-	// Add axes
+	// Add axes 
 	axes = buildAxes( 1000 );
 	scene.add( axes );
 
-	// Add ADDS
+	// From Example 
 	buildADDS();
 
 	// // Fence
@@ -458,7 +459,7 @@ loader.load('../models/housetest.dae', function (result) {
 
 // 	animate();
 // }
-	// Temporary for debugging while building virtual world.
+	// Temporary for debugging while building virtual world. Borrowed from example: http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/
 	function buildAxes( length ) {
 		var axes = new THREE.Object3D();
 		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
@@ -484,7 +485,7 @@ loader.load('../models/housetest.dae', function (result) {
 		var axis = new THREE.Line( geom, mat, THREE.LinePieces );
 		return axis;
 	}
-	//Temporary, from Tutorial.
+	//Temporary, from http://srchea.com/experimenting-with-web-audio-api-three-js-webgl tutorial.
 	function buildADDS() {
 		//ADDS Data Sculpture
 		var i = 0;
@@ -542,7 +543,7 @@ loader.load('../models/housetest.dae', function (result) {
 // 	requestAnimationFrame( animate );
 // 	renderer.render( scene, camera );
 // }
-// Temporary Random Color Generator for temp data sculpture.
+// Temporary Random Color Generator for temp data sculpture. http://srchea.com/experimenting-with-web-audio-api-three-js-webgl
 function randomFairColor() {
 	var min = 64;
 	var max = 224;
