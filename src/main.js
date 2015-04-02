@@ -51,7 +51,7 @@ function init() {
  	);
 
 
- camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+ camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
  camera.position.z = 100;
  scene.add(camera);
 
@@ -126,47 +126,47 @@ yawObject.position.set(0,10,150);
 	 shader.uniforms['tCube'].value = skybox; 
 
 	 	//Uses the built in THREE.js fragment and vertex shaders.
-	    var skyMaterial = new THREE.ShaderMaterial( {
-	    	fragmentShader: shader.fragmentShader,
-	    	vertexShader: shader.vertexShader,
-	    	uniforms: shader.uniforms,
-	    	depthWrite: false,
-	    	side: THREE.BackSide
-	    });
+	 	var skyMaterial = new THREE.ShaderMaterial( {
+	 		fragmentShader: shader.fragmentShader,
+	 		vertexShader: shader.vertexShader,
+	 		uniforms: shader.uniforms,
+	 		depthWrite: false,
+	 		side: THREE.BackSide
+	 	});
 
 
-	    var skyMesh = new THREE.Mesh(
-	    	new THREE.CubeGeometry(2000, 2000, 1000),
-	    	skyMaterial
-	    	);
+	 	var skyMesh = new THREE.Mesh(
+	 		new THREE.CubeGeometry(20000, 20000, 2000),
+	 		skyMaterial
+	 		);
 
-	    scene.add(skyMesh);
+	 	scene.add(skyMesh);
 
 
 
-	    cube1 = new Physijs.BoxMesh(
-	    	new THREE.CubeGeometry(10, 10, 10),
-	    	Physijs.createMaterial(
-	    		new THREE.MeshNormalMaterial(), 0.2, 0.9
-	    		)
-	    	);
-	    cube1.position.x = -50;
-	    scene.add(cube1);
-	    console.log("cube 1: " + cube1.id);
+	 	cube1 = new Physijs.BoxMesh(
+	 		new THREE.CubeGeometry(10, 10, 10),
+	 		Physijs.createMaterial(
+	 			new THREE.MeshNormalMaterial(), 0.2, 0.9
+	 			)
+	 		);
+	 	cube1.position.x = -50;
+	 	scene.add(cube1);
+	 	console.log("cube 1: " + cube1.id);
 
-	    cube2 = new Physijs.BoxMesh(
-	    	new THREE.CubeGeometry(10, 10, 10),
-	    	Physijs.createMaterial(
-	    		new THREE.MeshNormalMaterial(), 0.2, 0.9
-	    		)
-	    	);
-	    cube2.position.x = 50;
-	    scene.add(cube2);
-	    console.log("cube 2: " + cube2.id);
+	 	cube2 = new Physijs.BoxMesh(
+	 		new THREE.CubeGeometry(10, 10, 10),
+	 		Physijs.createMaterial(
+	 			new THREE.MeshNormalMaterial(), 0.2, 0.9
+	 			)
+	 		);
+	 	cube2.position.x = 50;
+	 	scene.add(cube2);
+	 	console.log("cube 2: " + cube2.id);
 
-	    cube2.addEventListener('collision', function(object) {
-	    	console.log("Object " + this.id + " collided with " + object.id);
-	    });
+	 	cube2.addEventListener('collision', function(object) {
+	 		console.log("Object " + this.id + " collided with " + object.id);
+	 	});
 
 
 
