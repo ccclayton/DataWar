@@ -82,7 +82,7 @@ yawObject = new Physijs.BoxMesh(
 	Physijs.createMaterial(
 		new THREE.MeshNormalMaterial(), 
 		1, 
-		.1
+		0
 		),
 	1000
 	);
@@ -180,7 +180,7 @@ yawObject.position.set(0,10,150);
  	ground_material = Physijs.createMaterial(
  		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../textures/brick.jpg' ) }),
 			.8, // high friction
-			.3 // low restitution
+			0 // low restitution
 			);
  	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
  	ground_material.map.repeat.set( 10, 10);
@@ -259,9 +259,65 @@ scene.add(light);
 	mirrorMesh.rotation.x = (- Math.PI * 0.5);
 	scene.add( mirrorMesh );
 
-	document.body.appendChild(renderer.domElement);
-	window.addEventListener( 'resize', onWindowResize, false );
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+
+	//Twitter Structure 
+	////NEED TO SOMEHOW PIECE EVERY OBJECT CREATED INTO ONE STRUCTURE
+	//Creates a panel that shows the tweet's original author.
+	//
+	var username = "colincclayton";
+	var tweet = "This is a test tweet. Hello World!";
+	//var authorPanel = CreateOriginalAuthor(scene,username); //Eventually pass in parsed usernames.  //might want to make class
+	//var authorP = new THREE.Object3D(authorPanel);
+	var tweetStructure = new TweetStructure(scene);
+	var x = 0;
+	var y = 0;
+	var z = -40;
+	
+	
+	//var base_Structure = 
+	tweetStructure.constructBase(username, x,y, z ); //Create Base of Twitter Structure.
+	//scene.add(base_Structure.getObject());
+
+	//var tweet_Structure = 
+	tweetStructure.CreateTweetPanel(tweet, x, y, z); //Create Tweet Panel
+	//scene.add(tweet_Structure.getObject());
+	//Create Connection Between Nodes
+	//tweetStructure.CreateConnection(obj1, ob);
+	
+	
+	//Make Tweet panel
+	//var tweetPanel = CreateTweetPanel(scene,username,tweet);
+	//var tweetP = new THREE.Object3D(tweetPanel);
+	//Make connection between Author Panel and Tweet Panel
+	//CreateConnection(scene,authorP,tweetP);
+
+
+	
+	
+	
+
+
+	
+
+
+	
+	
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
+
+document.body.appendChild(renderer.domElement);
+window.addEventListener( 'resize', onWindowResize, false );
 }
+
+
+
 
 function animate() {
 	// mesh.__dirtyPosition = true;
