@@ -265,35 +265,48 @@ scene.add(light);
 //----------------------------------------------------------------------------------------------------------------------
 
 	//Twitter Structure 
-	////NEED TO SOMEHOW PIECE EVERY OBJECT CREATED INTO ONE STRUCTURE
 	//Creates a panel that shows the tweet's original author.
-	//
+	//CURRENTLY HARDCODED. 
 	var username = "colincclayton";
 	var tweet = "This is a test tweet. Hello World!";
 	//var authorPanel = CreateOriginalAuthor(scene,username); //Eventually pass in parsed usernames.  //might want to make class
 	//var authorP = new THREE.Object3D(authorPanel);
-	var tweetStructure = new TweetStructure(scene);
+	var tweetStructure = new TweetStructure(scene); //Create TweetStructure Object.
 	var x = 0;
 	var y = 0;
 	var z = -40;
 	
-	
-	//var base_Structure = 
-	tweetStructure.constructBase(username, x,y, z ); //Create Base of Twitter Structure.
-	//scene.add(base_Structure.getObject());
+	var baseNode = tweetStructure.constructBase(username,10000, x,y, z ); //Create Base of Twitter Structure.(Object)
+	scene.add(baseNode);
+	baseNode.position.set(x,y,z);
+	baseNode.__dirtyPosition = true; 
 
-	//var tweet_Structure = 
-	tweetStructure.CreateTweetPanel(tweet, x, y, z); //Create Tweet Panel
-	//scene.add(tweet_Structure.getObject());
+	var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); //Create Tweet Panel
+	scene.add(tweetPanel);
+	tweetPanel.position.set(x,y + 30, z);
+	tweetPanel.__dirtyPosition = true;
+	
 	//Create Connection Between Nodes
-	//tweetStructure.CreateConnection(obj1, ob);
+	tweetStructure.CreateConnection(baseNode, tweetPanel);
+
+	var retweetNode = tweetStructure.constructBase("dGillies", 0, x, y, z);
+	scene.add(retweetNode);
+	retweetNode.position.set(x+30,y+50,z-20);
+	retweetNode.__dirtyPosition = true;
+
+	//Create Connection between TweetPanel and RetweetNode
+	tweetStructure.CreateConnection(tweetPanel, retweetNode);
+
+	var retweetNode2 = tweetStructure.constructBase("dGillies", 0, x, y, z);
+	scene.add(retweetNode2);
+	retweetNode2.position.set(x-30,y+50,z-20);
+	retweetNode2.__dirtyPosition = true;
+
+	//Create Connection between tweetPanel and retweetNode2
+	tweetStructure.CreateConnection(tweetPanel, retweetNode2);
 	
 	
-	//Make Tweet panel
-	//var tweetPanel = CreateTweetPanel(scene,username,tweet);
-	//var tweetP = new THREE.Object3D(tweetPanel);
-	//Make connection between Author Panel and Tweet Panel
-	//CreateConnection(scene,authorP,tweetP);
+
 
 
 	
