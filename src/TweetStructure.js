@@ -8,15 +8,20 @@ function TweetStructure(scene)
 		
 		var num = Math.random();
 		var canvas = document.createElement( 'canvas' );
+		canvas.width = 1920;
+    	canvas.height = 1080;
 		var context = canvas.getContext( '2d' );
 		
-		context.fillStyle = "white";
-		context.font = "bold 16px Arial";
+		context.fillStyle = "yellow";
+		context.font = "bold 75px Arial";
 
-			context.fillText("@"+username,10,50); //Will eventually be parsed usernames.
+
+			context.fillText("@"+username,300,500); //Will eventually be parsed usernames.
 			context.textAlign = 'center';
 			var tweeterTexture = new THREE.Texture( canvas );
 			tweeterTexture.needsUpdate = true;
+			tweeterTexture.magFilter = THREE.NearestFilter;
+			tweeterTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
 			//Create Physijs object out of canvas. This will hold the username of the Tweet.
 			var canvasMesh = new Physijs.SphereMesh(
@@ -35,14 +40,21 @@ function TweetStructure(scene)
 
 		var num = Math.random();
 		var canvas = document.createElement( 'canvas' );
+
+		 canvas.width = 1920;
+    	canvas.height = 1080;
+
 		var context = canvas.getContext( '2d' );
 		context.fillStyle = "white";
-		context.font = "14px Times";
+		context.font = "90px Times";
 
 
-		context.fillText(tweet,40,50); //Will eventually be parsed usernames.
+		context.fillText(tweet,300,500); //Will eventually be parsed usernames.
+		
 		context.textAlign = 'center';
 		var tweetText = new THREE.Texture( canvas );
+		tweetText.magFilter = THREE.NearestFilter;
+		tweetText.minFilter = THREE.LinearMipMapLinearFilter;
 		tweetText.needsUpdate = true;
 
 		//Create Physijs object out of canvas. This will hold the username of the Tweet.
@@ -68,6 +80,6 @@ function TweetStructure(scene)
 		);
 
 	 	var line = new THREE.Line( geometry, material );
-		scene.add(line);
-	}
+		return line;
+	};
 

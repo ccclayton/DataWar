@@ -267,10 +267,9 @@ scene.add(light);
 	//Twitter Structure 
 	//Creates a panel that shows the tweet's original author.
 	//CURRENTLY HARDCODED. 
+	// STILL NEED TO PUT THEM ALL INTO THE SAME STRUCTURE SO THEY MOVE TOGETHER!!!!!!!!!!!!!
 	var username = "colincclayton";
 	var tweet = "This is a test tweet. Hello World!";
-	//var authorPanel = CreateOriginalAuthor(scene,username); //Eventually pass in parsed usernames.  //might want to make class
-	//var authorP = new THREE.Object3D(authorPanel);
 	var tweetStructure = new TweetStructure(scene); //Create TweetStructure Object.
 	var x = 0;
 	var y = 0;
@@ -281,46 +280,51 @@ scene.add(light);
 	baseNode.position.set(x,y,z);
 	baseNode.__dirtyPosition = true; 
 
-	var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); //Create Tweet Panel
+	//Create Tweet Panel
+	var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); 
 	scene.add(tweetPanel);
+	//baseNode.add(tweetPanel)
 	tweetPanel.position.set(x,y + 30, z);
 	tweetPanel.__dirtyPosition = true;
+
 	
 	//Create Connection Between Nodes
-	tweetStructure.CreateConnection(baseNode, tweetPanel);
+	var connection_one = tweetStructure.CreateConnection(baseNode, tweetPanel);
+	scene.add(connection_one);
+	//baseNode.add(connection_one);
 
+	//Create retweetNode
 	var retweetNode = tweetStructure.constructBase("dGillies", 0, x, y, z);
 	scene.add(retweetNode);
+	//baseNode.add(retweetNode);
+	//tweetPanel.add(retweetNode);
 	retweetNode.position.set(x+30,y+50,z-20);
 	retweetNode.__dirtyPosition = true;
 
 	//Create Connection between TweetPanel and RetweetNode
-	tweetStructure.CreateConnection(tweetPanel, retweetNode);
+	var connection_two = tweetStructure.CreateConnection(tweetPanel, retweetNode);
+	scene.add(connection_two);
+	//baseNode.add(connection_two);
+	//retweetNode.add(connection_two);
 
-	var retweetNode2 = tweetStructure.constructBase("dGillies", 0, x, y, z);
+	//Create another retweetNode
+	var retweetNode2 = tweetStructure.constructBase("wei", 0, x, y, z);
 	scene.add(retweetNode2);
+	//baseNode.add(retweetNode2);
 	retweetNode2.position.set(x-30,y+50,z-20);
 	retweetNode2.__dirtyPosition = true;
 
-	//Create Connection between tweetPanel and retweetNode2
-	tweetStructure.CreateConnection(tweetPanel, retweetNode2);
+	//Create Connection between tweetPanel and second retweetNode
+	var connection_three = tweetStructure.CreateConnection(tweetPanel, retweetNode2);
+	scene.add(connection_three);
+	//baseNode.add(connection_three);
+	//baseNode.add(connection_three);
+	//retweetNode2.add(connection_three);
+	//tweetPanel.add(connection_three);
 	
 	
-
-
-
 	
 	
-	
-
-
-	
-
-
-	
-	
-
-
 
 
 //----------------------------------------------------------------------------------------------------------------------
