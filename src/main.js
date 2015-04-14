@@ -266,57 +266,82 @@ scene.add(light);
 
 	//Twitter Structure 
 	//Creates a panel that shows the tweet's original author.
-	//CURRENTLY HARDCODED. 
-	// STILL NEED TO PUT THEM ALL INTO THE SAME STRUCTURE SO THEY MOVE TOGETHER!!!!!!!!!!!!!
+	
 	var username = "colincclayton";
 	var tweet = "This is a test tweet. Hello World!";
-	var tweetStructure = new TweetStructure(scene); //Create TweetStructure Object.
+	//var tweetStructure = new TweetStructure(scene); //Create TweetStructure Object.
 	var x = 0;
-	var y = 0;
+	var y = 10;
 	var z = -40;
+
+	var position = new THREE.Vector3(x,y,z);
 	
-	var baseNode = tweetStructure.constructBase(username,10000, x,y, z ); //Create Base of Twitter Structure.(Object)
-	scene.add(baseNode);
-	baseNode.position.set(x,y,z);
-	baseNode.__dirtyPosition = true; 
+	//------------------------------------------------------------------------------------
+	//USED FOR TESTING DIFFERENT GEOMETRY CASES.
+	// var baseNode = tweetStructure.constructBase(username,10000, x,y, z ); //Create Base of Twitter Structure.(Object)
+	// scene.add(baseNode);
+	// baseNode.position.set(x,y,z);
+	// baseNode.__dirtyPosition = true;
+	//var nodeGeom = new THREE.SphereGeometry( 6, 32, 32); 
+	//
+	// var nodeGeom = new THREE.BoxGeometry( 30, 30, 10 );
+	 //var nodeGeom = new THREE.CylinderGeometry( 5, 5, 20, 32 );
+	 
+
+
+	//--------------------------------------------------------------------------------------
+	//Create new nodes by giving username(string), a geometry(null will give a default of sphere), 
+	// geometry type (string), position(THREE.Vector3), and mass.
+	// IMPORTANT: FOR DEFAULT OF SPHERE OBJECTS, GIVE A NULL ARGUMENT FOR GEOMETRY, AND GEOMETRY TYPE.
+	// OR GIVE NULL FOR GEOMETRY, AND "default" FOR GEOMETRY TYPE. 
+	// OTHERWISE, IF YOU ONLY HAVE THE GEOMETRY SET TO NULL, YOU WILL GET AN ALERT TELLING YOU TO FIX 
+	// THE CREATION OF YOUR NODE.
+	var node = new TwitterNode(username,null,null,position,100000); //username, geometry, position, mass.
+	scene.add(node);
 
 	//Create Tweet Panel
-	var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); 
-	scene.add(tweetPanel);
+	//var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); 
+	//scene.add(tweetPanel);
 	//baseNode.add(tweetPanel)
-	tweetPanel.position.set(x,y + 30, z);
-	tweetPanel.__dirtyPosition = true;
+	//tweetPanel.position.set(x,y + 30, z);
+	//tweetPanel.__dirtyPosition = true;
 
+	// var constraint = new Physijs.PointConstraint(
+ //    baseNode, // First object to be constrained
+ //     // OPTIONAL second object - if omitted then physijs_mesh_1 will be constrained to the scene
+ //    new THREE.Vector3( 0, 0, 0 ) // point in the scene to apply the constraint
+	// );
+	// scene.addConstraint( constraint );
 	
 	//Create Connection Between Nodes
-	var connection_one = tweetStructure.CreateConnection(baseNode, tweetPanel);
-	scene.add(connection_one);
+	//var connection_one = tweetStructure.CreateConnection(baseNode, tweetPanel);
+	//scene.add(connection_one);
 	//baseNode.add(connection_one);
 
 	//Create retweetNode
-	var retweetNode = tweetStructure.constructBase("dGillies", 0, x, y, z);
-	scene.add(retweetNode);
+	//var retweetNode = tweetStructure.constructBase("dGillies", 0, x, y, z);
+	//scene.add(retweetNode);
 	//baseNode.add(retweetNode);
 	//tweetPanel.add(retweetNode);
-	retweetNode.position.set(x+30,y+50,z-20);
-	retweetNode.__dirtyPosition = true;
+	//retweetNode.position.set(x+30,y+50,z-20);
+	//retweetNode.__dirtyPosition = true;
 
 	//Create Connection between TweetPanel and RetweetNode
-	var connection_two = tweetStructure.CreateConnection(tweetPanel, retweetNode);
-	scene.add(connection_two);
+	//var connection_two = tweetStructure.CreateConnection(tweetPanel, retweetNode);
+	//scene.add(connection_two);
 	//baseNode.add(connection_two);
 	//retweetNode.add(connection_two);
 
 	//Create another retweetNode
-	var retweetNode2 = tweetStructure.constructBase("wei", 0, x, y, z);
-	scene.add(retweetNode2);
+	//var retweetNode2 = tweetStructure.constructBase("wei", 0, x, y, z);
+	//scene.add(retweetNode2);
 	//baseNode.add(retweetNode2);
-	retweetNode2.position.set(x-30,y+50,z-20);
-	retweetNode2.__dirtyPosition = true;
+	//retweetNode2.position.set(x-30,y+50,z-20);
+	//retweetNode2.__dirtyPosition = true;
 
 	//Create Connection between tweetPanel and second retweetNode
-	var connection_three = tweetStructure.CreateConnection(tweetPanel, retweetNode2);
-	scene.add(connection_three);
+	//var connection_three = tweetStructure.CreateConnection(tweetPanel, retweetNode2);
+	//scene.add(connection_three);
 	//baseNode.add(connection_three);
 	//baseNode.add(connection_three);
 	//retweetNode2.add(connection_three);
