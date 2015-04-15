@@ -1,12 +1,14 @@
 
-function TweetStructure(scene)
+function TweetStructure() //don't need scene anymore
+							  // Need to add physics.
 {
-	this.scene = scene;
+	
 }
 
+	//Make this more general like New Node or something.
 	TweetStructure.prototype.constructBase = function(username, mass, x,y,z){
 		
-		var num = Math.random();
+		//var num = Math.random();
 		var canvas = document.createElement( 'canvas' );
 		canvas.width = 1920;
     	canvas.height = 1080;
@@ -38,7 +40,7 @@ function TweetStructure(scene)
 
 	TweetStructure.prototype.CreateTweetPanel = function(tweet,x,y,z){
 
-		var num = Math.random();
+		//var num = Math.random();
 		var canvas = document.createElement( 'canvas' );
 
 		 canvas.width = 1920;

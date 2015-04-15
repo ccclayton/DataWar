@@ -2,6 +2,11 @@
 	function TwitterNode(username,geometry,geometryType,position,mass) 
 
 	{
+		this.username = username;
+		this.geometry = geometry;
+		this.geometryType = geometryType;
+		this.position = position;
+		this.mass = mass;
 		
 		if((geometryType == null && geometry == null) || (geometryType.toUpperCase() == "default".toUpperCase() && geometry == null)){
 				geomFlag = 0; //Default
@@ -26,9 +31,9 @@
 
 		}
 
-		console.log(geomFlag); //Debugging.
+		//console.log(geomFlag); //Debugging.
 
-		return this.createNode(username,geometry,geometryType,position); //returns Node "object".
+		return this.createNode(this.username,this.geometry,this.geometryType,this.position,this.mass); //returns Node "object".
 		
 	}
 
@@ -98,7 +103,6 @@
 			break;
 			default:
 			geometry = new THREE.SphereGeometry( 6, 32, 32);
-			mass = 10000;
 			mesh = new Physijs.ConcaveMesh(
 				geometry,
 				Physijs.createMaterial(
@@ -108,13 +112,15 @@
 
 			break;
 		}
-
+		mesh.position.set(position.x,position.y,position.z);
+		mesh._dirtyPosition = true;
 
 		return mesh;
 	}
 
 	TwitterNode.prototype.setPosition = function(position){
 		this.position = position;
+		this._dirtyPosition = true;
 
 	}
 

@@ -269,12 +269,10 @@ scene.add(light);
 	
 	var username = "colincclayton";
 	var tweet = "This is a test tweet. Hello World!";
-	//var tweetStructure = new TweetStructure(scene); //Create TweetStructure Object.
-	var x = 0;
-	var y = 10;
-	var z = -40;
+	var tweetStructure = new TweetStructure(); //Create TweetStructure Object.
+	
 
-	var position = new THREE.Vector3(x,y,z);
+	var position = new THREE.Vector3(0,30,-40);
 	
 	//------------------------------------------------------------------------------------
 	//USED FOR TESTING DIFFERENT GEOMETRY CASES.
@@ -296,8 +294,17 @@ scene.add(light);
 	// OR GIVE NULL FOR GEOMETRY, AND "default" FOR GEOMETRY TYPE. 
 	// OTHERWISE, IF YOU ONLY HAVE THE GEOMETRY SET TO NULL, YOU WILL GET AN ALERT TELLING YOU TO FIX 
 	// THE CREATION OF YOUR NODE.
-	var node = new TwitterNode(username,null,null,position,100000); //username, geometry, position, mass.
-	scene.add(node);
+	 var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
+	 scene.add(node);
+
+	 var node2 = new TwitterNode(username, null, null, new THREE.Vector3( 0, 100, -120 ), 0);
+	 
+	 scene.add(node2);
+	 
+	// var node2 = new TwitterNode(username, null, null, new THREE.Vector3( 0, 10, -80 ), 1000);
+	// node2._dirtyPosition = true;
+	// //node2.setPosition(new THREE.Vector3( 0, 10, -80 ));
+	// scene.add(node2);
 
 	//Create Tweet Panel
 	//var tweetPanel = tweetStructure.CreateTweetPanel(tweet, x, y, z); 
@@ -319,12 +326,12 @@ scene.add(light);
 	//baseNode.add(connection_one);
 
 	//Create retweetNode
-	//var retweetNode = tweetStructure.constructBase("dGillies", 0, x, y, z);
-	//scene.add(retweetNode);
+	var retweetNode = tweetStructure.constructBase("dGillies", 0, 0, 10, -40);
+	scene.add(retweetNode);
 	//baseNode.add(retweetNode);
 	//tweetPanel.add(retweetNode);
-	//retweetNode.position.set(x+30,y+50,z-20);
-	//retweetNode.__dirtyPosition = true;
+	retweetNode.position.set(30,10,-20);
+	retweetNode.__dirtyPosition = true;
 
 	//Create Connection between TweetPanel and RetweetNode
 	//var connection_two = tweetStructure.CreateConnection(tweetPanel, retweetNode);
