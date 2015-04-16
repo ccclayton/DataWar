@@ -1,126 +1,126 @@
-	<!DOCTYPE html>
-	<html>
-	<head>
-		<meta charset="utf-8">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
 
-		<title>DataWar</title>
-		<link rel="stylesheet" type="text/css" href="stylesheet.css">
-		
+<title>DataWar</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
 
-	</head>
-	<body>
-		<script src ="../threejs.r70/build/three.js"></script>
-		<script src = "../Physijs/physi.js"></script>
-		<script src = "../Physijs/physiPointerLockControls.js"></script>
-		<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
-		<script src ="../threejs.r70/src/loaders/JSONLoader.js"> </script>
-		<script src ="../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
-		<script src = "../src/jquery-2.0.0.min.js"> </script>
-		<script src = "../src/audio.js"> </script>
-		<script src = "../threejs.r70/examples/js/Mirror.js"></script>
-		<script src = "../threejs.r70/examples/js/WaterShader.js"></script>
 
-		
-		
-		
+</head>
+<body>
+<script src ="../threejs.r70/build/three.js"></script>
+<script src = "../Physijs/physi.js"></script>
+<script src = "../Physijs/physiPointerLockControls.js"></script>
+<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
+<script src ="../threejs.r70/src/loaders/JSONLoader.js"> </script>
+<script src ="../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
+<script src = "../src/jquery-2.0.0.min.js"> </script>
+<script src = "../src/audio.js"> </script>
+<script src = "../threejs.r70/examples/js/Mirror.js"></script>
+<script src = "../threejs.r70/examples/js/WaterShader.js"></script>
 
-		<div id="blocker">
 
-			<div id="instructions">
-				<span style="font-size:50px">Click To Load Environment</span>
-				<br />
-				(Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
-			</div>
 
-		</div>
-		<!-- <!-- Start world creation -->
-		<script type="text/javascript">
-			var renderer, scene, camera, cube1, cube2;
 
-			var geometry, material, mesh;
-			var controls;
-			var materials = [];
-			var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
-			var collidableMeshList = [];
-			var cubes = new Array();
-			var blocker = document.getElementById( 'blocker' );
-			var instructions = document.getElementById( 'instructions' );
 
-	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+<div id="blocker">
 
-	if ( havePointerLock ) {
-		var element = document.body;
+<div id="instructions">
+<span style="font-size:50px">Click To Load Environment</span>
+<br />
+(Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
+</div>
 
-		var pointerlockchange = function ( event ) {
+</div>
+<!-- <!-- Start world creation -->
+<script type="text/javascript">
+var renderer, scene, camera, cube1, cube2;
 
-			if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+var geometry, material, mesh;
+var controls;
+var materials = [];
+var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
+var collidableMeshList = [];
+var cubes = new Array();
+var blocker = document.getElementById( 'blocker' );
+var instructions = document.getElementById( 'instructions' );
 
-				controls.enabled = true;
+// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-				blocker.style.display = 'none';
+if ( havePointerLock ) {
+	var element = document.body;
 
-			} else {
+	var pointerlockchange = function ( event ) {
 
-				controls.enabled = false;
+		if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
 
-				blocker.style.display = '-webkit-box';
-				blocker.style.display = '-moz-box';
-				blocker.style.display = 'box';
+			controls.enabled = true;
 
-				instructions.style.display = '';
+			blocker.style.display = 'none';
 
-			}
+		} else {
 
-		}
+			controls.enabled = false;
 
-		var pointerlockerror = function ( event ) {
+			blocker.style.display = '-webkit-box';
+			blocker.style.display = '-moz-box';
+			blocker.style.display = 'box';
+
 			instructions.style.display = '';
+
 		}
 
-		// Hook pointer lock state change events
-		document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-		document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-		document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+	}
 
-		document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-		document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-		document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+	var pointerlockerror = function ( event ) {
+		instructions.style.display = '';
+	}
 
-		instructions.addEventListener( 'click', function ( event ) {
+	// Hook pointer lock state change events
+	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
 
-			instructions.style.display = 'none';
-			// Ask the browser to lock the pointer
-			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-			if ( /Firefox/i.test( navigator.userAgent ) ) {
+	instructions.addEventListener( 'click', function ( event ) {
 
-				var fullscreenchange = function ( event ) {
+		instructions.style.display = 'none';
+		// Ask the browser to lock the pointer
+		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 
-					if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+		if ( /Firefox/i.test( navigator.userAgent ) ) {
 
-						document.removeEventListener( 'fullscreenchange', fullscreenchange );
-						document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+			var fullscreenchange = function ( event ) {
 
-						element.requestPointerLock();
-					}
+				if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
 
+					document.removeEventListener( 'fullscreenchange', fullscreenchange );
+					document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+					element.requestPointerLock();
 				}
 
-				document.addEventListener( 'fullscreenchange', fullscreenchange, false );
-				document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
-
-				element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
-
-				element.requestFullscreen();
-
-			} else {
-
-				element.requestPointerLock();
-
 			}
 
-		}, false );
+			document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+			document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+			element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+			element.requestFullscreen();
+
+		} else {
+
+			element.requestPointerLock();
+
+		}
+
+	}, false );
 
 } else {
 
@@ -128,8 +128,9 @@
 
 }
 </script> 
-<script src = "TwitterNode.js"></script>
 <script src = "TweetStructure.js"></script>
+<script src = "TwitterNode.js"></script>
+<script src = "TweetPanel.js"></script>
 <script src = "main.js"> </script>
 </body>
 </html>
