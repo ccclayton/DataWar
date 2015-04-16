@@ -1,3 +1,4 @@
+var fs = require('fs');
 var Twit = require('twit');
 
 var T = new Twit({
@@ -7,6 +8,10 @@ var T = new Twit({
   , access_token_secret:  'h7raMD2P8mfODYCeElvTTQVHdJbrmNcEhX0dlkN8xUhHA'
 })
 
+// Read in all the models
+// fs.readdirSync(__dirname + '/../models').forEach(function(filename) {
+// 	if (~filename.indexOf('.js')) require(__dirname + "/../models/" + filename);
+// })
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
@@ -21,9 +26,10 @@ var tweetSchema = mongoose.Schema({
     created_at : String
 })
 
-var Tweet = mongoose.model('Tweet', tweetSchema)
+var Tweet = mongoose.model('Tweet', tweetSchema);
 
 var db = mongoose.connection;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function (callback) {
