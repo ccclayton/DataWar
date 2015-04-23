@@ -1,15 +1,18 @@
-
-function TweetPanel(tweet,position) //don't need scene anymore
+"use strict";
+function TweetPanel(tweet,position,mass) 
 // Need to add physics.
 {
-	return this.NewTweet(tweet, position);
+	Node.call(this);
+	this.tweet = tweet;
+	this.position = position;
+	this.mass = mass;
+	//return this.NewTweet(this.tweet, this.position,this.mass);
 }
 
+TweetPanel.prototype = new Node();         //Inheritance
+TweetPanel.prototype.constructor = Node;  //Fixes the pointer.
+TweetPanel.prototype.draw = function(){
 
-
-TweetPanel.prototype.NewTweet = function(tweet,position){
-
-	//var num = Math.random();
 	var canvas = document.createElement( 'canvas' );
 
 	canvas.width = 1920;
@@ -20,7 +23,7 @@ TweetPanel.prototype.NewTweet = function(tweet,position){
 	context.font = "90px Times";
 
 
-	context.fillText(tweet,300,500); //Will eventually be parsed usernames.
+	context.fillText(this.tweet,300,500); //Will eventually be parsed usernames.
 
 	context.textAlign = 'center';
 	var tweetText = new THREE.Texture( canvas );
@@ -30,16 +33,16 @@ TweetPanel.prototype.NewTweet = function(tweet,position){
 
 	//Create Physijs object out of canvas. This will hold the username of the Tweet.
 	var tweetMesh = new Physijs.BoxMesh(
-			new THREE.CubeGeometry(50, 12, 1),
-			Physijs.createMaterial(
-					new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0.8, 0
-					), 0
-			);
+		new THREE.CubeGeometry(50, 12, 1),
+		Physijs.createMaterial(
+			new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0.8, 0
+			), this.mass
+		);
 
-	tweetMesh.position.set(position.x,position.y,position.z);
+	tweetMesh.position.set(this.position.x,this.position.y,this.position.z);
 	tweetMesh._dirtyPosition = true;
 
-	return tweetMesh;
+	scene.add(tweetMesh);
 };
 
 
