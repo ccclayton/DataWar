@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 
 var tweetSchema = mongoose.Schema({
-	id : String,
+	id : Number,
 	raw : JSON,
     user : String,
     description : String, 
     retweet : String,
-    timestamp : String,
-    created_at : String
+    timestamp : Number,
+    created_at : Date
 })
 
-mongoose.model('Tweet', tweetSchema)
+module.exports = mongoose.model('Tweet', tweetSchema)

@@ -1,0 +1,98 @@
+{  
+   "_id":ObjectId("553925f792fe27761a7d49b0"),
+   "id":591286372373135400,
+   "raw":{  
+      "timestamp_ms":"1429808631400",
+      "lang":"en",
+      "filter_level":"low",
+      "possibly_sensitive":false,
+      "retweeted":false,
+      "favorited":false,
+      "entities":{  
+         "symbols":[  
+
+         ],
+         "user_mentions":[  
+
+         ],
+         "urls":[  
+            {  
+               "indices":[  
+                  37,
+                  60
+               ],
+               "display_url":"twitter.com/Elverojaguar/s…",
+               "expanded_url":"https://twitter.com/Elverojaguar/status/591281719707328512",
+               "url":"https://t.co/3qGNhy97n4"
+            }
+         ],
+         "trends":[  
+
+         ],
+         "hashtags":[  
+
+         ]
+      },
+      "favorite_count":0,
+      "retweet_count":0,
+      "contributors":null,
+      "place":null,
+      "coordinates":null,
+      "geo":null,
+      "user":{  
+         "notifications":null,
+         "follow_request_sent":null,
+         "following":null,
+         "default_profile_image":false,
+         "default_profile":true,
+         "profile_image_url_https":"https://pbs.twimg.com/profile_images/589584648797167616/KNklJfZU_normal.jpg",
+         "profile_image_url":"http://pbs.twimg.com/profile_images/589584648797167616/KNklJfZU_normal.jpg",
+         "profile_use_background_image":true,
+         "profile_text_color":"333333",
+         "profile_sidebar_fill_color":"DDEEF6",
+         "profile_sidebar_border_color":"C0DEED",
+         "profile_link_color":"0084B4",
+         "profile_background_tile":false,
+         "profile_background_image_url_https":"https://abs.twimg.com/images/themes/theme1/bg.png",
+         "profile_background_image_url":"http://abs.twimg.com/images/themes/theme1/bg.png",
+         "profile_background_color":"C0DEED",
+         "is_translator":false,
+         "contributors_enabled":false,
+         "lang":"en",
+         "geo_enabled":false,
+         "time_zone":null,
+         "utc_offset":null,
+         "created_at":"Sat Apr 18 01:08:44 +0000 2015",
+         "statuses_count":340,
+         "favourites_count":128,
+         "listed_count":1,
+         "friends_count":68,
+         "followers_count":14,
+         "verified":false,
+         "protected":false,
+         "description":null,
+         "url":null,
+         "location":"",
+         "screen_name":"InspireMe82",
+         "name":".......",
+         "id_str":"3161728736",
+         "id":3161728736
+      },
+      "in_reply_to_screen_name":null,
+      "in_reply_to_user_id_str":null,
+      "in_reply_to_user_id":null,
+      "in_reply_to_status_id_str":null,
+      "in_reply_to_status_id":null,
+      "truncated":false,
+      "source":"<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+      "text":"banana face were r u? on vacation?🐵🌴 https://t.co/3qGNhy97n4",
+      "id_str":"591286372373135360",
+      "id":591286372373135400,
+      "created_at":"Thu Apr 23 17:03:51 +0000 2015"
+   },
+   "user":"InspireMe82",
+   "description":"banana face were r u? on vacation?🐵🌴 https://t.co/3qGNhy97n4",
+   "timestamp":1429808631400,
+   "created_at":   ISODate("2015-04-23T17:03:51   Z"),
+   "__v":0
+}

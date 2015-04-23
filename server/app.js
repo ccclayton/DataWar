@@ -4,25 +4,26 @@
 
 'use strict';
 
-// Set default node environment to development
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
 var express = require('express');
 var mongoose = require('mongoose');
+var tweet = require('../models/tweet.js');
+var path = require('path');
+var express = require('express');
+var app = express();
 
 // Connect to database
 mongoose.connect('mongodb://localhost/test');
 
 // Setup server
-var express = require('express');
-var app = express();
+require('./config/express');
+require('./routes')(app);
+
+app.use(express.static('/home/danny/Documents/Kinetech/DataWar'));
+
 
 // Start server
-var server = app.listen(3000, function () {
+app.listen(3000);
+console.log('Listening on port 3000');
 
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Example app listening at http://%s:%s', host, port);
-
-});
+// Expose app
+exports = module.exports = app;

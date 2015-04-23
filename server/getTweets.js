@@ -16,17 +16,17 @@ var T = new Twit({
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
-var tweetSchema = mongoose.Schema({
-	id : String,
-	raw : JSON,
-    user : String,
-    description : String, 
-    retweet : String,
-    timestamp : String,
-    created_at : String
-})
+// var tweetSchema = mongoose.Schema({
+// 	id : Number,
+// 	raw : JSON,
+//     user : String,
+//     description : String, 
+//     retweet : String,
+//     timestamp : Number,
+//     created_at : String
+// })
 
-var Tweet = mongoose.model('Tweet', tweetSchema);
+var Tweet = require('../models/tweet.js')
 
 var db = mongoose.connection;
 
@@ -49,7 +49,7 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	var stream = T.stream('statuses/filter', { track: '#apple', language: 'en' })
+	var stream = T.stream('statuses/filter', { track: ['#apple', 'swag', 'banana'], language: 'en' })
 
 	// Start the stream, and store the JSON information in data
 	stream.on('tweet', function (data) {
