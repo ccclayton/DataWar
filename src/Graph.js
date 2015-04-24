@@ -175,7 +175,7 @@ function Node(node_id) {
   this.connectedEdges= [];
   this.position = null; //use THREE.Vector3
   this.data = {};
-  this.geometry = new THREE.SphereGeometry( 25, 25, 25);
+  this.geometry = null;
 }
 
 Node.prototype.kill = function(){
@@ -235,53 +235,53 @@ Node.prototype.connectedFrom = function(node) {
 };
 
 
-//TODO: Rewrite this so it handles different geometries or override it.
-Node.prototype.draw=function(options){
-  // debugger;
-  this.data.color=Math.random() * 0xffffff;
-  this.data.size = Math.pow(this.data.userInfo.followers_count, 0.25);
-  //this.data.size = 5;
-  // console.log("size: "+this.data.size);
-  this.data.size = this.data.size < 1 ? 1 : this.data.size;
-  this.data.size = this.data.size > 20 ? 20 : this.data.size;
-
-  var draw_object = new THREE.Mesh( this.geometry, new THREE.MeshBasicMaterial( {  color: this.data.color, opacity: 0.7 } ) );
-
-  draw_object.org_node = this;
-
-  var scale = 0.1;
-  draw_object.scale.x = this.data.size*scale;
-  draw_object.scale.y = this.data.size*scale;
-  draw_object.scale.z = this.data.size*scale;
-
-  // if(that.show_labels) {
-  //   if(node.data.title != undefined) {
-  //     var label_object = new THREE.Label(node.data.title);
-  //   } else {
-  //     var label_object = new THREE.Label(node.id);
-  //   }
-  //   node.data.label_object = label_object;
-  //   scene.add( node.data.label_object );
-  // }
-
-  // var area = 5000;
-  // draw_object.position.x = Math.floor(Math.random() * (area + area + 1) - area);
-  // draw_object.position.y = Math.floor(Math.random() * (area + area + 1) - area);
-
-  draw_object.position.copy(this.position);
-  this.position = draw_object.position; //link node.position to draw_object.position
-
-  // if(that.layout === "3d") {
-  //   // draw_object.position.z = Math.floor(Math.random() * (area + area + 1) - area);
-  //   draw_object.position.z = node.position.z;
-  // }
-
-  // draw_object.id = node.id;
-  this.data.draw_object = draw_object;
-  this.data.draw_object.selectionEnabled = true;
-  // node.position = draw_object.position;
-  this.scene.add( this.data.draw_object );
-};
+////TODO: Rewrite this so it handles different geometries or override it.
+//Node.prototype.draw=function(options){
+//  // debugger;
+//  //this.data.color=Math.random() * 0xffffff;
+//  this.data.size = Math.pow(this.data.userInfo.followers_count, 0.25);
+//  //this.data.size = 5;
+//  // console.log("size: "+this.data.size);
+//  this.data.size = this.data.size < 1 ? 1 : this.data.size;
+//  this.data.size = this.data.size > 20 ? 20 : this.data.size;
+//
+//  var draw_object = new THREE.Mesh( this.geometry, new THREE.MeshBasicMaterial(  ) );
+//
+//  draw_object.org_node = this;
+//
+//  var scale = 0.1;
+//  draw_object.scale.x = this.data.size*scale;
+//  draw_object.scale.y = this.data.size*scale;
+//  draw_object.scale.z = this.data.size*scale;
+//
+//  // if(that.show_labels) {
+//  //   if(node.data.title != undefined) {
+//  //     var label_object = new THREE.Label(node.data.title);
+//  //   } else {
+//  //     var label_object = new THREE.Label(node.id);
+//  //   }
+//  //   node.data.label_object = label_object;
+//  //   scene.add( node.data.label_object );
+//  // }
+//
+//  // var area = 5000;
+//  // draw_object.position.x = Math.floor(Math.random() * (area + area + 1) - area);
+//  // draw_object.position.y = Math.floor(Math.random() * (area + area + 1) - area);
+//
+//  draw_object.position.copy(this.position);
+//  this.position = draw_object.position; //link node.position to draw_object.position
+//
+//  // if(that.layout === "3d") {
+//  //   // draw_object.position.z = Math.floor(Math.random() * (area + area + 1) - area);
+//  //   draw_object.position.z = node.position.z;
+//  // }
+//
+//  // draw_object.id = node.id;
+//  this.data.draw_object = draw_object;
+//  this.data.draw_object.selectionEnabled = true;
+//  // node.position = draw_object.position;
+//  this.scene.add( this.data.draw_object );
+//};
 
 Node.prototype.show=function(){
 
@@ -296,6 +296,7 @@ function Edge(source, target) {
   this.source = source;
   this.target = target;
   this.data = {};
+   this.geometries = [];
 };
 
 Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pass in node that issue the request
@@ -311,7 +312,7 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
 
 //Changed by Colin Clayton
 Edge.prototype.draw=function(){
-  material = new THREE.LineBasicMaterial({ color: this.source.data.color, opacity: 1, linewidth: 0.1});
+  material = new THREE.LineBasicMaterial({ linewidth: 0.1});
   // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
   var tmp_geo = new THREE.Geometry();

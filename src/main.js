@@ -20,7 +20,7 @@ var parameters = {
 		param: 4,
 		filterparam: 1
 };
-var tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
+
 
 
 init();
@@ -227,27 +227,9 @@ function createGraph(){
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.
 
+    tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
 
-    var username = "colincclayton";
     var tweets = ["This is a test tweet. Hello World!","Kinetech Arts is awesome.", "We're getting closer to being done!"];
-
-	var username = "colincclayton";
-	var tweet = "This is a test tweet. Hello World!";
-	// var tweetStructure = new TweetStructure(); //Create TweetStructure Object.
-
-
-
-    var position = new THREE.Vector3(0, 0, -40);
-
-    //--------------------------------------------------------------------------------------
-    //Create new nodes by giving username(string), a geometry(null will give a default of sphere),
-    // geometry type (string), position(THREE.Vector3), and mass.
-    // IMPORTANT: FOR DEFAULT OF SPHERE OBJECTS, GIVE A NULL ARGUMENT FOR GEOMETRY, AND GEOMETRY TYPE.
-    // OR GIVE NULL FOR GEOMETRY, AND "default" FOR GEOMETRY TYPE.
-    // OTHERWISE, IF YOU ONLY HAVE THE GEOMETRY SET TO NULL, YOU WILL GET AN ALERT TELLING YOU TO FIX
-    // THE CREATION OF YOUR NODE.
-    //
-   // var tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
 
 
     var usernames = ["colincclayton", "dGillies", "Wei", "Jackie", "Van Halen", "test", "Gene Simmons"];
@@ -258,23 +240,6 @@ function createGraph(){
 
     //graph.add(edge);
 
-	//--------------------------------------------------------------------------------------
-	//Create new nodes by giving username(string), a geometry(null will give a default of sphere), 
-	// geometry type (string), position(THREE.Vector3), and mass.
-	// IMPORTANT: FOR DEFAULT OF SPHERE OBJECTS, GIVE A NULL ARGUMENT FOR GEOMETRY, AND GEOMETRY TYPE.
-	// OR GIVE NULL FOR GEOMETRY, AND "default" FOR GEOMETRY TYPE. 
-	// OTHERWISE, IF YOU ONLY HAVE THE GEOMETRY SET TO NULL, YOU WILL GET AN ALERT TELLING YOU TO FIX 
-	// THE CREATION OF YOUR NODE.
-	// 
-	// var tweetStructure = new TweetStructure(scene); //Create new TweetStructure
-	// var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
-	// tweetStructure.AddNode(node);
-	// var node2 = new TwitterNode(username, null, null, new THREE.Vector3( 0, 100, -120 ), 0);
-	// tweetStructure.AddNode(node2);
-	// var tweetPanel = new TweetPanel(tweet,new THREE.Vector3( 0, 20, -20 ));
-	// tweetStructure.AddPanel(tweetPanel);
-	// tweetStructure.CreateConnection(node,tweetPanel);
-	//scene.add(connection);
 
 
 
@@ -313,13 +278,16 @@ function animate() {
 	// yawObject.__dirtyPosition = true;
 	// PlayerCube.__dirtyPosition = true;
 	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
+    //tweetStructure.render();
+
 	water.material.uniforms.time.value += 1.0 / 60.0;
 	controls.update();
 	scene.simulate(); // run physics
 	water.render();
-    //tweetStructure.render(); //TODO: DOES THIS NEED TO BE HERE?
+    tweetStructure.render(); //TODO: DOES THIS NEED TO BE HERE?
 	animate_sound();
-	
+
+
 
 	// ground.__dirtyPosition = true;
 	// fence.__dirtyPosition = true;

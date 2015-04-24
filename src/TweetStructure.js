@@ -24,40 +24,50 @@ var TweetStructure=function(options){
 
     var processUserNames=function(usernames,tweets){
         //console.log("batch processing usernames");
-        usernames.forEach(function(username){
-           var node = createUserNode(username);
+        //usernames.forEach(function(username){
+        //   var node = createUserNode(username);
+        //
+        //    tweets.forEach(function(tweet){
+        //    var panel = createTweetPanel(tweet);
+        //
+        //        var edge = graph.addEdge(node,panel);
+        //        edge.draw();
+        //    })
 
-            tweets.forEach(function(tweet){
-            var panel = createTweetPanel(tweet);
 
-                var edge = graph.addEdge(node,panel);
-                edge.draw();
-            })
-        })
+       // })
 
-
+        for(var i = 0; i < 2; i++){
+            var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
+        }
 
     };
-    var createUserNode = function(username){
-        numNodes++;
-        var userNode = new TwitterNode(username,null,null,lookupStartPosition(username),0);
-        graph.addNode(userNode);
 
+    var createUserNode = function(username){
+        var location = lookupStartPosition(username);
+        var userNode = new TwitterNode(username,null,null,location,0);
+        userNode.id = numNodes; //NOT SURE
+        graph.addNode(userNode);
+        userNode.position =location;
+        userNode.geometry =  new THREE.SphereGeometry(6, 32, 32);
+
+        //userNode.id = numNodes; //NOT SURE
+        numNodes++; //NOT SURE.
 
         userNode.draw();
 
         return userNode;//Testing
 
-        //if(graph.nodes.length > maxNumUser)
-        //        removeOldestNode();
-        //
-        //    if(graph.nodes.length > maxNumUser)
-        //        removeOldestNode();
+             
     };
 
     var createTweetPanel = function(tweet){
-        var tweetPanel = new TweetPanel(tweet,lookupStartPosition(tweet),0);
+        var location = lookupStartPosition(tweet);
+        var tweetPanel = new TweetPanel(tweet,location,0);
+        tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
+        tweetPanel.position = location;
+        numNodes++;
         tweetPanel.draw();
         return tweetPanel; //Testing
     };
@@ -72,17 +82,7 @@ var TweetStructure=function(options){
         })
     };
 
-    //var doProcessTweets=function(tweets){
-    //    if(tweets.length<1) return
-    //
-    //    var that = this;
-    //    var tweet = tweets.shift();
-    //    processOneTweet(tweet, lookupStartPosition(tweet)); //TODO: START HERE
-    //    graph.layout.init();
-    //    graph.layout.resetTemperature();
-    //    if(tweets.length>0)
-    //        setTimeout(function(){doProcessTweets(tweets);}, 400);
-    //};
+
 
         //Modified by Colin Clayton
     var lookupStartPosition=function(twitterHandle){
@@ -96,14 +96,7 @@ var TweetStructure=function(options){
     };
 
 
-    //var removeOldestNode=function(){
-    //    var node = graph.getOldestNode();
-    //    node.data.tweets.forEach(function(item){
-    //        var idx = tweetsInContext.indexOf(item);
-    //        tweetsInContext.splice(idx,1);
-    //    })
-    //    graph.removeNode(node);
-    //};
+
 
 
     //var processOneTweet=function(tweet, nodeOrigin){
@@ -136,80 +129,55 @@ var TweetStructure=function(options){
 
 
 
-    //var userHasTweet=function(node, tweet){
-    //    // if(node.data.tweets.length>3)
-    //    // 	debugger;
-    //
-    //    for(var i=0; i<node.data.tweets.length; i++){
-    //        // if(node.data.tweets[i].text == tweet.text)
-    //        if(node.data.tweets[i].id == tweet.id)
-    //            return node.data.tweets[i];
-    //    }
-    //    return null;
-    //};
-
-
-    //var addTweetToUser=function(node, tweet){
-    //    var twData = userHasTweet(node, tweet);
-    //    if(twData!=null){ //found a match
-    //        twData.count+=1;
-    //    }else{
-    //        var tweetData={
-    //            id:tweet.id,
-    //            text:tweet.text,
-    //            created_by:node.data.userInfo.screen_name,
-    //            created_at:tweet.created_at,
-    //            count:1
-    //        };
-    //
-    //        node.data.tweets.push(tweetData);
-    //        tweetsInContext.push(tweetData);
-    //    }
-    //    // tweetsInContext.sort(function(x,y){
-    //    // 	return x.count< y.count;
-    //    // });
-    //};
-
-
-
-    //var isRetweet=function(tweet){
-    //    return tweet.retweeted_status != undefined;
-    //};
-
-
-    //// if user exist, return it, otherwise, create it and return
-    //var createUserNode=function(userInfo, nodeOrigin){
-    //    // debugger;
-    //    var node = graph.getNode(userInfo);
-    //    if(node == undefined){
-    //        var node = new Node(userInfo);
-    //       // node.data.userInfo=userInfo;
-    //        //node.data.tweets=[];
-    //
-    //        ///////////////////////////
-    //        //node starting position
-    //        ///////////////////////////
-    //        node.position = nodeOrigin;
-    //
-    //        graph.addNode(node);
-    //        node.draw();
-    //    }
-    //
-    //    return node;
-    //};
 
 
     var render=function(){
+
         // Generate layout if not finished
         if(!graph.layout.finished) {
            // info_text.calc = "<span style='color: red'>Calculating layout...</span>";
-            graph.layout.generate(new THREE.Vector3(0,30,-40));
+            graph.layout.generate(new THREE.Vector3(40,10,-60));
+
         }
 
         //// Update position of lines (edges)
         //for(var i=0; i<graph.geometries.length; i++) {
         //    graph.geometries[i].verticesNeedUpdate = true;
         //}
+
+        ////TODO: Update position of nodes and panels
+        for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
+           //var nodeToBe =  graph.getNode(i);
+            var nodeToBe = graph.nodes[i];
+
+
+            //nodeToBe.draw();
+            //console.log(nodeToBe);
+            nodeToBe.geometry.verticesNeedUpdate = true;
+            nodeToBe.geometry.elementsNeedUpdate = true;
+            //console.log(nodeToBe.position);
+
+            nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
+
+            //nodeToBe.draw();
+
+            //nodeToBe.position.x += Math.random() * 10;
+            //nodeToBe.position.y += Math.random() * 10;
+            //nodeToBe.position.z += Math.random() * 10;
+
+
+            //console.log(nodeToBe.position);
+
+
+
+
+           // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
+
+        }
+
+
+
+
         //
         //
         //// Show labels if set

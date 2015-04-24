@@ -57,8 +57,8 @@ TwitterNode.prototype.draw = function () {
     context.textAlign = 'center';
     var tweeterTexture = new THREE.Texture(canvas);
     tweeterTexture.needsUpdate = true;
-    tweeterTexture.magFilter = THREE.NearestFilter;
-    tweeterTexture.minFilter = THREE.LinearMipMapLinearFilter;
+    //tweeterTexture.magFilter = THREE.NearestFilter;
+    //tweeterTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
     //NEED A SWITCH CASE FOR DIFFERENT TYPES OF GEOMETRY/Meshes
 
@@ -69,16 +69,16 @@ TwitterNode.prototype.draw = function () {
             alert("Error at creation of node.");
             break;
         case 2:
-            mesh = new Physijs.BoxMesh(
-                this.geometry,
+            this.mesh = new Physijs.BoxMesh(
+                geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
                 ), this.mass
             );
             break;
         case 3:
-            mesh = new Physijs.SphereMesh(
-                this.geometry,
+            this.mesh = new Physijs.SphereMesh(
+                geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
                 ), this.mass
@@ -86,24 +86,24 @@ TwitterNode.prototype.draw = function () {
 
             break;
         case 4:    //NEED TO FIX PHYSICS. CYLINDER WILL CURRENTLY FALL OVER AND ROLL AWAY.
-            mesh = new Physijs.CylinderMesh(
-                this.geometry,
+            this.mesh = new Physijs.CylinderMesh(
+                geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
                 ), this.mass
             );
             break;
         case 5:
-            mesh = new Physijs.ConvexMesh(
-                this.geometry,
+            this.mesh = new Physijs.ConvexMesh(
+                geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
                 ), this.mass
             );
             break;
         case 6:
-            mesh = new Physijs.ConcaveMesh(
-                this.geometry,
+            this.mesh = new Physijs.ConcaveMesh(
+                geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
                 ), this.mass
@@ -111,7 +111,7 @@ TwitterNode.prototype.draw = function () {
             break;
         default:
             geometry = new THREE.SphereGeometry(6, 32, 32);
-            mesh = new Physijs.SphereMesh(
+            this.mesh = new Physijs.SphereMesh(
                 geometry,
                 Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
@@ -120,10 +120,12 @@ TwitterNode.prototype.draw = function () {
 
             break;
     }
-    mesh.position.set(this.position.x, this.position.y, this.position.z);
-    mesh._dirtyPosition = true;
+    this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+    this.mesh.geometry.verticesNeedUpdate = true;
+   this.mesh.geometry.elementsNeedUpdate = true;
+    this.mesh._dirtyPosition = true;
 
-    scene.add(mesh);
+    scene.add(this.mesh);
 }
 
 TwitterNode.prototype.killNode = function () {

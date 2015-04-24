@@ -27,8 +27,8 @@ TweetPanel.prototype.draw = function(){
 
 	context.textAlign = 'center';
 	var tweetText = new THREE.Texture( canvas );
-	tweetText.magFilter = THREE.NearestFilter;
-	tweetText.minFilter = THREE.LinearMipMapLinearFilter;
+	//tweetText.magFilter = THREE.NearestFilter;
+	//tweetText.minFilter = THREE.LinearMipMapLinearFilter;
 	tweetText.needsUpdate = true;
 
 	//Create Physijs object out of canvas. This will hold the username of the Tweet.
@@ -40,6 +40,8 @@ TweetPanel.prototype.draw = function(){
 		);
 
 	tweetMesh.position.set(this.position.x,this.position.y,this.position.z);
+	tweetMesh.geometry.verticesNeedUpdate = true;
+	tweetMesh.geometry.elementsNeedUpdate = true;
 	tweetMesh._dirtyPosition = true;
 
 	scene.add(tweetMesh);
