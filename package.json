@@ -1,0 +1,13 @@
+{
+  "name": "Datawar",
+  "description": "Kinetech Datawar",
+  "author": "Danny Gillies",
+  "dependencies": {
+    "express": ">= 4.12.1",
+    "mongoose": ">= 4.0.2",
+    "connect": ">= 3.3.5",
+    "twit": "^1.1.18",
+    "ejs": "~0.8.4"
+  },
+  "engine": "node 0.10.33"
+}

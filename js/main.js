@@ -9,6 +9,8 @@ var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
 var waterNormals;
 var tweetStructure;
+var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
+var dt = Date.parse(curdate)
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -211,6 +213,7 @@ function init() {
     mirrorMesh.rotation.x = (-Math.PI * 0.5);
     scene.add(mirrorMesh);
 
+    grabTweets();
 
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -221,6 +224,18 @@ function init() {
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
+}
+
+// AJAX REQUESTS
+function grabTweets() {
+  setTimeout(grabTweets, 5000);
+  var param = {date : dt};
+  $.get( '/api/tweets', param, function(data) {
+    if (data.tweets.length != 0) {
+      dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
+      console.log(data.tweets.length);
+    }
+  });
 }
 
 function createGraph(){
@@ -286,8 +301,6 @@ function animate() {
 	water.render();
     tweetStructure.render(); //TODO: DOES THIS NEED TO BE HERE?
 	animate_sound();
-
-
 
 	// ground.__dirtyPosition = true;
 	// fence.__dirtyPosition = true;

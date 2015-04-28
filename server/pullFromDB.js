@@ -19,7 +19,7 @@ db.once('open', function (callback) {
 
 });
 
-var findTweets = function(db, callback) {
+exports.findTweets = function(db, callback) {
 
 	setTimeout(function() {findTweets(db, null)}, 6000);
 

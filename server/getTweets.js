@@ -49,7 +49,7 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	var stream = T.stream('statuses/filter', { track: ['#apple', 'swag', 'banana'], language: 'en' })
+	var stream = T.stream('statuses/filter', { track: ['#apple', 'elephant'], language: 'en' })
 
 	// Start the stream, and store the JSON information in data
 	stream.on('tweet', function (data) {

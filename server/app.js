@@ -8,7 +8,6 @@ var express = require('express');
 var mongoose = require('mongoose');
 var tweet = require('../models/tweet.js');
 var path = require('path');
-var express = require('express');
 var app = express();
 
 // Connect to database
