@@ -297,6 +297,7 @@ function Edge(source, target) {
   this.target = target;
   this.data = {};
    this.geometries = [];
+    this.line = null;
 };
 
 Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pass in node that issue the request
@@ -312,26 +313,26 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
 
 //Changed by Colin Clayton
 Edge.prototype.draw=function(){
-  material = new THREE.LineBasicMaterial({ linewidth: 0.1});
+  material = new THREE.LineBasicMaterial({ linewidth: 1, transparent: false});
   // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
   var tmp_geo = new THREE.Geometry();
   tmp_geo.vertices.push(this.source.position); // was data.draw_object.position
   tmp_geo.vertices.push(this.target.position);
-  var line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
+  this.line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
   // line = new THREE.Line( tmp_geo, material );
   // var tmpBufferGeo = THREE.BufferGeometryUtils.fromGeometry( tmp_geo );
   // line = new THREE.Line( tmpBufferGeo, material, THREE.LinePieces );
 
 
-  line.scale.x = line.scale.y = line.scale.z = 1;
-  line.originalScale = 0.1;
+  this.line.scale.x = this.line.scale.y = this.line.scale.z = 1;
+  this.line.originalScale = 0.1;
   //this.data.draw_object = line;
 
    //this.geometries.push(tmp_geo);  //TODO: NEED TO FIX THIS!!
   // bufferGeometries.push(tmpBufferGeo);
 
-  scene.add( line );
+  scene.add( this.line );
 };
 
 Edge.prototype.show=function(){

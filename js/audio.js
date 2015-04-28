@@ -80,7 +80,7 @@ request.onload = function() {
 			// $('#play_link').css('top', ($(window).height() / 2 - $('#play_link').height() / 2) + 'px');
 			// $('#play_link').css('left', ($(window).width() / 2 - $('#play_link').width() / 2) + 'px');
 			// $('#play').fadeIn();
-			
+
 			play();
 		},
 		function(error) {
