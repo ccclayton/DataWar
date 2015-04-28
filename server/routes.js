@@ -23,7 +23,7 @@ module.exports = function(app) {
 
 
   var options = {
-    root: '/Users/ccclayton/Documents/Programming/School/Kinetech/DataWar'
+    root: '/home/danny/Documents/Kinetech/DataWar/'
   }
 
   // All other routes should redirect to the index.html
