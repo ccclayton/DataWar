@@ -49,7 +49,7 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	var stream = T.stream('statuses/filter', { track: ['#apple', 'swag', 'banana'], language: 'en' })
+	var stream = T.stream('statuses/filter', { track: ['#apple', 'elephant'], language: 'en' })
 
 	// Start the stream, and store the JSON information in data
 	stream.on('tweet', function (data) {
@@ -59,6 +59,7 @@ var waitForTweets = function(db, callback) {
 			// Get rid of the '@' at the beginning and the ':' at the end of the username that it was retweeted from
 			var retweetFrom = res[1].substring(1, res[1].length - 1);
 			console.log("----------RETWEET FROM " + retweetFrom + "------------")
+			data.text = data.text.substring(data.text.indexOf(':') + 2);
 		}
 
 		// Create the tweet object

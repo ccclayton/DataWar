@@ -9,16 +9,18 @@ var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
 var waterNormals;
 var tweetStructure;
+var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
+var dt = Date.parse(curdate)
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
-		width: 2000,
-		height: 2000,
-		widthSegments: 250,
-		heightSegments: 250,
-		depth: 1500,
-		param: 4,
-		filterparam: 1
+        width: 2000,
+        height: 2000,
+        widthSegments: 250,
+        heightSegments: 250,
+        depth: 1500,
+        param: 4,
+        filterparam: 1
 };
 
 
@@ -211,6 +213,7 @@ function init() {
     mirrorMesh.rotation.x = (-Math.PI * 0.5);
     scene.add(mirrorMesh);
 
+    grabTweets();
 
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -221,6 +224,19 @@ function init() {
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
+}
+
+// AJAX REQUESTS
+function grabTweets() {
+  setTimeout(grabTweets, 5000);
+  console.log("Getting tweets...");
+  var param = {date : dt};
+  $.get( '/api/tweets', param, function(data) {
+    if (data.tweets.length != 0) {
+      dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
+      console.log(data.tweets.length);
+    }
+  });
 }
 
 function createGraph(){
@@ -245,15 +261,15 @@ function createGraph(){
 
 
 
-	//var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
+    //var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
 
     //node.draw(); //Overridden draw function
     //var node2 = new TwitterNode("wei",null,null,new THREE.Vector3(0,40,-40),0);
     //node2.draw(); //Overridden draw function
 
 
-	//Create new tweetPanel to display tweet.
-	//var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
+    //Create new tweetPanel to display tweet.
+    //var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
     //scene.add(tweetPanel);
 
     //var edge = new Edge(node,tweetPanel);
@@ -273,128 +289,127 @@ function createGraph(){
 
 
 function animate() {
-	requestAnimationFrame(animate);
-	// mesh.__dirtyPosition = true;
-	// yawObject.__dirtyPosition = true;
-	// PlayerCube.__dirtyPosition = true;
-	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
+    requestAnimationFrame(animate);
+    // mesh.__dirtyPosition = true;
+    // yawObject.__dirtyPosition = true;
+    // PlayerCube.__dirtyPosition = true;
+    // PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
     //tweetStructure.render();
+    animate_sound();
+    tweetStructure.render();
+    water.material.uniforms.time.value += 1.0 / 60.0;
+    controls.update();
+    scene.simulate(); // run physics
+    water.render();
+    //tweetStructure.render();
+    //animate_sound();
 
-	water.material.uniforms.time.value += 1.0 / 60.0;
-	controls.update();
-	scene.simulate(); // run physics
-	water.render();
-    tweetStructure.render(); //TODO: DOES THIS NEED TO BE HERE?
-	animate_sound();
+    // ground.__dirtyPosition = true;
+    // fence.__dirtyPosition = true;
+    // cube2.__dirtyPosition = true;
+    // cube1.__dirtyPosition = true;
 
-
-
-	// ground.__dirtyPosition = true;
-	// fence.__dirtyPosition = true;
-	// cube2.__dirtyPosition = true;
-	// cube1.__dirtyPosition = true;
-
-	
-	render();
+    
+    render();
 }
 
 function render() {
-	renderer.render(scene, camera);
+    renderer.render(scene, camera);
 }
 
 // Temporary for debugging while building virtual world. Borrowed from example: http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/
 function buildAxes( length ) {
-	var axes = new THREE.Object3D();
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
-	axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
-	return axes;
+    var axes = new THREE.Object3D();
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+    return axes;
 }
 //Temporary for debugging while building virtual world.
 function buildAxis( src, dst, colorHex, dashed ) {
-	var geom = new THREE.Geometry(),
-			mat;
-	if(dashed) {
-		mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
-	} else {
-		mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
-	}
-	geom.vertices.push( src.clone() );
-	geom.vertices.push( dst.clone() );
-	geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
-	var axis = new THREE.Line( geom, mat, THREE.LinePieces );
-	return axis;
+    var geom = new THREE.Geometry(),
+            mat;
+    if(dashed) {
+        mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+    } else {
+        mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+    }
+    geom.vertices.push( src.clone() );
+    geom.vertices.push( dst.clone() );
+    geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+    var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+    return axis;
 }
 
 //Temporary, from http://srchea.com/experimenting-with-web-audio-api-three-js-webgl tutorial.
 
 function buildADDS() {
-	//ADDS Data Sculpture
-	var i = 0;
-	for(var x = 20; x < 400; x += 20) {
-		var j = 0;
-		cubes[i] = new Array();
-		for(var y = 0; y < 60; y += 2) {
-			var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
+    //ADDS Data Sculpture
+    var i = 0;
+    for(var x = 20; x < 400; x += 20) {
+        var j = 0;
+        cubes[i] = new Array();
+        for(var y = 0; y < 60; y += 2) {
+            var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
 
-			var material = new THREE.MeshPhongMaterial({
-				color: randomFairColor(),
-				ambient: 0x808080,
-				specular: 0xffffff,
-				shininess: 20,
-				reflectivity: 5.5 
-			});
+            var material = new THREE.MeshPhongMaterial({
+                color: randomFairColor(),
+                ambient: 0x808080,
+                specular: 0xffffff,
+                shininess: 20,
+                reflectivity: 5.5 
+            });
 
-			cubes[i][j] = new THREE.Mesh(geometry, material);
-			cubes[i][j].position = new THREE.Vector3(x-100, y, -400);
-			cubes[i][j].rotation.y = Math.PI/2;
+            cubes[i][j] = new THREE.Mesh(geometry, material);
+            cubes[i][j].position = new THREE.Vector3(x-100, y, -400);
+            cubes[i][j].rotation.y = Math.PI/2;
 
-			scene.add(cubes[i][j]);
-			j++;
-		}
-		i++;
-	}
+            scene.add(cubes[i][j]);
+            j++;
+        }
+        i++;
+    }
 }
 
 function onWindowResize() {
 
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
-	renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
 //Temporary Animation function for sound visualization: https://github.com/srchea/Sound-Visualizer.
 function animate_sound() {
 
-	if(typeof array === 'object' && array.length > 0) {
-		var k = 0;
-		for(var i = 0; i < cubes.length; i++) {
-			for(var j = 0; j < cubes[i].length; j++) {
-				var scale = (array[k] + boost) / 30;
-				cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
-				k += (k < array.length ? 1 : 0);
-			}
-		}
-	}
+    if(typeof array === 'object' && array.length > 0) {
+        var k = 0;
+        for(var i = 0; i < cubes.length; i++) {
+            for(var j = 0; j < cubes[i].length; j++) {
+                var scale = (array[k] + boost) / 30;
+                cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
+                k += (k < array.length ? 1 : 0);
+            }
+        }
+    }
 }
 
-// 	// charposition = controls.getObject().position;
-// 	// console.log(charposition);
-// 	update();
+//  // charposition = controls.getObject().position;
+//  // console.log(charposition);
+//  update();
 
-// 	requestAnimationFrame( animate );
-// 	renderer.render( scene, camera );
+//  requestAnimationFrame( animate );
+//  renderer.render( scene, camera );
 // }
 // Temporary Random Color Generator for temp data sculpture. http://srchea.com/experimenting-with-web-audio-api-three-js-webgl
 function randomFairColor() {
-	var min = 64;
-	var max = 224;
-	var r = (Math.floor(Math.random() * (max - min + 1)) + min) * 65536;
-	var g = (Math.floor(Math.random() * (max - min + 1)) + min) * 256;
-	var b = (Math.floor(Math.random() * (max - min + 1)) + min);
-	return r + g + b;
+    var min = 64;
+    var max = 224;
+    var r = (Math.floor(Math.random() * (max - min + 1)) + min) * 65536;
+    var g = (Math.floor(Math.random() * (max - min + 1)) + min) * 256;
+    var b = (Math.floor(Math.random() * (max - min + 1)) + min);
+    return r + g + b;
 }
 
