@@ -279,13 +279,14 @@ function animate() {
 	// PlayerCube.__dirtyPosition = true;
 	// PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
     //tweetStructure.render();
-
+    animate_sound();
+    tweetStructure.render();
 	water.material.uniforms.time.value += 1.0 / 60.0;
 	controls.update();
 	scene.simulate(); // run physics
 	water.render();
-    tweetStructure.render(); //TODO: DOES THIS NEED TO BE HERE?
-	animate_sound();
+    //tweetStructure.render();
+	//animate_sound();
 
 
 

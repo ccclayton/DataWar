@@ -122,7 +122,7 @@ TwitterNode.prototype.draw = function () {
     }
     this.mesh.position.set(this.position.x, this.position.y, this.position.z);
     this.mesh.geometry.verticesNeedUpdate = true;
-   this.mesh.geometry.elementsNeedUpdate = true;
+    this.mesh.geometry.elementsNeedUpdate = true;
     this.mesh._dirtyPosition = true;
 
     scene.add(this.mesh);
@@ -137,3 +137,15 @@ TwitterNode.prototype.getPosition = function () {
     return this.position;
 }
 
+
+TwitterNode.prototype.setPosition = function(newPos){
+    this.mesh.position.copy(newPos);
+    this.mesh._dirtyPosition = true;
+}
+
+TwitterNode.prototype.setRotation = function (newRotation){ // THREE.Vector3
+    var euler = new THREE.Euler(newRotation.x,newRotation.y,newRotation.z,'XYZ');
+    this.mesh.position.applyEuler(euler);
+
+    this.mesh._dirtyRotation = true;
+}
