@@ -26,17 +26,8 @@ module.exports = function(app) {
     root: '/Users/ccclayton/Documents/Programming/School/Kinetech/DataWar'
   }
 
-  // Insert routes below
-  app.route('/aa')
-    .get(function(req, res) {
-      // var temp = options.root;
-      // options.root += 'server/';
-      res.sendFile('server/test.js', options)
-      // options.root = temp;
-    })
-
   // All other routes should redirect to the index.html
-  app.route('/')
+  app.route('/*')
     .get(function(req, res) {
       // res.set('Content-Type', 'text/html');
       // var temp = options.root;
@@ -48,7 +39,6 @@ module.exports = function(app) {
 
   app.route('/api/tweets')
     .get(function(req, res) {
-      console.log(req.query.date);
       dt = req.query.date;
       Tweet.find({created_at: { $gt: dt}}, function(err, tweets) {
         if (err) return handleError(err);

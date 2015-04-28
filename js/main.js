@@ -229,6 +229,7 @@ function init() {
 // AJAX REQUESTS
 function grabTweets() {
   setTimeout(grabTweets, 5000);
+  console.log("Getting tweets...");
   var param = {date : dt};
   $.get( '/api/tweets', param, function(data) {
     if (data.tweets.length != 0) {
