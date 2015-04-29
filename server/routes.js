@@ -28,7 +28,11 @@ module.exports = function(app) {
         if (err) return handleError(err);
         // console.log(tweets.length);
         // res.json({tweets: tweets});
-        res.json({tweets: tweets});
+        var temp = [];
+        for (var i = 0; i < tweets.length; i++) {
+          temp[i] = {user: tweets[i].user, description: tweets[i].description};
+        }
+        res.json({tweets: temp});
         // res.send("WEEEEEEEEE");
         // console.log("SDFWEFWEFWEF");
       })

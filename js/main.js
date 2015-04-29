@@ -217,7 +217,7 @@ function init() {
 
     //----------------------------------------------------------------------------------------------------------------------
 
-    createGraph(); //Creates Twitter Structure Graph.
+    createGraph(null); //Creates Twitter Structure Graph.
 
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -234,50 +234,61 @@ function grabTweets() {
   $.get( '/api/tweets', param, function(data) {
     if (data.tweets.length != 0) {
       dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
-      console.log(data.tweets.length);
+      // console.log(data.tweets.length);
+      console.log(data);
+      createGraph(data);
     }
   });
 }
 
-function createGraph(){
+function createGraph(serverinfo){
     //Twitter Structure
-    //Creates a panel that shows the tweet's original author.
+    //Creates a panel that shows the tweet's original author.''
 
     tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
 
-    var tweets = ["This is a test tweet. Hello World!","Kinetech Arts is awesome.", "We're getting closer to being done!"];
+
+    if (serverinfo != null) {
+        console.log(serverinfo);
+
+        var tweetArray = serverinfo.tweets;
+
+        var tweets = [];
+        var usernames = [];
+
+        for (var i = 0; i < tweetArray.length; i++) {
+            tweets[i] = tweetArray[i].description;
+            usernames[i] = tweetArray[i].user;
+        }
+        //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
+        tweetStructure.processUserNames(usernames,tweets);
+       // tweetStructure.processTweets(tweets);
 
 
-    var usernames = ["colincclayton", "dGillies", "Wei", "Jackie", "Van Halen", "test", "Gene Simmons"];
-    //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
-    tweetStructure.processUserNames(usernames,tweets);
-   // tweetStructure.processTweets(tweets);
-
-
-    //graph.add(edge);
+        //graph.add(edge);
 
 
 
 
 
 
-    //var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
+        //var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
 
-    //node.draw(); //Overridden draw function
-    //var node2 = new TwitterNode("wei",null,null,new THREE.Vector3(0,40,-40),0);
-    //node2.draw(); //Overridden draw function
+        //node.draw(); //Overridden draw function
+        //var node2 = new TwitterNode("wei",null,null,new THREE.Vector3(0,40,-40),0);
+        //node2.draw(); //Overridden draw function
 
 
-    //Create new tweetPanel to display tweet.
-    //var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
-    //scene.add(tweetPanel);
+        //Create new tweetPanel to display tweet.
+        //var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
+        //scene.add(tweetPanel);
 
-    //var edge = new Edge(node,tweetPanel);
-    //edge.draw();
+        //var edge = new Edge(node,tweetPanel);
+        //edge.draw();
 
-    //var edge2 = new Edge(node2,tweetPanel);
-    //edge2.draw();
-
+        //var edge2 = new Edge(node2,tweetPanel);
+        //edge2.draw();
+    }
 
 
 
