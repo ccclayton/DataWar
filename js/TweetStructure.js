@@ -13,7 +13,7 @@ var TweetStructure=function(options){
     // tweetsInContext = tweetsInContext;
 
     graph.layout = new Layout.ForceDirected(graph, layoutOptions);
-    graph.layout.init({attraction: 10000, repulsion: 100,iterations:10000});
+    //graph.layout.init(); //TODO: CALL WHEN EVERYTHING IS READY
 
     // options = {scene:drawing.scene};
     // var graph = new Graph(options);
@@ -24,19 +24,23 @@ var TweetStructure=function(options){
 
     var processUserNames=function(usernames,tweets){
         //console.log("batch processing usernames");
-        usernames.forEach(function(username){
-           var node = createUserNode(username);
+        usernames.forEach(function(username) {
+            var node = createUserNode(username);
 
-            tweets.forEach(function(tweet){
-            var panel = createTweetPanel(tweet);
+            tweets.forEach(function (tweet) {
+                var panel = createTweetPanel(tweet);
 
-                var edge = graph.addEdge(node,panel);
+                var edge = graph.addEdge(node, panel);
                 edge.draw();
             })
 
 
+
+
+
         })
 
+        graph.layout.init();
         //for(var i = 0; i < 2; i++){
         //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
         //}
@@ -58,7 +62,7 @@ var TweetStructure=function(options){
 
         return userNode;//Testing
 
-             
+
     };
 
     var createTweetPanel = function(tweet){
@@ -84,7 +88,7 @@ var TweetStructure=function(options){
 
 
 
-        //Modified by Colin Clayton
+    //Modified by Colin Clayton
     var lookupStartPosition=function(twitterHandle){
         //Todo: Hook to db of tracked users and their model positions
         var position = new THREE.Vector3((Math.random()-0.5)*200,
@@ -135,8 +139,9 @@ var TweetStructure=function(options){
 
         // Generate layout if not finished
         if(!graph.layout.finished) {
-           // info_text.calc = "<span style='color: red'>Calculating layout...</span>";
-            graph.layout.generate(new THREE.Vector3(40,10,-60));
+            // info_text.calc = "<span style='color: red'>Calculating layout...</span>";
+            //graph.layout.generate(new THREE.Vector3(40,10,-60));
+            graph.layout.generate(new THREE.Vector3(0,0,0));
             //graph.layout.repulsion_multiplier = 1;
             //graph.layout.attraction_multiplier = 0
             //graph.layout.speedUpFactor = 100;
@@ -150,32 +155,32 @@ var TweetStructure=function(options){
 
         ////TODO: Update position of nodes and panels
         for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
-           //var nodeToBe =  graph.getNode(i);
+            //var nodeToBe =  graph.getNode(i);
             var nodeToBe = graph.nodes[i];
 
 
             //nodeToBe.draw();
             //console.log(nodeToBe);
-           // nodeToBe.mesh.geometry.verticesNeedUpdate = true;
-           // nodeToBe.mesh.geometry.elementsNeedUpdate = true;
+            // nodeToBe.mesh.geometry.verticesNeedUpdate = true;
+            // nodeToBe.mesh.geometry.elementsNeedUpdate = true;
             //console.log(nodeToBe.position);
 
-           // nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
+            // nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
 
             //nodeToBe.draw();
 
-           // nodeToBe.mesh.position.x += Math.random() * 10;
-           // nodeToBe.mesh.position.y += Math.random() * 10; //DOESN'T WORK!
-           // nodeToBe.mesh.position.z += Math.random() * 10;
-           // nodeToBe.setPosition(new THREE.Vector3( nodeToBe.position.x, nodeToBe.position.y , nodeToBe.position.z += Math.random() + 0.001));
-           // nodeToBe.setRotation(new THREE.Vector3(0,0.2,0));
+            // nodeToBe.mesh.position.x += Math.random() * 10;
+            // nodeToBe.mesh.position.y += Math.random() * 10; //DOESN'T WORK!
+            // nodeToBe.mesh.position.z += Math.random() * 10;
+            // nodeToBe.setPosition(new THREE.Vector3( nodeToBe.position.x, nodeToBe.position.y , nodeToBe.position.z += Math.random() + 0.001));
+            // nodeToBe.setRotation(new THREE.Vector3(0,0.2,0));
 
             //console.log(nodeToBe.position);
 
 
 
 
-           // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
+            // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
 
         }
         graph.edges.forEach(function(e){
@@ -259,4 +264,5 @@ var TweetStructure=function(options){
         // tweetsInContext: tweetsInContext
     }
 };
+
 

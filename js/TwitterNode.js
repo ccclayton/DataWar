@@ -132,6 +132,10 @@ TwitterNode.prototype.killNode = function () {
     scene.remove(this.node);
 }
 
+TwitterNode.prototype.updateMeshPosition = function(){
+    this.position.copy( this.mesh.position);
+    this.mesh._dirtyPosition = true;
+};
 
 TwitterNode.prototype.getPosition = function () {
     return this.position;

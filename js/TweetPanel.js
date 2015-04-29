@@ -1,5 +1,5 @@
 "use strict";
-function TweetPanel(tweet,position,mass) 
+function TweetPanel(tweet,position,mass)
 // Need to add physics.
 {
 	Node.call(this);
@@ -14,7 +14,7 @@ TweetPanel.prototype.constructor = Node;  //Fixes the pointer.
 TweetPanel.prototype.draw = function(){
 
 	var canvas = document.createElement( 'canvas' );
-    var tweetMesh;
+	var mesh;
 	canvas.width = 1920;
 	canvas.height = 1080;
 
@@ -32,32 +32,37 @@ TweetPanel.prototype.draw = function(){
 	tweetText.needsUpdate = true;
 
 	//Create Physijs object out of canvas. This will hold the username of the Tweet.
-	 this.tweetMesh = new Physijs.BoxMesh(
+	this.mesh = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(50, 12, 1),
 		Physijs.createMaterial(
 			new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0.8, 0
-			), this.mass
-		);
+		), this.mass
+	);
 
-	this.tweetMesh.position.set(this.position.x,this.position.y,this.position.z);
-	this.tweetMesh.geometry.verticesNeedUpdate = true;
-	this.tweetMesh.geometry.elementsNeedUpdate = true;
-	this.tweetMesh._dirtyPosition = true;
+	this.mesh.position.set(this.position.x,this.position.y,this.position.z);
+	this.mesh.geometry.verticesNeedUpdate = true;
+	this.mesh.geometry.elementsNeedUpdate = true;
+	this.mesh._dirtyPosition = true;
 
-	scene.add(this.tweetMesh);
+	scene.add(this.mesh);
 };
 
 TweetPanel.prototype.getPosition = function(){
 	return this.position;
 }
+TweetPanel.prototype.updateMeshPosition = function(){
+	this.position.copy( this.mesh.position);
+	this.mesh._dirtyPosition = true;
+};
+
 TweetPanel.prototype.setPosition = function(newPos){
-	this.tweetMesh.position.copy(newPos);
-    this.tweetMesh._dirtyPosition = true;
+	this.mesh.position.copy(newPos);
+	this.mesh._dirtyPosition = true;
 }
 
 TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3
-    var euler = new THREE.Euler(newRotation.x,newRotation.y,newRotation.z,'XYZ');
-    this.tweetMesh.position.applyEuler(euler);
+	var euler = new THREE.Euler(newRotation.x,newRotation.y,newRotation.z,'XYZ');
+	this.mesh.position.applyEuler(euler);
 
-    this.tweetMesh._dirtyRotation = true;
+	this.mesh._dirtyRotation = true;
 }

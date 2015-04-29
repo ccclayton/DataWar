@@ -423,9 +423,9 @@ Layout.ForceDirected = function(graph, options) {
         var updated = true;
         //scale down by factor of 10 to reduce oscillation? this is not necessary as it effectively reduces the force constant
         // var scaleDown = 10; //was originally 10
-        var xshift = -(node.position.x-node.layout.tmp_pos_x)/_scaleDown;
-        var yshift = -(node.position.y-node.layout.tmp_pos_y)/_scaleDown;
-        var zshift = that.fix_z ? 0 : -(node.position.z-node.layout.tmp_pos_z)/_scaleDown; //fix_z true => try to maintain 2D flat look
+        var xshift = -(node.mesh.position.x-node.layout.tmp_pos_x)/_scaleDown;
+        var yshift = -(node.mesh.position.y-node.layout.tmp_pos_y)/_scaleDown;
+        var zshift = that.fix_z ? 0 : -(node.mesh.position.z-node.layout.tmp_pos_z)/_scaleDown; //fix_z true => try to maintain 2D flat look
 
         xshift *= (node.layout.temperature+1);
         yshift *= (node.layout.temperature+1);
@@ -436,9 +436,10 @@ Layout.ForceDirected = function(graph, options) {
           node.layout.v_y = node.layout.v_y * this.momentum_factor + yshift * this.new_factor;
           node.layout.v_z = node.layout.v_z * this.momentum_factor + zshift * this.new_factor;
 
-          node.position.x +=  node.layout.v_x;
-          node.position.y +=  node.layout.v_y;
-          node.position.z +=  node.layout.v_z;
+          node.mesh.position.x +=  node.layout.v_x;
+          node.mesh.position.y +=  node.layout.v_y;
+          node.mesh.position.z +=  node.layout.v_z;
+          node.mesh._dirtyPosition = true;
         }else{
           node.lastXshift = node.lastXshift || xshift;
           node.lastYshift = node.lastYshift || yshift;
@@ -455,9 +456,10 @@ Layout.ForceDirected = function(graph, options) {
             yshift /= node.slowDown;
             zshift /= node.slowDown;
           }
-          node.position.x +=  xshift;
-          node.position.y +=  yshift;
-          node.position.z +=  zshift;
+          node.mesh.position.x +=  xshift;
+          node.mesh.position.y +=  yshift;
+          node.mesh.position.z +=  zshift;
+          node.mesh._dirtyPosition = true;
         }
 
         // execute callback function if positions has been updated
