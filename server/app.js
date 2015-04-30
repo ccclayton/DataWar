@@ -17,8 +17,8 @@ mongoose.connect('mongodb://localhost/test');
 require('./config/express');
 require('./routes')(app);
 
+//app.use(express.static('/Users/ccclayton/Documents/Programming/School/Kinetech/DataWar'));
 app.use(express.static('/home/danny/Documents/Kinetech/DataWar'));
-
 
 // Start server
 app.listen(3000);
