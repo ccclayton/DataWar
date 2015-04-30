@@ -258,7 +258,7 @@ function createGraph(serverinfo){
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
-    tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
+    tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
 
 
     if (serverinfo != null) {

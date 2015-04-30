@@ -8,7 +8,9 @@ function TwitterNode(username, geometry, geometryType, position, mass) {
     this.geometry = geometry;
     this.geometryType = geometryType;
     this.position = position;
+    this._dirtyPosition = true;
     this.mass = mass;
+    //this.mesh = null; //NEEDS TO BE THE ACTUAL MESH..
 
 
 
@@ -42,7 +44,7 @@ function TwitterNode(username, geometry, geometryType, position, mass) {
 TwitterNode.prototype = new Node();         //Inheritance
 TwitterNode.prototype.constructor = Node;  //Fixes the pointer.
 
-TwitterNode.prototype.draw = function () {
+TwitterNode.prototype.draw = function (location) {
 
     var canvas = document.createElement('canvas');
     canvas.width = 1920;
@@ -72,58 +74,64 @@ TwitterNode.prototype.draw = function () {
             this.mesh = new Physijs.BoxMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
+            this.mesh._dirtyPosition = true;
             break;
         case 3:
             this.mesh = new Physijs.SphereMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-
+            this.mesh._dirtyPosition = true;
             break;
         case 4:    //NEED TO FIX PHYSICS. CYLINDER WILL CURRENTLY FALL OVER AND ROLL AWAY.
             this.mesh = new Physijs.CylinderMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
+            this.mesh._dirtyPosition = true;
             break;
         case 5:
             this.mesh = new Physijs.ConvexMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
+            this.mesh._dirtyPosition = true;
             break;
         case 6:
             this.mesh = new Physijs.ConcaveMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
+            this.mesh._dirtyPosition = true;
             break;
         default:
             geometry = new THREE.SphereGeometry(6, 32, 32);
             this.mesh = new Physijs.SphereMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0.9, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
+            this.mesh._dirtyPosition = true;
 
             break;
     }
-    this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+    this.mesh._dirtyPosition = true;
+    this.mesh.position.set(location.x,location.y,location.z);
     this.mesh.geometry.verticesNeedUpdate = true;
     this.mesh.geometry.elementsNeedUpdate = true;
-    this.mesh._dirtyPosition = true;
+    //this.mesh._dirtyPosition = true;
 
     scene.add(this.mesh);
 }
@@ -138,7 +146,7 @@ TwitterNode.prototype.updateMeshPosition = function(){
 };
 
 TwitterNode.prototype.getPosition = function () {
-    return this.position;
+    return this.mesh.position;
 }
 
 
