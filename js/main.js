@@ -11,6 +11,7 @@ var waterNormals;
 var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
+console.log(dt);
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -227,15 +228,27 @@ function init() {
 }
 
 // AJAX REQUESTS
+//function grabTweets() {
+//    setTimeout(grabTweets, 5000);
+//    var param = {date : dt};
+//    $.get( '/api/tweets', param, function(data) {
+//        if (data.tweets.length != 0) {
+//            dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
+//            console.log(data.tweets.length);
+//        }
+//    });
+//}
 function grabTweets() {
   setTimeout(grabTweets, 5000);
+    console.log(dt);
   console.log("Getting tweets...");
   var param = {date : dt};
   $.get( '/api/tweets', param, function(data) {
     if (data.tweets.length != 0) {
-      dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
+        //console.log(data.tweets[data.tweets.length -1].created_at)
+      dt = Date.parse(data.tweets[data.tweets.length -1].created_at);
       // console.log(data.tweets.length);
-      console.log(data);
+      //console.log(dt);
       createGraph(data);
     }
   });
@@ -257,11 +270,12 @@ function createGraph(serverinfo){
         var usernames = [];
 
         for (var i = 0; i < tweetArray.length; i++) {
-            tweets[i] = tweetArray[i].description;
-            usernames[i] = tweetArray[i].user;
+            tweets[0] = tweetArray[i].description;
+            usernames[0] = tweetArray[i].user;
+            tweetStructure.processUserNames(usernames,tweets);
         }
         //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
-        tweetStructure.processUserNames(usernames,tweets);
+        //tweetStructure.processUserNames(usernames,tweets);
        // tweetStructure.processTweets(tweets);
 
 
