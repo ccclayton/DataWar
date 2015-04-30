@@ -213,9 +213,9 @@ Layout.ForceDirected = function(graph, options) {
 
         // n.position = n.position.matrixWorld.multiplyVector3( originPoint );
 
-        n.layout.tmp_pos_x = n.position.x;
-        n.layout.tmp_pos_y = n.position.y;
-        n.layout.tmp_pos_z = n.position.z;
+        n.layout.tmp_pos_x = n.mesh.position.x;
+        n.layout.tmp_pos_y = n.mesh.position.y;
+        n.layout.tmp_pos_z = n.mesh.position.z;
 
         // n.layout.tmp_pos_x = 0;//n.position.x;
         // n.layout.tmp_pos_y = 3000;//n.position.y;
@@ -283,19 +283,19 @@ Layout.ForceDirected = function(graph, options) {
 
       for(var i=0; i < nodes_length; i++) {
         var node_v = graph.nodes[i];
-        var dist = node_v.position.length();
+        var dist = node_v.mesh.position.length();
         var sqrtdist = Math.sqrt(dist);
         // sum_dist += dist;
         //add a sqrt of distance to origin, so the pull gets extra stronger when far
         if(dist > this.earthRadius*1.4){
-          node_v.layout.offset_x -= node_v.position.x * sqrtdist * this.gravity;
-          node_v.layout.offset_y -= node_v.position.y * sqrtdist * this.gravity;
-          node_v.layout.offset_z -= node_v.position.z * sqrtdist * this.gravity;
+          node_v.layout.offset_x -= node_v.mesh.position.x * sqrtdist * this.gravity;
+          node_v.layout.offset_y -= node_v.mesh.position.y * sqrtdist * this.gravity;
+          node_v.layout.offset_z -= node_v.mesh.position.z * sqrtdist * this.gravity;
         }else{
           var hardness = 100000;
-          node_v.layout.offset_x += node_v.position.x * hardness * this.gravity;
-          node_v.layout.offset_y += node_v.position.y * hardness * this.gravity;
-          node_v.layout.offset_z += node_v.position.z * hardness * this.gravity;
+          node_v.layout.offset_x += node_v.mesh.position.x * hardness * this.gravity;
+          node_v.layout.offset_y += node_v.mesh.position.y * hardness * this.gravity;
+          node_v.layout.offset_z += node_v.mesh.position.z * hardness * this.gravity;
         }
         // node_v.layout.offset_x -= node_v.position.x  * this.gravity;
         // node_v.layout.offset_y -= node_v.position.y  * this.gravity;
@@ -324,7 +324,7 @@ Layout.ForceDirected = function(graph, options) {
       //black holes
       for(var bh_id = 0; bh_id<num_black_hole; bh_id++){
         if(black_holes[bh_id].gravity > 0.1){
-          var pos = black_holes[bh_id].position;
+          var pos = black_holes[bh_id].mesh.position; //CHECK didn't have mesh before.
           var gravity = black_holes[bh_id].gravity;
           // console.log(gravity);
 
@@ -354,14 +354,14 @@ Layout.ForceDirected = function(graph, options) {
           for(var i=0; i < nodes_length; i++) {
             var node_v = graph.nodes[i];
 
-            var delta_x = node_v.layout.tmp_pos_x - pos.x;
-            var delta_y = node_v.layout.tmp_pos_y - pos.y;
-            var delta_z = node_v.layout.tmp_pos_z - pos.z;
+            var delta_x = node_v.mesh.layout.tmp_pos_x - pos.x;
+            var delta_y = node_v.mesh.layout.tmp_pos_y - pos.y;
+            var delta_z = node_v.mesh.layout.tmp_pos_z - pos.z;
 
             var delta_length;
             delta_length = Math.max(EPSILON, vec3length(delta_x, delta_y, delta_z/1000)); //make z less
             if(delta_length<influence_radius){
-              node_v.layout.temperature = influence_temperature;
+              node_v.mesh.layout.temperature = influence_temperature;
               affected+=1;
             }
           }

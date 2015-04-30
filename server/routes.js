@@ -17,7 +17,7 @@ module.exports = function(app) {
 
 
   var options = {
-    root: '/home/danny/Documents/Kinetech/DataWar/'
+    root: '/Users/ccclayton/Documents/Programming/School/Kinetech/DataWar/'
   }
 
   // Insert routes below
