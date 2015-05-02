@@ -5,13 +5,15 @@ function TweetPanel(tweet,position,mass)
 	Node.call(this);
 	this.tweet = tweet;
 	this.position = position;
+    //this._dirtyPosition = true;
 	this.mass = mass;
+    this.mesh = null;
 	//return this.NewTweet(this.tweet, this.position,this.mass);
 }
 
 TweetPanel.prototype = new Node();         //Inheritance
 TweetPanel.prototype.constructor = Node;  //Fixes the pointer.
-TweetPanel.prototype.draw = function(){
+TweetPanel.prototype.draw = function(location){
 
 	var canvas = document.createElement( 'canvas' );
 	var mesh;
@@ -35,29 +37,29 @@ TweetPanel.prototype.draw = function(){
 	this.mesh = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(50, 12, 1),
 		Physijs.createMaterial(
-			new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0.8, 0
+			new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0, 0
 		), this.mass
 	);
 
-	this.mesh.position.set(this.position.x,this.position.y,this.position.z);
+	this.mesh.position.set(location.x,location.y,location.z);
 	this.mesh.geometry.verticesNeedUpdate = true;
 	this.mesh.geometry.elementsNeedUpdate = true;
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 
 	scene.add(this.mesh);
 };
 
 TweetPanel.prototype.getPosition = function(){
-	return this.position;
+	return this.mesh.position;
 }
 TweetPanel.prototype.updateMeshPosition = function(){
 	this.position.copy( this.mesh.position);
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 };
 
 TweetPanel.prototype.setPosition = function(newPos){
 	this.mesh.position.copy(newPos);
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 }
 
 TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3

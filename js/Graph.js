@@ -57,6 +57,7 @@ function Graph(options) {
     this.layout;
     this.scene = null;
 
+
     if(options!=undefined && options.scene!=undefined) this.scene = options.scene;
     Node.prototype.scene = this.scene;
     Edge.prototype.scene = this.scene;
@@ -317,8 +318,8 @@ Edge.prototype.draw=function(){
     // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
     var tmp_geo = new THREE.Geometry();
-    tmp_geo.vertices.push(this.source.position); // was data.draw_object.position
-    tmp_geo.vertices.push(this.target.position);
+    tmp_geo.vertices.push(this.source.mesh.position); // was data.draw_object.position
+    tmp_geo.vertices.push(this.target.mesh.position);
     this.line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
     // line = new THREE.Line( tmp_geo, material );
     // var tmpBufferGeo = THREE.BufferGeometryUtils.fromGeometry( tmp_geo );

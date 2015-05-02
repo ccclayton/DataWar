@@ -2,6 +2,7 @@
 "use strict";
 var TweetStructure=function(options){
     var maxNumUser = 150;
+    //this.Layout = options.layout; //Check
     var scene = options.scene;
     var graph = new Graph(options);
     var layoutOptions={};
@@ -34,7 +35,7 @@ var TweetStructure=function(options){
         var edge = graph.addEdge(node, panel);
         edge.draw();
 
-        graph.layout.init();
+        graph.layout.init({iterations: 100000});
         //for(var i = 0; i < 2; i++){
         //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
         //}
@@ -46,13 +47,14 @@ var TweetStructure=function(options){
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
-        userNode.position.copy(location); //CHECK
+       // userNode.mesh.position.copy(location); //CHECK
+       // userNode.mesh._dirtyPosition = true;
         //userNode.mesh.geometry =  new THREE.SphereGeometry(6, 32, 32);
 
         //userNode.id = numNodes; //NOT SURE
         numNodes++; //NOT SURE.
 
-        userNode.draw();
+        userNode.draw(location);
 
         return userNode;//Testing
 
@@ -64,9 +66,10 @@ var TweetStructure=function(options){
         var tweetPanel = new TweetPanel(tweet,location,0);
         tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
-        tweetPanel.position = location;
+        //tweetPanel.mesh.position.copy(location); //mesh is undefined...
+        //tweetPanel.mesh._dirtyPosition = true;
         numNodes++;
-        tweetPanel.draw();
+        tweetPanel.draw(location);
         return tweetPanel; //Testing
     };
 
@@ -85,12 +88,10 @@ var TweetStructure=function(options){
     //Modified by Colin Clayton
     var lookupStartPosition=function(twitterHandle){
         //Todo: Hook to db of tracked users and their model positions
-        var position = new THREE.Vector3((Math.random()-0.5)*200,
-            Math.random()*0.5 * 100,
-            (Math.random()-0.5)*200);
-        return position.z >= 10 ? position :  new THREE.Vector3((Math.random()-0.5)*200,
-            10,
-            (Math.random()-0.5)*200);
+        var position = new THREE.Vector3((Math.random()-0.5)*50,
+            Math.random()*0.5 * 200,
+            (Math.random()-0.5)*50);
+        return position;
     };
 
 
@@ -135,7 +136,7 @@ var TweetStructure=function(options){
         if(!graph.layout.finished) {
             // info_text.calc = "<span style='color: red'>Calculating layout...</span>";
             //graph.layout.generate(new THREE.Vector3(40,10,-60));
-            graph.layout.generate(new THREE.Vector3(0,0,0));
+            graph.layout.generate();
             //graph.layout.repulsion_multiplier = 1;
             //graph.layout.attraction_multiplier = 0
             //graph.layout.speedUpFactor = 100;
@@ -148,9 +149,9 @@ var TweetStructure=function(options){
         //}
 
         ////TODO: Update position of nodes and panels
-        for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
+        //for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
             //var nodeToBe =  graph.getNode(i);
-            var nodeToBe = graph.nodes[i];
+            //var nodeToBe = graph.nodes[i];
 
 
             //nodeToBe.draw();
@@ -176,7 +177,7 @@ var TweetStructure=function(options){
 
             // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
 
-        }
+       // }
         graph.edges.forEach(function(e){
             e.line.geometry.verticesNeedUpdate=true;
             e.line.geometry.elementsNeedUpdate = true;
@@ -246,15 +247,13 @@ var TweetStructure=function(options){
         // graph:function(){return graph;},
         graph:graph,
         render:render,
-        lastTweetTime:lastTweetTime,
-        clear: clear,
         resetLastTweetTime:function(){lastTweetTime=new Date(Date.now() - 24*3600*1000);},
 
         drawGraph: drawGraph,
         processTweets: processTweets,
         createUserNode: createUserNode,
-        createTweetPanel: createTweetPanel,
-        makeConnections: makeConnections
+        createTweetPanel: createTweetPanel
+
         // tweetsInContext: tweetsInContext
     }
 };
