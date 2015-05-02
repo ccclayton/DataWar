@@ -8,7 +8,7 @@ function TwitterNode(username, geometry, geometryType, position, mass) {
     this.geometry = geometry;
     this.geometryType = geometryType;
     this.position = position;
-    this._dirtyPosition = true;
+    //this._dirtyPosition = true;
     this.mass = mass;
     //this.mesh = null; //NEEDS TO BE THE ACTUAL MESH..
 
@@ -77,7 +77,7 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
             break;
         case 3:
             this.mesh = new Physijs.SphereMesh(
@@ -86,7 +86,7 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
             break;
         case 4:    //NEED TO FIX PHYSICS. CYLINDER WILL CURRENTLY FALL OVER AND ROLL AWAY.
             this.mesh = new Physijs.CylinderMesh(
@@ -95,7 +95,7 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
             break;
         case 5:
             this.mesh = new Physijs.ConvexMesh(
@@ -104,7 +104,7 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
             break;
         case 6:
             this.mesh = new Physijs.ConcaveMesh(
@@ -113,7 +113,7 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
             break;
         default:
             geometry = new THREE.SphereGeometry(6, 32, 32);
@@ -123,11 +123,11 @@ TwitterNode.prototype.draw = function (location) {
                     new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
                 ), this.mass
             );
-            this.mesh._dirtyPosition = true;
+            this.mesh.__dirtyPosition = true;
 
             break;
     }
-    this.mesh._dirtyPosition = true;
+    this.mesh.__dirtyPosition = true;
     this.mesh.position.set(location.x,location.y,location.z);
     this.mesh.geometry.verticesNeedUpdate = true;
     this.mesh.geometry.elementsNeedUpdate = true;
@@ -142,7 +142,7 @@ TwitterNode.prototype.killNode = function () {
 
 TwitterNode.prototype.updateMeshPosition = function(){
     this.position.copy( this.mesh.position);
-    this.mesh._dirtyPosition = true;
+    this.mesh.__dirtyPosition = true;
 };
 
 TwitterNode.prototype.getPosition = function () {
@@ -152,7 +152,7 @@ TwitterNode.prototype.getPosition = function () {
 
 TwitterNode.prototype.setPosition = function(newPos){
     this.mesh.position.copy(newPos);
-    this.mesh._dirtyPosition = true;
+    this.mesh.__dirtyPosition = true;
 }
 
 TwitterNode.prototype.setRotation = function (newRotation){ // THREE.Vector3

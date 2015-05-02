@@ -35,8 +35,8 @@ Layout.ForceDirected = function(graph, options) {
     var options = options || {};
 
     this.layout = "3d";
-    this.attraction_multiplier = options.attraction || 1;
-    this.repulsion_multiplier = options.repulsion || 5;
+    this.attraction_multiplier = options.attraction || 7.0;
+    this.repulsion_multiplier = options.repulsion || 0.1;
     this.max_iterations = options.iterations || 1000;
     this.graph = graph;
     this.width = options.width || 200;
@@ -96,10 +96,10 @@ Layout.ForceDirected = function(graph, options) {
                 node_v.layout.force = 0;
                 node_v.layout.tmp_pos_x = node_v.layout.tmp_pos_x || node_v.mesh.position.x;
                 node_v.layout.tmp_pos_y = node_v.layout.tmp_pos_y || node_v.mesh.position.y;
-                node_v_dirtyPosition = true;
+                node_v.mesh.__dirtyPosition = true;
                 if (this.layout === "3d") {
                     node_v.layout.tmp_pos_z = node_v.layout.tmp_pos_z || node_v.mesh.position.z;
-                    node_v._dirtyPosition = true;
+                    node_v.mesh.__dirtyPosition = true;
                 }
 
                 for (var j = i + 1; j < nodes_length; j++) {
@@ -108,10 +108,10 @@ Layout.ForceDirected = function(graph, options) {
                         node_u.layout = node_u.layout || {};
                         node_u.layout.tmp_pos_x = node_u.layout.tmp_pos_x || node_u.mesh.position.x;
                         node_u.layout.tmp_pos_y = node_u.layout.tmp_pos_y || node_u.mesh.position.y;
-                        node_u._dirtyPosition = true;
+                        node_u.mesh.__dirtyPosition = true;
                         if (this.layout === "3d") {
                             node_u.layout.tmp_pos_z = node_u.layout.tmp_pos_z || node_u.mesh.position.z;
-                            node_u._dirtyPosition = true;
+                            node_u.mesh.__dirtyPosition = true;
                         }
 
                         var delta_x = node_v.layout.tmp_pos_x - node_u.layout.tmp_pos_x;
@@ -205,13 +205,13 @@ Layout.ForceDirected = function(graph, options) {
                 var updated = true;
                 node.mesh.position.x -= (node.mesh.position.x - node.layout.tmp_pos_x) / 10;
                 node.mesh.position.y -= (node.mesh.position.y - node.layout.tmp_pos_y) / 10;
-                node._dirtyPosition = true;
+                node.mesh.__dirtyPosition = true;
 
                 if (this.layout === "3d") {
                     node.mesh.position.z -= (node.mesh.position.z - node.layout.tmp_pos_z) / 10;
-                    node._dirtyPosition = true;
+                    node.mesh.__dirtyPosition = true;
                 }
-               // node._dirtyPosition = true;
+                node.mesh.__dirtyPosition = true;
 
                 // execute callback function if positions has been updated
                 if (updated && typeof callback_positionUpdated === 'function') {

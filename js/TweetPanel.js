@@ -5,7 +5,7 @@ function TweetPanel(tweet,position,mass)
 	Node.call(this);
 	this.tweet = tweet;
 	this.position = position;
-    this._dirtyPosition = true;
+    //this._dirtyPosition = true;
 	this.mass = mass;
     this.mesh = null;
 	//return this.NewTweet(this.tweet, this.position,this.mass);
@@ -44,7 +44,7 @@ TweetPanel.prototype.draw = function(location){
 	this.mesh.position.set(location.x,location.y,location.z);
 	this.mesh.geometry.verticesNeedUpdate = true;
 	this.mesh.geometry.elementsNeedUpdate = true;
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 
 	scene.add(this.mesh);
 };
@@ -54,12 +54,12 @@ TweetPanel.prototype.getPosition = function(){
 }
 TweetPanel.prototype.updateMeshPosition = function(){
 	this.position.copy( this.mesh.position);
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 };
 
 TweetPanel.prototype.setPosition = function(newPos){
 	this.mesh.position.copy(newPos);
-	this.mesh._dirtyPosition = true;
+	this.mesh.__dirtyPosition = true;
 }
 
 TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3
