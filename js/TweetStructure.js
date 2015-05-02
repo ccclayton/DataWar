@@ -8,6 +8,7 @@ var TweetStructure=function(options){
     var layoutOptions={};
     var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
     var numNodes = 0;
+    var storedTweets = [];
 
 
     // var tweetsInContext=[];
@@ -29,18 +30,50 @@ var TweetStructure=function(options){
         var description = tweet.description;
         var retweet = tweet.retweet;
 
-        var node = createUserNode(user);
-        var panel = createTweetPanel(description);
+        if (retweet != null) {
+            console.log("ITS A RETWEET BROS");
+            var retweetNode = createUserNode(user);
+            var node_id = getASCIIvalue(description);
+            console.log(node_id);
+            var retweetText = graph.getNode(node_id);
+            if (retweetText != null) {
+                var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
-        var edge = graph.addEdge(node, panel);
-        edge.draw();
+                retweetEdge.draw();
+            } else {
+                retweetText = createTweetPanel(description);
+                var originalNode = createUserNode(retweet);
+                var tweetEdge = graph.addEdge(originalNode, retweetText);
+                var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
+                tweetEdge.draw();
+                retweetEdge.draw();
+            }
+
+        } else {
+
+            var node = createUserNode(user);
+            var panel = createTweetPanel(description);
+
+            var edge = graph.addEdge(node, panel);
+            edge.draw();
+            storedTweets.push(description);
+
+            //for(var i = 0; i < 2; i++){
+            //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
+            //}
+        }
         graph.layout.init({iterations: 100000});
-        //for(var i = 0; i < 2; i++){
-        //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
-        //}
 
     };
+
+    var getASCIIvalue = function(tweet) {
+        var value = 0;
+        for (var i = 0; i < tweet.length; i++) {
+            value += tweet.charCodeAt(i);
+        }
+        return value;
+    }
 
     var createUserNode = function(username){
         var location = lookupStartPosition(username);
@@ -64,7 +97,9 @@ var TweetStructure=function(options){
     var createTweetPanel = function(tweet){
         var location = lookupStartPosition(tweet);
         var tweetPanel = new TweetPanel(tweet,location,0);
-        tweetPanel.id = numNodes;
+        tweetPanel.id = getASCIIvalue(tweet);
+        console.log(tweetPanel.id);
+        //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
         //tweetPanel.mesh.position.copy(location); //mesh is undefined...
         //tweetPanel.mesh._dirtyPosition = true;
