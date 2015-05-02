@@ -1,4 +1,4 @@
-
+// RkqqvYKque
 "use strict";
 var TweetStructure=function(options){
     var maxNumUser = 150;
@@ -22,23 +22,17 @@ var TweetStructure=function(options){
         graph.addEdge(origin,dest);
     };
 
-    var processUserNames=function(usernames,tweets){
+    var drawGraph=function(tweet){
         //console.log("batch processing usernames");
-        usernames.forEach(function(username) {
-            var node = createUserNode(username);
+        var user = tweet.user;
+        var description = tweet.description;
+        var retweet = tweet.retweet;
 
-            tweets.forEach(function (tweet) {
-                var panel = createTweetPanel(tweet);
+        var node = createUserNode(user);
+        var panel = createTweetPanel(description);
 
-                var edge = graph.addEdge(node, panel);
-                edge.draw();
-            })
-
-
-
-
-
-        })
+        var edge = graph.addEdge(node, panel);
+        edge.draw();
 
         graph.layout.init();
         //for(var i = 0; i < 2; i++){
@@ -256,7 +250,7 @@ var TweetStructure=function(options){
         clear: clear,
         resetLastTweetTime:function(){lastTweetTime=new Date(Date.now() - 24*3600*1000);},
 
-        processUserNames: processUserNames,
+        drawGraph: drawGraph,
         processTweets: processTweets,
         createUserNode: createUserNode,
         createTweetPanel: createTweetPanel,

@@ -254,25 +254,20 @@ function grabTweets() {
   });
 }
 
-function createGraph(serverinfo){
+function createGraph(tweets){
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
     tweetStructure = new TweetStructure({scene: this.scene}); //Create tweet graph
 
 
-    if (serverinfo != null) {
-        console.log(serverinfo);
+    if (tweets != null) {
+        console.log(tweets);
 
-        var tweetArray = serverinfo.tweets;
-
-        var tweets = [];
-        var usernames = [];
+        var tweetArray = tweets.tweets;
 
         for (var i = 0; i < tweetArray.length; i++) {
-            tweets[0] = tweetArray[i].description;
-            usernames[0] = tweetArray[i].user;
-            tweetStructure.processUserNames(usernames,tweets);
+            tweetStructure.drawGraph(tweetArray[i]);
         }
         //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
         //tweetStructure.processUserNames(usernames,tweets);
