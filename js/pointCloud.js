@@ -42,7 +42,7 @@ PointCloud.prototype.init = function(){
 
 	this.seedParticles(this.maxParticles);
 	var pc = new THREE.PointCloud( this.geometry, shaderMaterial );
-	// pc.frustumCulled = false;
+	pc.frustumCulled = false;
 	window.pc = pc;
 	this.scene.add( pc );
 };
@@ -77,13 +77,28 @@ PointCloud.prototype.addBatch = function(){
 	}
 };
 
-PointCloud.prototype.add = function(vertex, color, size){
-	if(this.idx >= this.maxParticles){ //when max particle exceeded, we stop adding new points.
-		return 0;
-	}
-	this.idx++;
+PointCloud.prototype.addInFrontOfCamera = function(){
+	var pos = controls.getObject().position.clone();
+	var dir = new THREE.Vector3();
+	controls.getDirection(dir);
+	// var dir = new THREE.Vector3(0,0,-1);
+	// dir.applyQuaternion(camera.quaternion);
+	pos.add(dir.multiplyScalar(40))
+		.add(new THREE.Vector3(
+			(Math.random()-0.5) *10,
+			Math.random()*10 + 5,
+			(Math.random()-0.5) * 10
+			));
+	pointCloud.add(pos, 0xffffff , 5);
+}
 
-	console.log(this.idx);
+PointCloud.prototype.add = function(vertex, color, size){
+	this.idx ++;
+	if(this.idx == this.maxParticles){ //when max particle exceeded, we stop adding new points.
+		this.idx=0;
+	}
+
+	// console.log(this.idx);
 	this.geometry.vertices[this.idx].copy(vertex);
 	this.geometry.verticesNeedUpdate = true;
 

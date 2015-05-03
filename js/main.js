@@ -225,7 +225,7 @@ function init() {
 
 
     pointCloud = new PointCloud(scene);
-    pointCloud.addBatch();
+    // pointCloud.addBatch();
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }

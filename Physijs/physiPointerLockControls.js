@@ -147,10 +147,11 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 		return function( v ) {
 
-			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
-
-			v.copy( direction ).applyEuler( rotation );
-			console.log(v);
+			// rotation.set( pitchObject.rotation.x+yawObject.rotation.x, yawObject.rotation.y, yawObject.rotation.z );
+			// console.log(yawObject.rotation);
+			// v.copy( direction ).applyEuler( rotation );
+			v.copy( direction ).applyEuler( yawObject.rotation );
+			// console.log(v);
 
 			return v;
 
@@ -187,7 +188,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 			// console.log("rotating Y "+rotateY);
 			yawObject.rotateY(rotateY);
 			yawObject.__dirtyRotation = true;
-			pitchObject.rotation.x += rotateX;
+			pitchObject.rotation.x += rotateX; //disable pitchObject rotation
 			doRotate = false;
 		}
 

@@ -16,6 +16,7 @@ OscControl.prototype.init=function(){
 			if(Math.abs(vel)>0.02){
 				controls.enabled = true;
 				controls.moving(velSign * sqrtVel*50);
+				pointCloud.addInFrontOfCamera();
 			}
 
 			var rotate = msg[5]-0.5;
