@@ -24,7 +24,7 @@ var parameters = {
         filterparam: 1
 };
 
-
+var pointCloud=null;
 
 init();
 animate();
@@ -147,7 +147,7 @@ function init() {
     ground_material.map.repeat.set(10, 10);
 
     ground = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(1000, 1, 1000),
+        new THREE.CubeGeometry(100000, 1, 100000),
         ground_material,
         0 // mass
     );
@@ -223,6 +223,9 @@ function init() {
 
     //----------------------------------------------------------------------------------------------------------------------
 
+
+    pointCloud = new PointCloud(scene);
+    pointCloud.addBatch();
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
