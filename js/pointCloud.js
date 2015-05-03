@@ -3,7 +3,7 @@
 var PointCloud=function(_scene){
 	// we have to pre seed the particles. hide them with color black and size 0.
 	this.scene = _scene;
-	this.maxParticles = 2000;
+	this.maxParticles = 20000;
 	this.idx = -1;
 	this.geometry = new THREE.Geometry();
 
