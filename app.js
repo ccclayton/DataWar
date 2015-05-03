@@ -6,7 +6,7 @@
 
 var express = require('express');
 var mongoose = require('mongoose');
-var tweet = require('../models/tweet.js');
+var tweet = require('./models/tweet.js');
 var path = require('path');
 var app = express();
 
@@ -14,11 +14,11 @@ var app = express();
 mongoose.connect('mongodb://localhost/test');
 
 // Setup server
-require('./config/express');
-require('./routes')(app);
+require('./server/config/express');
+require('./server/routes')(app);
 
-//app.use(express.static('/Users/ccclayton/Documents/Programming/School/Kinetech/DataWar'));
-app.use(express.static('/home/danny/Documents/Kinetech/DataWar'));
+app.use(express.static('./'));
+// app.use(express.static('/home/danny/Documents/Kinetech/DataWar'));
 
 // Start server
 app.listen(3000);
