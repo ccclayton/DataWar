@@ -49,7 +49,12 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 	};
 
-	var onKeyDown = function ( event ) {
+	this.rotateY=function(val){
+		rotateY = val;
+		doRotate = true;
+	}
+
+	this.onKeyDown = function ( event ) {
 		// console.log(event.keyCode);
 		pitchObject.getDirection;
 		switch ( event.keyCode ) {
@@ -85,7 +90,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 	};
 
-	var onKeyUp = function ( event ) {
+	this.onKeyUp = function ( event ) {
 
 		switch( event.keyCode ) {
 
@@ -114,8 +119,8 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	};
 
 	document.addEventListener( 'mousemove', onMouseMove, false );
-	document.addEventListener( 'keydown', onKeyDown, false );
-	document.addEventListener( 'keyup', onKeyUp, false );
+	document.addEventListener( 'keydown', this.onKeyDown, false );
+	document.addEventListener( 'keyup', this.onKeyUp, false );
 
 	this.enabled = false;
 
@@ -161,7 +166,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 		var delta = ( time - prevTime ) / 1000;
 
 		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
+		velocity.z -= velocity.z * 3.0 * delta;
 		// velocity.z = 0;
 		// velocity.x = 0;
 
@@ -214,7 +219,12 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	this.moveForward = function() {
 		return moveForward;
 	};
-	
+
+	this.moving = function(dv){
+		var delta = 0.16; //assume 60 frame per second
+		velocity.z += dv*delta;
+	};
+
 	this.moveBackward = function() {
 		return moveBackward;
 	};

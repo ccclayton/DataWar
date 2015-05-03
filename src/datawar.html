@@ -20,6 +20,8 @@
 <script type = "text/javascript" src = "../threejs.r70/examples/js/Mirror.js"></script>
 <script type = "text/javascript" src = "../threejs.r70/examples/js/WaterShader.js"></script>
 
+<script src="/socket.io/socket.io.js"></script>
+<script src="../js/oscControl.js"></script>
 
 
 
@@ -45,6 +47,8 @@ var collidableMeshList = [];
 var cubes = new Array();
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
+
+var oscControl = new OscControl();
 
 // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;

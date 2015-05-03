@@ -239,7 +239,7 @@ function init() {
 //    });
 //}
 function grabTweets() {
-  setTimeout(grabTweets, 5000);
+  setTimeout(grabTweets, 50000);
     console.log(dt);
   console.log("Getting tweets...");
   var param = {date : dt};
