@@ -1,0 +1,31 @@
+{
+  "name": "DataWar",
+  "version": "1.0.0",
+  "description": "Change path in route.js and app.js to your absolute path. (Just comment out the others)",
+  "main": "app.js",
+  "dependencies": {
+    "connect": "^3.3.5",
+    "ejs": "^2.3.1",
+    "express": "^4.12.3",
+    "mongoose": "^4.0.1",
+    "node-osc": "^0.3.0",
+    "require": "^2.4.17",
+    "routes": "^2.0.0",
+    "socket.io": "^1.3.5",
+    "twit": "^1.1.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://wdyang:year2005@github.com/ccclayton/DataWar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ccclayton/DataWar/issues"
+  },
+  "homepage": "https://github.com/ccclayton/DataWar"
+}
