@@ -86,11 +86,11 @@ PointCloud.prototype.addInFrontOfCamera = function(){
 	// dir.applyQuaternion(camera.quaternion);
 	// pos.add(dir.multiplyScalar(40))
 	pos.add(new THREE.Vector3(
-			(Math.random()-0.5) *10,
-			Math.random()*10 + 5,
-			(Math.random()-0.5) * 10
+			(Math.random()-0.5) *3,
+			Math.random()*3 + 5,
+			(Math.random()-0.5) * 3
 			));
-	pointCloud.add(pos, 0xffffff , 5);
+	pointCloud.add(pos, 0xffffff , 3);
 }
 
 PointCloud.prototype.add = function(vertex, color, size){

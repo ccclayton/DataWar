@@ -43,7 +43,7 @@ function init() {
         new THREE.Vector3(0, -250, 0)
     );
 
-
+    oscControl = new OscControl(scene);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100000);
     camera.position.z = 100;
     scene.add(camera);
