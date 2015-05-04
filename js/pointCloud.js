@@ -90,7 +90,7 @@ PointCloud.prototype.addInFrontOfCamera = function(){
 			Math.random()*3 + 5,
 			(Math.random()-0.5) * 3
 			));
-	pointCloud.add(pos, 0xffffff , 3);
+	pointCloud.add(pos, 0xffffff , 2);
 }
 
 PointCloud.prototype.add = function(vertex, color, size){

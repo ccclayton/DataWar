@@ -28,14 +28,15 @@ WiiBalanceBoard.prototype.messageIn=function(msg){
 		var vel = this.y-0.5;
 		var velSign = vel > 0 ? 1 : -1;
 		var sqrtVel = Math.sqrt(velSign*vel)
-		if(Math.abs(vel)>0.02){
+		if(Math.abs(vel)>0.0002){
 			controls.enabled = true;
 			controls.moving(velSign * sqrtVel*50);
 			pointCloud.addInFrontOfCamera();
+			lineTrace.addInFrontOfCamera();
 		}
 
 		var rotate = this.x-0.5;
-		if(Math.abs(rotate)>0.02){
+		if(Math.abs(rotate)>0.0002){
 			var sign = rotate > 0 ? 1 : -1;
 			controls.rotateY(-0.1*sign*Math.sqrt(sign*rotate)*sqrtVel*velSign);
 		}

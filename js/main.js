@@ -24,7 +24,8 @@ var parameters = {
         filterparam: 1
 };
 
-var pointCloud=null;
+var pointCloud = null;
+var lineTrace = null;
 
 init();
 animate();
@@ -225,6 +226,7 @@ function init() {
 
 
     pointCloud = new PointCloud(scene);
+    lineTrace = new LineTrace(scene);
     // pointCloud.addBatch();
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
