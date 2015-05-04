@@ -9,6 +9,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	camera.rotation.set( 0, 0, 0 );
 
 	var pitchObject = new THREE.Object3D();
+	pitchObject.position.set(0,0, 50);
 	pitchObject.add( camera );
 
 	// var yawObject = new THREE.Object3D();
@@ -79,7 +80,10 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 				break;
 
 			case 32: // space
-				if ( canJump === true ) velocity.y += 100;
+				if ( canJump === true ){
+					yawObject.applyCentralImpulse(new THREE.Vector3(0, 200000, 0));
+					// velocity.y += 100;
+				}
 				canJump = false;
 				break;
 

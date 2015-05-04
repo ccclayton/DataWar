@@ -77,14 +77,15 @@ PointCloud.prototype.addBatch = function(){
 	}
 };
 
+//pull camera back 50, now we add particle at the center of yawObject
 PointCloud.prototype.addInFrontOfCamera = function(){
 	var pos = controls.getObject().position.clone();
-	var dir = new THREE.Vector3();
-	controls.getDirection(dir);
+	// var dir = new THREE.Vector3();
+	// controls.getDirection(dir);
 	// var dir = new THREE.Vector3(0,0,-1);
 	// dir.applyQuaternion(camera.quaternion);
-	pos.add(dir.multiplyScalar(40))
-		.add(new THREE.Vector3(
+	// pos.add(dir.multiplyScalar(40))
+	pos.add(new THREE.Vector3(
 			(Math.random()-0.5) *10,
 			Math.random()*10 + 5,
 			(Math.random()-0.5) * 10

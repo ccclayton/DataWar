@@ -10,22 +10,24 @@ OscControl.prototype.init=function(){
 	if(typeof io !== "undefined") { //Failover for running on non Node server / Web Demo
 		this.socket = io.connect(window.location.origin);
 		this.socket.on('wiibalanceboard', function(msg){
-			var vel = msg[6]-0.5;
-			var velSign = vel > 0 ? 1 : -1;
-			var sqrtVel = Math.sqrt(velSign*vel)
-			if(Math.abs(vel)>0.02){
-				controls.enabled = true;
-				controls.moving(velSign * sqrtVel*50);
-				pointCloud.addInFrontOfCamera();
-			}
-
-			var rotate = msg[5]-0.5;
-			if(Math.abs(rotate)>0.02){
-				var sign = rotate > 0 ? 1 : -1;
-				controls.rotateY(-0.1*sign*Math.sqrt(sign*rotate)*sqrtVel*velSign);
-			}
-
 			//[bl, br, tl, tr, sum x, y], all (0, 1) range
+			if(msg[4]>0.2){
+				var vel = msg[6]-0.5;
+				var velSign = vel > 0 ? 1 : -1;
+				var sqrtVel = Math.sqrt(velSign*vel)
+				if(Math.abs(vel)>0.02){
+					controls.enabled = true;
+					controls.moving(velSign * sqrtVel*50);
+					pointCloud.addInFrontOfCamera();
+				}
+
+				var rotate = msg[5]-0.5;
+				if(Math.abs(rotate)>0.02){
+					var sign = rotate > 0 ? 1 : -1;
+					controls.rotateY(-0.1*sign*Math.sqrt(sign*rotate)*sqrtVel*velSign);
+				}
+			}
+
 			// console.log(msg);
 			// scope.processOSCData(msg);
 			// console.log(msg);

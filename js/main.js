@@ -57,11 +57,11 @@ function init() {
 
 
     yawObject = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(20, 10, 20),
+        new THREE.CubeGeometry(50, 10, 50),
         Physijs.createMaterial(
             new THREE.MeshNormalMaterial(),
-            1,
-            0
+            0.2, //friction
+            0.2 //restitution
         ),
         1000
     );
@@ -141,7 +141,7 @@ function init() {
     ground_material = Physijs.createMaterial(
         new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture('../textures/brick.jpg')}),
         .8, // high friction
-        0 // low restitution
+        0.1 // low restitution
     );
     ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
     ground_material.map.repeat.set(10, 10);
