@@ -29,7 +29,7 @@ var LineTrace=function(_scene){
 //pull camera back 50, now we add particle at the center of yawObject
 LineTrace.prototype.addInFrontOfCamera = function(){
 	var pos = controls.getObject().position.clone();
-	pos.y+=5;
+	pos.y+=7;
 
 	var lpos = this.lastPos.clone();
 	lpos.multiplyScalar(0.8);
