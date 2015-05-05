@@ -230,6 +230,11 @@ function init() {
 
     pointCloud.addBatch();
 
+    //read kinect data / build skeleton
+    var bSkeleton = true;
+    window.Kinect=connectKinect(bSkeleton);
+
+
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }

@@ -24,9 +24,6 @@ require('./server/routes')(app);
 io.set('log level', 1);
 var oscServer, oscClient;
 oscServer = new osc.Server(3334, '0.0.0.0'); //listening on 3333
-// oscClient = new osc.Cliend('127.0.0.1', 3333);
-
-// oscClient.send('/connection', 1);
 
 var connectedSockets=[];
 
@@ -37,18 +34,19 @@ oscServer.on('message', function(msg, rinfo){
 			msg.shift();
 			connectedSockets.forEach(function(s){
 				s.emit("wiibalanceboard", msg);
-			})
+			});
+			break;
+			case "#bundle":
+			msg.shift();
+			msg.shift();
+			msg.shift();
+			// console.log(msg);
+			connectedSockets.forEach(function(s){
+				s.emit("skeleton", msg);
+			});
 		default:
 	}
 })
-
-// oscServer.on('wiibalanceboard', function(msg, rinfo){
-//   console.log(msg[2]);
-//   connectedSockets.forEach(function(s){
-//     s.emit("oscdata", msg[2]);
-//   })
-// })
-
 
 io.sockets.on('connection', function(socket){
   connectedSockets.push(socket);
@@ -62,9 +60,7 @@ io.sockets.on('connection', function(socket){
   });
 
 
-})
-
-
+});
 
 
 app.use(express.static('./'));
