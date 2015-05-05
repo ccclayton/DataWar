@@ -9,7 +9,8 @@ var PointCloud=function(_scene){
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
-		customColor: { type: 'c', value: [] }
+		customColor: { type: 'c', value: [] },
+		// velocity_x: { type: 'f', value: []}
 	};
 
 	this.values_size = this.attributes.size.value;
@@ -48,6 +49,21 @@ PointCloud.prototype.init = function(){
 };
 
 
+// update should be called in the main render loop
+PointCloud.prototype.update=function(){
+	// if (out of range) set pos to (0, -1, 0), skip
+	// if ( y < 0) skip
+
+	// if (not visible) return
+	// // calculate time delta
+	// // apply vel*delta => vertices
+	// v_x += rand() * factor;
+	// v_y ...
+	// v_z ...
+	// pos_x += v_x * delta;
+	// pos_y += v_y * delta;
+};
+
 
 PointCloud.prototype.seedParticles=function(numVertices){
 	for ( var i = 0; i < numVertices; i ++ ) {
@@ -65,7 +81,7 @@ PointCloud.prototype.seedParticles=function(numVertices){
 };
 
 PointCloud.prototype.addBatch = function(){
-	for ( var i = 0; i < 1000; i ++ ) {
+	for ( var i = 0; i < 2000; i ++ ) {
 		var vertex = new THREE.Vector3();
 		vertex.x = (Math.random() - 0.5);
 		vertex.y = Math.random()*0.03+0.01;
