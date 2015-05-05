@@ -9,7 +9,8 @@ var PointCloud=function(_scene){
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
-		customColor: { type: 'c', value: [] }
+		customColor: { type: 'c', value: [] },
+		// velocity_x: { type: 'f', value: []}
 	};
 
 	this.values_size = this.attributes.size.value;
@@ -47,6 +48,21 @@ PointCloud.prototype.init = function(){
 	this.scene.add( pc );
 };
 
+
+// update should be called in the main render loop
+PointCloud.prototype.update(){
+	// if (out of range) set pos to (0, -1, 0), skip
+	// if ( y < 0) skip
+
+	// if (not visible) return
+	// // calculate time delta
+	// // apply vel*delta => vertices
+	// v_x += rand() * factor;
+	// v_y ...
+	// v_z ...
+	// pos_x += v_x * delta;
+	// pos_y += v_y * delta;
+};
 
 
 PointCloud.prototype.seedParticles=function(numVertices){
