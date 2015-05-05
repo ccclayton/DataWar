@@ -201,7 +201,7 @@ function init() {
         sunDirection: directionalLight.position.normalize(),
         sunColor: 0xffffff,
         waterColor: 0x001e0f,
-        distortionScale: 10.0,
+        distortionScale: 10.0
     });
 
 
@@ -227,9 +227,16 @@ function init() {
 
     pointCloud = new PointCloud(scene);
     lineTrace = new LineTrace(scene);
+<<<<<<< HEAD
+    //pointCloud.addInFrontOfCamera();
+
+
+    pointCloud.addBatch();
+=======
 
     pointCloud.addBatch();
 
+>>>>>>> 3f928883b318d63142d3061e55b4c7e26c09cd9f
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -246,7 +253,7 @@ function init() {
 //    });
 //}
 function grabTweets() {
-  setTimeout(grabTweets, 50000);
+  setTimeout(grabTweets, 5000);
     console.log(dt);
   console.log("Getting tweets...");
   var param = {date : dt};
