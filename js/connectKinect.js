@@ -91,17 +91,83 @@ function connectKinect(bSkeleton) {
   var lastPacketTime = new Date().getTime();
 
   var skeleton = new THREE.Object3D();
-  skeleton.name = "skeleton";
-  window.skeleton = skeleton;
+
+  var boxGeo=new THREE.BoxGeometry(10, 5, 2);
+  var boxMat = new THREE.MeshBasicMaterial({color:0x00ffff});
+  var box = new THREE.Mesh(boxGeo, boxMat);
+  skeleton.add(box);
 
   joints.forEach(function(j){
     jointsNodes[j] = new THREE.Vector3();
     jointsLastPosition[j] = new THREE.Vector3();
     jointsSpeed[j] = new THREE.Vector3();
     jointsTrackingState[j] = TrackingState.NotTracked;
+
+    jointPositions.push(new THREE.Vector3(0,10,0));
   });
 
-  if(bSkeleton)
+
+  var drawBones=function() {
+    for(var i=0; i<jointPath.length; i++){
+        if (!lineObjects[i]) {
+          var lineMaterial = new THREE.LineBasicMaterial({
+              color: 0xffffff,
+              linewidth:10
+          });
+
+          var lineGeometry = new THREE.Geometry();
+          lineGeometry.vertices.push(jointPositions[joints.indexOf(jointPath[i][0])]);
+          lineGeometry.vertices.push(jointPositions[joints.indexOf(jointPath[i][1])]);
+      
+          var line = new THREE.Line(lineGeometry, lineMaterial);
+
+          skeleton.add(line);
+
+          lineObjects[i] = line;
+        }
+      }
+  }
+
+  var drawJoints=function(){
+    for(var i=0; i<joints.length; i++){
+        if (joints[i] !== "rthumb" && joints[i] !== "rhandtip" && joints[i] !== "lthumb" && joints[i] !== "lhandtip") {
+          if (!jointObjects[i]) {
+            var material = new THREE.MeshBasicMaterial( { color:0xffffff } );
+            // var material = new THREE.MeshNormalMaterial();
+            var customMaterial = new THREE.ShaderMaterial( 
+            {
+              uniforms: {},
+              vertexShader:   document.getElementById( 'glowVertexShader'   ).textContent,
+              fragmentShader: document.getElementById( 'glowFragmentShader' ).textContent,
+              side: THREE.BackSide,
+              blending: THREE.AdditiveBlending,
+              transparent: true
+            });
+
+            var sphere = new THREE.Mesh( new THREE.SphereGeometry( jointSizes[i], 10, 10 ), material );
+            
+            skeleton.add(sphere);
+            
+            jointObjects[i] = sphere;
+
+            jointObjects[i].position.copy(jointPositions[i]);
+          }
+        }
+      }
+  }
+  
+
+  drawJoints();
+  drawBones();
+
+
+  scene.add(skeleton);
+
+  skeleton.name = "skeleton";
+  window.skeleton = skeleton;
+
+
+  // if(bSkeleton)
     //drawing = new Drawing.SkeletonGraph({layout: '3d', selection: false, numNodes: 50, graphLayout:{attraction: 2000, repulsion: 0.8}, showStats: true, showInfo: true});
 
   socket = io.connect(window.location.origin);
@@ -110,30 +176,27 @@ function connectKinect(bSkeleton) {
       console.log(msg);
     })
     .on("skeleton", function(msg){
-       // console.log(msg);
+       // console.log(msg.length);
       // console.log(msg[3]);
       var worldScale = 0.015;    
       var yOffset = 10;
       var zOffset = 0;
       if(msg.length> 10){ //has valid skeleton data
-        scene.add(skeleton);
 
         //get all the joint positions
         for(var i=0; i<joints.length; i++){
-            jointPositions[i] = new THREE.Vector3(msg[i][3]*worldScale,
+          jointPositions[i].copy(new THREE.Vector3(msg[i][3]*worldScale,
                                                   msg[i][4]*worldScale + yOffset,
-                                                  zOffset);
+                                                  zOffset));
         }
       }
       
       if(bSkeleton){
-        drawBones();
-        drawJoints();
 
         updateBones();
         updateJoints();
 
-        skeleton.position.copy(yawObject.position.clone());
+        // skeleton.position.copy(yawObject.position.clone());
         
         // var qm = new THREE.Quaternion();
         // THREE.Quaternion.slerp(skeleton.quaternion, camera.quaternion, qm, 0.07);
@@ -158,7 +221,7 @@ function connectKinect(bSkeleton) {
       //     kinectInfo.forEach(function(info){
       //       drawing.kinectInfo.push(info);  
       //     });
-      //   }
+        // }
       }
     });
 
@@ -185,55 +248,6 @@ function connectKinect(bSkeleton) {
       }
     }
 
-    var drawBones=function() {
-      for(var i=0; i<jointPath.length; i++){
-          if (!lineObjects[i]) {
-            var lineMaterial = new THREE.LineBasicMaterial({
-                color: 0xffffff,
-                linewidth:10
-            });
-
-            var lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(jointPositions[joints.indexOf(jointPath[i][0])]);
-            lineGeometry.vertices.push(jointPositions[joints.indexOf(jointPath[i][1])]);
-        
-            var line = new THREE.Line(lineGeometry, lineMaterial);
-
-            skeleton.add(line);
-
-            lineObjects[i] = line;
-          }
-        }
-    }
-
-    var drawJoints=function(){
-      for(var i=0; i<joints.length; i++){
-          if (joints[i] !== "rthumb" && joints[i] !== "rhandtip" && joints[i] !== "lthumb" && joints[i] !== "lhandtip") {
-            if (!jointObjects[i]) {
-              var material = new THREE.MeshBasicMaterial( { color:0xffffff } );
-              // var material = new THREE.MeshNormalMaterial();
-              var customMaterial = new THREE.ShaderMaterial( 
-              {
-                uniforms: {},
-                vertexShader:   document.getElementById( 'glowVertexShader'   ).textContent,
-                fragmentShader: document.getElementById( 'glowFragmentShader' ).textContent,
-                side: THREE.BackSide,
-                blending: THREE.AdditiveBlending,
-                transparent: true
-              });
-
-              var sphere = new THREE.Mesh( new THREE.SphereGeometry( jointSizes[i], 10, 10 ), material );
-              
-              skeleton.add(sphere);
-              
-              jointObjects[i] = sphere;
-
-              jointObjects[i].position.copy(jointPositions[i]);
-            }
-          }
-        }
-    }
-    
     var calculateSpeed=function(){
       joints.forEach(function(i){
         var n  = jointsNodes[i];

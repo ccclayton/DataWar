@@ -332,10 +332,14 @@ function animate() {
     // PlayerCube.__dirtyPosition = true;
     // PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
     //tweetStructure.render();
+
     animate_sound();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
+    // debugger
+    if(skeleton.children.length != 0)
+        skeleton.position.copy(yawObject.position.clone());
     scene.simulate(); // run physics
     water.render();
     //tweetStructure.render();

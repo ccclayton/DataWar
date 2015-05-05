@@ -36,7 +36,7 @@ oscServer.on('message', function(msg, rinfo){
 				s.emit("wiibalanceboard", msg);
 			});
 			break;
-			case "#bundle":
+		case "#bundle":
 			msg.shift();
 			msg.shift();
 			msg.shift();
@@ -44,6 +44,7 @@ oscServer.on('message', function(msg, rinfo){
 			connectedSockets.forEach(function(s){
 				s.emit("skeleton", msg);
 			});
+			break;
 		default:
 	}
 })
