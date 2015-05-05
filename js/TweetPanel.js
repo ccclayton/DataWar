@@ -22,7 +22,7 @@ TweetPanel.prototype.draw = function(location){
 
 	var context = canvas.getContext( '2d' );
 	context.fillStyle = "white";
-	context.font = "120px Times";
+	context.font = "90px Calibri";
 
 	var maxWidth = 1920;
 	var lineHeight = 120;
@@ -33,8 +33,6 @@ TweetPanel.prototype.draw = function(location){
 	wrapText(context, text, x, y, maxWidth, lineHeight);
 
 	//context.fillText(this.tweet,300,500); //Will eventually be parsed usernames.
-
-	context.textAlign = 'center';
 	var tweetText = new THREE.Texture( canvas );
 	//tweetText.magFilter = THREE.NearestFilter;
 	//tweetText.minFilter = THREE.LinearMipMapLinearFilter;
@@ -76,6 +74,7 @@ TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3
 	this.mesh._dirtyRotation = true;
 }
 
+// http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
 	var words = text.split(' ');
 	var line = '';

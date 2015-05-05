@@ -32,7 +32,7 @@ var TweetStructure=function(options){
 
         if (retweet != null) {
             console.log("ITS A RETWEET BROS");
-            var retweetNode = createUserNode(user);
+            var retweetNode = createRetweetNode(user);
             var node_id = getASCIIvalue(description);
             console.log(node_id);
             var retweetText = graph.getNode(node_id);
@@ -77,6 +77,7 @@ var TweetStructure=function(options){
 
     var createUserNode = function(username){
         var location = lookupStartPosition(username);
+        location.y -= 5;
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -93,6 +94,25 @@ var TweetStructure=function(options){
 
 
     };
+
+    var createRetweetNode = function(username) {
+        var location = lookupStartPosition(username);
+        location.y += 5;
+        var userNode = new TwitterNode(username,null,null,location,0);
+        userNode.id = numNodes; //NOT SURE
+        graph.addNode(userNode);
+        // userNode.mesh.position.copy(location); //CHECK
+        // userNode.mesh._dirtyPosition = true;
+        //userNode.mesh.geometry =  new THREE.SphereGeometry(6, 32, 32);
+
+        //userNode.id = numNodes; //NOT SURE
+        numNodes++; //NOT SURE.
+
+        userNode.draw(location);
+
+        return userNode;//Testing
+
+    }
 
     var createTweetPanel = function(tweet){
         var location = lookupStartPosition(tweet);
@@ -124,7 +144,7 @@ var TweetStructure=function(options){
     var lookupStartPosition=function(twitterHandle){
         //Todo: Hook to db of tracked users and their model positions
         var position = new THREE.Vector3((Math.random()-0.5)*50,
-            Math.random()*0.5 * 200,
+            30,
             (Math.random()-0.5)*50);
         return position;
     };
