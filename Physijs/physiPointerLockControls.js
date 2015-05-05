@@ -1,7 +1,7 @@
 /**
  * @author mrdoob / http://mrdoob.com/
  */
-
+// var debugOn = false;
 THREE.PointerLockControls = function (yawObject, camera ) {
 
 	var scope = this;
@@ -9,7 +9,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	camera.rotation.set( 0, 0, 0 );
 
 	var pitchObject = new THREE.Object3D();
-	pitchObject.position.set(0,0, 50);
+	pitchObject.position.set(0,0, 20);
 	pitchObject.add( camera );
 
 	// var yawObject = new THREE.Object3D();
@@ -30,7 +30,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 	var prevTime = performance.now();
 
-	var velocity = new THREE.Vector3();
+	var velocity = new THREE.Vector3(0,0,0);
 
 	var PI_2 = Math.PI / 2;
 
@@ -164,14 +164,19 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	}();
 
 	this.update = function ( ) {
-
-		if ( scope.enabled === false ) return;
-
 		var time = performance.now();
-		var delta = ( time - prevTime ) / 1000;
 
+		if ( scope.enabled === false ){
+			prevTime = time;
+			return;
+		}
+
+		var delta = ( time - prevTime ) / 1000;
+		// if(debugOn) debugger
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 3.0 * delta;
+		if(velocity.z > 100) velocity.z = 100;
+		if(velocity.z< -100) velocity.z = -100;
 		// velocity.z = 0;
 		// velocity.x = 0;
 
@@ -226,6 +231,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	};
 
 	this.moving = function(dv){
+		// debugOn = true;
 		var delta = 0.16; //assume 60 frame per second
 		velocity.z += dv*delta;
 	};
