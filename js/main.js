@@ -227,15 +227,9 @@ function init() {
 
     pointCloud = new PointCloud(scene);
     lineTrace = new LineTrace(scene);
-<<<<<<< HEAD
-     pointCloud.addBatch();
-=======
-    //pointCloud.addInFrontOfCamera();
-
 
     pointCloud.addBatch();
 
->>>>>>> 9cade4995bb1f405e73dda4af245918956b498c4
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -433,7 +427,7 @@ function animate_sound() {
             pointCloud.geometry.vertices[i].y += scale * 0.1;
 
                 pointCloud.geometry.verticesNeedUpdate = true;
-                k += (k < array.length ? 1 : 0);
+                k += (k < (array.length-1) ? 1 : 0);
             }
 
     }

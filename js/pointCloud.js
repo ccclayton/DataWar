@@ -50,7 +50,7 @@ PointCloud.prototype.init = function(){
 
 
 // update should be called in the main render loop
-PointCloud.prototype.update(){
+PointCloud.prototype.update=function(){
 	// if (out of range) set pos to (0, -1, 0), skip
 	// if ( y < 0) skip
 
@@ -81,7 +81,7 @@ PointCloud.prototype.seedParticles=function(numVertices){
 };
 
 PointCloud.prototype.addBatch = function(){
-	for ( var i = 0; i < 1000; i ++ ) {
+	for ( var i = 0; i < 2000; i ++ ) {
 		var vertex = new THREE.Vector3();
 		vertex.x = (Math.random() - 0.5);
 		vertex.y = Math.random()*0.03+0.01;
