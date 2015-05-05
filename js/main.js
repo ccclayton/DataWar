@@ -338,8 +338,10 @@ function animate() {
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
     // debugger
-    if(skeleton.children.length != 0)
+    if(skeleton.children.length != 0){
         skeleton.position.copy(yawObject.position.clone());
+        skeleton.setRotationFromEuler(yawObject.rotation);
+    }
     scene.simulate(); // run physics
     water.render();
     //tweetStructure.render();

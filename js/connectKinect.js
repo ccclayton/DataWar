@@ -92,10 +92,10 @@ function connectKinect(bSkeleton) {
 
   var skeleton = new THREE.Object3D();
 
-  var boxGeo=new THREE.BoxGeometry(10, 5, 2);
-  var boxMat = new THREE.MeshBasicMaterial({color:0x00ffff});
-  var box = new THREE.Mesh(boxGeo, boxMat);
-  skeleton.add(box);
+  // var boxGeo=new THREE.BoxGeometry(10, 5, 2);
+  // var boxMat = new THREE.MeshBasicMaterial({color:0x00ffff});
+  // var box = new THREE.Mesh(boxGeo, boxMat);
+  // skeleton.add(box);
 
   joints.forEach(function(j){
     jointsNodes[j] = new THREE.Vector3();
@@ -178,16 +178,17 @@ function connectKinect(bSkeleton) {
     .on("skeleton", function(msg){
        // console.log(msg.length);
       // console.log(msg[3]);
-      var worldScale = 0.015;    
-      var yOffset = 10;
-      var zOffset = 0;
+      var worldScale = 0.01;    
+      var yOffset = 5;
+      var zOffset = -25;
       if(msg.length> 10){ //has valid skeleton data
 
         //get all the joint positions
+        console.log(msg[0][5]*worldScale);
         for(var i=0; i<joints.length; i++){
           jointPositions[i].copy(new THREE.Vector3(msg[i][3]*worldScale,
                                                   msg[i][4]*worldScale + yOffset,
-                                                  zOffset));
+                                                  msg[i][5]*worldScale + zOffset));
         }
       }
       
