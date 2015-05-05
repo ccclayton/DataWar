@@ -227,7 +227,7 @@ function init() {
 
     pointCloud = new PointCloud(scene);
     lineTrace = new LineTrace(scene);
-    // pointCloud.addBatch();
+     pointCloud.addBatch();
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -270,6 +270,11 @@ function createGraph(tweets){
         console.log(tweets);
 
         var tweetArray = tweets.tweets;
+
+        //var numTweets = tweetArray.length;
+        //var timePer = 50000 / numTweets;
+
+        //setTimeout(tweetStructure.drawGraph(tweetArray)
 
         for (var i = 0; i < tweetArray.length; i++) {
             tweetStructure.drawGraph(tweetArray[i]);

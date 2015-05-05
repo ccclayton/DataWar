@@ -22,10 +22,17 @@ TweetPanel.prototype.draw = function(location){
 
 	var context = canvas.getContext( '2d' );
 	context.fillStyle = "white";
-	context.font = "90px Times";
+	context.font = "120px Times";
 
+	var maxWidth = 1920;
+	var lineHeight = 120;
+	var x = (canvas.width - maxWidth) / 2;
+	var y = 300;
+	var text = this.tweet;
 
-	context.fillText(this.tweet,300,500); //Will eventually be parsed usernames.
+	wrapText(context, text, x, y, maxWidth, lineHeight);
+
+	//context.fillText(this.tweet,300,500); //Will eventually be parsed usernames.
 
 	context.textAlign = 'center';
 	var tweetText = new THREE.Texture( canvas );
@@ -67,4 +74,24 @@ TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3
 	this.mesh.position.applyEuler(euler);
 
 	this.mesh._dirtyRotation = true;
+}
+
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+	var words = text.split(' ');
+	var line = '';
+
+	for(var n = 0; n < words.length; n++) {
+		var testLine = line + words[n] + ' ';
+		var metrics = context.measureText(testLine);
+		var testWidth = metrics.width;
+		if (testWidth > maxWidth && n > 0) {
+			context.fillText(line, x, y);
+			line = words[n] + ' ';
+			y += lineHeight;
+		}
+		else {
+			line = testLine;
+		}
+	}
+	context.fillText(line, x, y);
 }
