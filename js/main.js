@@ -227,16 +227,9 @@ function init() {
 
     pointCloud = new PointCloud(scene);
     lineTrace = new LineTrace(scene);
-<<<<<<< HEAD
-    //pointCloud.addInFrontOfCamera();
-
-
-    pointCloud.addBatch();
-=======
 
     pointCloud.addBatch();
 
->>>>>>> 3f928883b318d63142d3061e55b4c7e26c09cd9f
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
