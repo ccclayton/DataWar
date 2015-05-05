@@ -50,8 +50,8 @@ WiiBalanceBoard.prototype.messageIn=function(msg){
 			controls.moving(velSign * sqrtVel*50);
 			// console.log(velSign*sqrtVel*50);
 
-			pointCloud.addInFrontOfCamera();
-			lineTrace.addInFrontOfCamera();
+			// pointCloud.addInFrontOfCamera();
+			// lineTrace.addInFrontOfCamera();
 		}
 
 		var rotate = this.x-0.5;

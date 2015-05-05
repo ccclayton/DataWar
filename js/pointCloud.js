@@ -91,6 +91,7 @@ PointCloud.prototype.addBatch = function(){
 		// this.add( vertex, 0xffaa00 , 10 );
 		this.add( vertex, 0xffffff , 40 );
 	}
+	this.idx=2000;
 };
 
 //pull camera back 50, now we add particle at the center of yawObject
@@ -106,13 +107,13 @@ PointCloud.prototype.addInFrontOfCamera = function(){
 			Math.random()*4 + 6,
 			(Math.random()-0.5) * 4
 			));
-	pointCloud.add(pos, 0xffffff , 2);
+	pointCloud.add(pos, 0x50ffff , 2);
 }
 
 PointCloud.prototype.add = function(vertex, color, size){
 	this.idx ++;
 	if(this.idx == this.maxParticles){ //when max particle exceeded, we stop adding new points.
-		this.idx=0;
+		this.idx=2000;
 	}
 
 	// console.log(this.idx);

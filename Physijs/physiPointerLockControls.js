@@ -206,6 +206,11 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 		yawObject.translateZ( velocity.z * delta );
 		yawObject.__dirtyPosition = true;
 
+		if(velocity.length()>0.1){
+			pointCloud.addInFrontOfCamera();
+			lineTrace.addInFrontOfCamera();
+		}
+
 		if ( yawObject.position.y < 10 ) {
 			// yawObject.position.y = 10;
 
