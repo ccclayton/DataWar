@@ -57,7 +57,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 	this.onKeyDown = function ( event ) {
 		// console.log(event.keyCode);
-		pitchObject.getDirection;
+		// pitchObject.getDirection;
 		switch ( event.keyCode ) {
 			case 38: // up
 			case 87: // w
@@ -89,6 +89,10 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 
 			case 90: //z for testing
 				cube2.setLinearVelocity(new THREE.Vector3(10, 40, 10));
+				break;
+
+			case 70: //f for flipping
+				yawObject.applyImpulse(new THREE.Vector3(0, 100000, 0), new THREE.Vector3(10, 0, 0));
 				break;
 		}
 
