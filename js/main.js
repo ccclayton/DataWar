@@ -227,7 +227,11 @@ function init() {
 
     pointCloud = new PointCloud(scene);
     lineTrace = new LineTrace(scene);
-    // pointCloud.addBatch();
+    //pointCloud.addInFrontOfCamera();
+
+
+    pointCloud.addBatch();
+
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -411,13 +415,18 @@ function animate_sound() {
 
     if(typeof array === 'object' && array.length > 0) {
         var k = 0;
-        for(var i = 0; i < cubes.length; i++) {
-            for(var j = 0; j < cubes[i].length; j++) {
-                var scale = (array[k] + boost) / 30;
-                cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
+        for(var i = 0; i < pointCloud.geometry.vertices.length; i++) {
+                var random = Math.random()*100;
+                var scale = (array[k] + boost) / 30; //Boost comes from audio.js file.
+                if(random % 2 == 0){
+                    pointCloud.geometry.vertices[i].y -= scale*0.1;
+                }
+            pointCloud.geometry.vertices[i].y += scale * 0.1;
+
+                pointCloud.geometry.verticesNeedUpdate = true;
                 k += (k < array.length ? 1 : 0);
             }
-        }
+
     }
 }
 
