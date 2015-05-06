@@ -315,12 +315,16 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
 //Changed by Colin Clayton
 Edge.prototype.draw=function(){
     material = new THREE.LineBasicMaterial({ linewidth: 1, transparent: false});
+    material.side = THREE.DoubleSide;
+    material.needsUpdate = true;
     // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
     var tmp_geo = new THREE.Geometry();
     tmp_geo.vertices.push(this.source.mesh.position); // was data.draw_object.position
     tmp_geo.vertices.push(this.target.mesh.position);
     this.line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
+    this.line.geometry.verticesNeedUpdate = true;
+    this.line.geometry.elementsNeedUpdate = true;
     // line = new THREE.Line( tmp_geo, material );
     // var tmpBufferGeo = THREE.BufferGeometryUtils.fromGeometry( tmp_geo );
     // line = new THREE.Line( tmpBufferGeo, material, THREE.LinePieces );
