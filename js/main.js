@@ -427,17 +427,33 @@ function animate_sound() {
         var diff = 0;
         for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
                 var random = Math.random()*1000;
-                var scale = (binaries[k] + boost) / 30; //Boost comes from audio.js file.
-                if((random % 2) == 0){
-                    pointCloud2.geometry.vertices[i].y -= scale*0.1;
-
+                var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
+                //console.log(binaries[k]);
+                if(boost > 30){
+                    pointCloud2.changeColor(i,getRandomColor());
+                }
+                else if(boost > 25)
+                {
+                    pointCloud2.changeColor(i,getRandomColor());
                 }
 
-                pointCloud2.geometry.vertices[i].y += scale * 0.1;
-                pointCloud2.changeColor(i,getRandomColor());
+                //var num = binaries[k].toString();
+                //var conversion = "#";
+                //conversion += parseInt(num,16);
+                //var hex = String(conversion);
+                //var result = hex.substring(0,hex.length);
+                //console.log(result);
+               // pointCloud.changeColor(i, result);
+                //if((random % 2) == 0){
+                  //  pointCloud2.geometry.vertices[i].y -= scale*0.1;
+
+                //}
+
+                //pointCloud2.geometry.vertices[i].y += scale * 0.1;
+                //pointCloud2.changeColor(i,getRandomColor());
                 //pointCloud2.geometry.vertices[i].uniforms.color.value = new THREE.Color(getRandomColor());
 
-            
+
             //pointCloud.changeColor(i,"#FF6600");
             //pointCloud2.changeColor(i,"#ffee23");
 
@@ -448,7 +464,7 @@ function animate_sound() {
                 pointCloud2.geometry.verticesNeedUpdate = true;
 
 
-                k += (k < (binaries.length-1) ? 1 : 0);
+                //k += (k < (binaries.length-1) ? 1 : 0);
 
             //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
             //water.distortionScale += 10;
