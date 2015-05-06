@@ -25,6 +25,7 @@ var parameters = {
 };
 
 var pointCloud = null;
+var pointCloud2 = null;
 var lineTrace = null;
 
 init();
@@ -58,7 +59,7 @@ function init() {
 
 
     yawObject = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(50, 10, 50),
+        new THREE.BoxGeometry(50, 10, 50),
         Physijs.createMaterial(
             new THREE.MeshNormalMaterial(),
             0.2, //friction
@@ -100,7 +101,7 @@ function init() {
 
 
     var skyMesh = new THREE.Mesh(
-        new THREE.CubeGeometry(20000, 20000, 2000),
+        new THREE.BoxGeometry(20000, 20000, 2000),
         skyMaterial
     );
 
@@ -108,7 +109,7 @@ function init() {
 
 
     cube1 = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.BoxGeometry(10, 10, 10),
         Physijs.createMaterial(
             new THREE.MeshNormalMaterial(), 0.2, 0.9
         )
@@ -118,7 +119,7 @@ function init() {
     console.log("cube 1: " + cube1.id);
 
     cube2 = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(10, 10, 10),
+        new THREE.BoxGeometry(10, 10, 10),
         Physijs.createMaterial(
             new THREE.MeshNormalMaterial(), 0.2, 0.9
         )
@@ -148,7 +149,7 @@ function init() {
     ground_material.map.repeat.set(10, 10);
 
     ground = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(100000, 1, 100000),
+        new THREE.BoxGeometry(100000, 1, 100000),
         ground_material,
         0 // mass
     );
@@ -157,7 +158,7 @@ function init() {
     scene.add(ground);
 
     fence = new Physijs.BoxMesh(
-        new THREE.CubeGeometry(193, 40, 2),
+        new THREE.BoxGeometry(193, 40, 2),
         Physijs.createMaterial(
             new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
         ),
@@ -185,7 +186,7 @@ function init() {
     axes = buildAxes(1000);
     scene.add(axes);
 
-    buildADDS();
+    //buildADDS();
 
     renderer = new THREE.WebGLRenderer({clearAlpha: 1});
     renderer.setClearColor(0x000000);
@@ -201,12 +202,14 @@ function init() {
         sunDirection: directionalLight.position.normalize(),
         sunColor: 0xffffff,
         waterColor: 0x001e0f,
-        distortionScale: 10.0
+        distortionScale: 20.0
+
     });
+    //alert(water.geometry);
 
 
     mirrorMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(parameters.width * 500, parameters.height * 500, 50, 50),
+        new THREE.PlaneBufferGeometry(parameters.width * 500, parameters.height * 500, 50, 50),
         water.material
     );
 
@@ -226,14 +229,33 @@ function init() {
 
 
     pointCloud = new PointCloud(scene);
+    pointCloud.uniforms.color.value = new THREE.Color(0xFF6600);
+
+    pointCloud2 = new PointCloud(scene);
+
     lineTrace = new LineTrace(scene);
 
-    pointCloud.addBatch();
+
+
+     //pointCloud.addBatch();
+
+
+    //pointCloud.addInFrontOfCamera();
+
+    //pointCloud2.seedParticles(200000);
+    pointCloud2.addBatch();
+
 
     //read kinect data / build skeleton
     var bSkeleton = true;
     window.Kinect=connectKinect(bSkeleton);
 
+
+
+
+    //pointCloud.addBatch();
+
+    
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
@@ -334,6 +356,7 @@ function animate() {
     //tweetStructure.render();
 
     animate_sound();
+    //pointCloud.update();  //TODO: Change Movement. Pass to Shader.
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
@@ -387,35 +410,7 @@ function buildAxis( src, dst, colorHex, dashed ) {
     return axis;
 }
 
-//Temporary, from http://srchea.com/experimenting-with-web-audio-api-three-js-webgl tutorial.
 
-function buildADDS() {
-    //ADDS Data Sculpture
-    var i = 0;
-    for(var x = 20; x < 400; x += 20) {
-        var j = 0;
-        cubes[i] = new Array();
-        for(var y = 0; y < 60; y += 2) {
-            var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
-
-            var material = new THREE.MeshPhongMaterial({
-                color: randomFairColor(),
-                ambient: 0x808080,
-                specular: 0xffffff,
-                shininess: 20,
-                reflectivity: 5.5 
-            });
-
-            cubes[i][j] = new THREE.Mesh(geometry, material);
-            cubes[i][j].position = new THREE.Vector3(x-100, y, -400);
-            cubes[i][j].rotation.y = Math.PI/2;
-
-            scene.add(cubes[i][j]);
-            j++;
-        }
-        i++;
-    }
-}
 
 function onWindowResize() {
 
@@ -427,30 +422,58 @@ function onWindowResize() {
 //Temporary Animation function for sound visualization: https://github.com/srchea/Sound-Visualizer.
 function animate_sound() {
 
-    if(typeof array === 'object' && array.length > 0) {
+    if(typeof binaries === 'object' && binaries.length-1 > 0) {
         var k = 0;
-        for(var i = 0; i < pointCloud.geometry.vertices.length; i++) {
-                var random = Math.random()*100;
-                var scale = (array[k] + boost) / 30; //Boost comes from audio.js file.
-                if(random % 2 == 0){
-                    pointCloud.geometry.vertices[i].y -= scale*0.1;
-                }
-            pointCloud.geometry.vertices[i].y += scale * 0.1;
+        var diff = 0;
+        for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
+                var random = Math.random()*1000;
+                var scale = (binaries[k] + boost) / 30; //Boost comes from audio.js file.
+                if((random % 2) == 0){
+                    pointCloud2.geometry.vertices[i].y -= scale*0.1;
 
-                pointCloud.geometry.verticesNeedUpdate = true;
-                k += (k < (array.length-1) ? 1 : 0);
+                }
+
+                pointCloud2.geometry.vertices[i].y += scale * 0.1;
+                pointCloud2.changeColor(i,getRandomColor());
+                //pointCloud2.geometry.vertices[i].uniforms.color.value = new THREE.Color(getRandomColor());
+
+            
+            //pointCloud.changeColor(i,"#FF6600");
+            //pointCloud2.changeColor(i,"#ffee23");
+
+            //}
+            //pointCloud.changeColor(i,getRandomColor());
+            //pointCloud.uniforms.color.needsUpdate = true;
+            //console.log("randomColor :" + getRandomColor());
+                pointCloud2.geometry.verticesNeedUpdate = true;
+
+
+                k += (k < (binaries.length-1) ? 1 : 0);
+
+            //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
+            //water.distortionScale += 10;
+
+
+
             }
+ //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
+
 
     }
 }
+function getRandomColor() {
+    var color = '#';
+    var letters = '0123456789ABCDEF'.split('');
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
 
-//  // charposition = controls.getObject().position;
-//  // console.log(charposition);
-//  update();
+    var colorWithoutQuotes = String(color);
+    colorWithoutQuotes = colorWithoutQuotes.substring(0,colorWithoutQuotes.length);
 
-//  requestAnimationFrame( animate );
-//  renderer.render( scene, camera );
-// }
+    return colorWithoutQuotes;
+}
+
 // Temporary Random Color Generator for temp data sculpture. http://srchea.com/experimenting-with-web-audio-api-three-js-webgl
 function randomFairColor() {
     var min = 64;

@@ -6,7 +6,7 @@ var context;
 var source, sourceJs;
 var analyser;
 var url = '../data/O_Fortuna.mp3';
-var array = new Array();
+var binaries = new Array();
 var boost = 0;
 
 var interval = window.setInterval(function() {
@@ -58,13 +58,13 @@ request.onload = function() {
 			source.connect(context.destination);
 
 			sourceJs.onaudioprocess = function(e) {
-				array = new Uint8Array(analyser.frequencyBinCount);
-				analyser.getByteFrequencyData(array);
+				binaries = new Uint8Array(analyser.frequencyBinCount);
+				analyser.getByteFrequencyData(binaries);
 				boost = 0;
-				for (var i = 0; i < array.length; i++) {
-		            boost += array[i];
+				for (var i = 0; i < binaries.length; i++) {
+		            boost += binaries[i];
 		        }
-		        boost = boost / array.length;
+		        boost = boost / binaries.length;
 			};
 
 			$('#info')

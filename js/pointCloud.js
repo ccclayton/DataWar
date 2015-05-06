@@ -51,6 +51,11 @@ PointCloud.prototype.init = function(){
 
 // update should be called in the main render loop
 PointCloud.prototype.update=function(){
+
+    //this.uniforms.color.value = new THREE.Color(getRandomColor());
+    //this.uniforms.needsUpdate = true;
+
+
 	// if (out of range) set pos to (0, -1, 0), skip
 	// if ( y < 0) skip
 
@@ -63,6 +68,8 @@ PointCloud.prototype.update=function(){
 	// pos_x += v_x * delta;
 	// pos_y += v_y * delta;
 };
+
+
 
 
 PointCloud.prototype.seedParticles=function(numVertices){
