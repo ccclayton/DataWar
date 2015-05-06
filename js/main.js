@@ -11,7 +11,7 @@ var waterNormals;
 var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
-console.log(dt);
+var currTweetArray = [];
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -219,7 +219,7 @@ function init() {
 
     //----------------------------------------------------------------------------------------------------------------------
 
-    createGraph(null); //Creates Twitter Structure Graph.
+    createGraph(); //Creates Twitter Structure Graph.
 
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -261,31 +261,32 @@ function grabTweets() {
       dt = Date.parse(data.tweets[data.tweets.length -1].created_at);
       // console.log(data.tweets.length);
       //console.log(dt);
-      createGraph(data);
+       currTweetArray = currTweetArray.concat(data.tweets);
+        console.log(currTweetArray);
+      //createGraph(data);
     }
   });
 }
 
-function createGraph(tweets){
+function createGraph(){
+    setTimeout(createGraph, 2000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
     tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
 
 
-    if (tweets != null) {
-        console.log(tweets);
-
-        var tweetArray = tweets.tweets;
+    if (currTweetArray.length != 0) {
+        console.log(currTweetArray);
 
         //var numTweets = tweetArray.length;
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
-
-        for (var i = 0; i < tweetArray.length; i++) {
-            tweetStructure.drawGraph(tweetArray[i]);
-        }
+        tweetStructure.drawGraph(currTweetArray.pop());
+        //for (var i = 0; i < 2; i++) {
+        //    tweetStructure.drawGraph(tweetArray[i]);
+        //}
         //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
         //tweetStructure.processUserNames(usernames,tweets);
        // tweetStructure.processTweets(tweets);

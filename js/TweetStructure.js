@@ -77,7 +77,7 @@ var TweetStructure=function(options){
 
     var createUserNode = function(username){
         var location = lookupStartPosition(username);
-        location.y -= 5;
+        location.y = 15;
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -97,7 +97,7 @@ var TweetStructure=function(options){
 
     var createRetweetNode = function(username) {
         var location = lookupStartPosition(username);
-        location.y += 5;
+        location.y = 35;
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -116,6 +116,7 @@ var TweetStructure=function(options){
 
     var createTweetPanel = function(tweet){
         var location = lookupStartPosition(tweet);
+        location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0);
         tweetPanel.id = getASCIIvalue(tweet);
         console.log(tweetPanel.id);

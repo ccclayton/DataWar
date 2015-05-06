@@ -34,7 +34,7 @@ module.exports = function(app) {
           res.json({tweets: tweets});
           // res.send("WEEEEEEEEE");
           // console.log("SDFWEFWEFWEF");
-        }).limit(20);
+        }).limit(50);
       });
   //app.route('/api/tweets')
   //  .get(function(req, res) {
