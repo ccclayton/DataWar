@@ -273,7 +273,7 @@ function init() {
 //    });
 //}
 function grabTweets() {
-  setTimeout(grabTweets, 5000);
+  setTimeout(grabTweets, 50000);
     console.log(dt);
   console.log("Getting tweets...");
   var param = {date : dt};
@@ -291,7 +291,7 @@ function grabTweets() {
 }
 
 function createGraph(){
-    setTimeout(createGraph, 2000);
+    setTimeout(createGraph, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
@@ -305,6 +305,7 @@ function createGraph(){
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
+        tweetStructure.drawGraph(currTweetArray.pop());
         tweetStructure.drawGraph(currTweetArray.pop());
         //for (var i = 0; i < 2; i++) {
         //    tweetStructure.drawGraph(tweetArray[i]);

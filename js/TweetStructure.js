@@ -31,18 +31,17 @@ var TweetStructure=function(options){
         var retweet = tweet.retweet;
 
         if (retweet != null) {
-            console.log("ITS A RETWEET BROS");
-            var retweetNode = createRetweetNode(user);
             var node_id = getASCIIvalue(description);
-            console.log(node_id);
             var retweetText = graph.getNode(node_id);
             if (retweetText != null) {
+                var retweetNode = createRetweetNode(user, retweetText.position);
                 var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
                 retweetEdge.draw();
             } else {
                 retweetText = createTweetPanel(description);
-                var originalNode = createUserNode(retweet);
+                var retweetNode = createRetweetNode(user, retweetText.position);
+                var originalNode = createUserNode(retweet, retweetText.position);
                 var tweetEdge = graph.addEdge(originalNode, retweetText);
                 var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
@@ -51,9 +50,8 @@ var TweetStructure=function(options){
             }
 
         } else {
-
-            var node = createUserNode(user);
             var panel = createTweetPanel(description);
+            var node = createUserNode(user, panel.position);
 
             var edge = graph.addEdge(node, panel);
             edge.draw();
@@ -75,9 +73,9 @@ var TweetStructure=function(options){
         return value;
     }
 
-    var createUserNode = function(username){
-        var location = lookupStartPosition(username);
-        location.y = 15;
+    var createUserNode = function(username, location){
+        //var location = lookupStartPosition(username);
+        location.y = 5;
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -95,9 +93,9 @@ var TweetStructure=function(options){
 
     };
 
-    var createRetweetNode = function(username) {
-        var location = lookupStartPosition(username);
-        location.y = 35;
+    var createRetweetNode = function(username, location) {
+        //var location = lookupStartPosition(username);
+        location.y = 55;
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -116,7 +114,7 @@ var TweetStructure=function(options){
 
     var createTweetPanel = function(tweet){
         var location = lookupStartPosition(tweet);
-        location.y = 25;
+        //location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0);
         tweetPanel.id = getASCIIvalue(tweet);
         console.log(tweetPanel.id);
@@ -145,7 +143,7 @@ var TweetStructure=function(options){
     var lookupStartPosition=function(twitterHandle){
         //Todo: Hook to db of tracked users and their model positions
         var position = new THREE.Vector3((Math.random()-0.5)*50,
-            30,
+            25,
             (Math.random()-0.5)*50);
         return position;
     };

@@ -39,8 +39,8 @@ Layout.ForceDirected = function(graph, options) {
     this.repulsion_multiplier = options.repulsion || 0.1;
     this.max_iterations = options.iterations || 1000;
     this.graph = graph;
-    this.width = options.width || 200;
-    this.height = options.height || 200;
+    this.width = options.width || 400;
+    this.height = options.height || 70;
     this.finished = false;
 
     var callback_positionUpdated = options.positionUpdated;
@@ -208,11 +208,11 @@ Layout.ForceDirected = function(graph, options) {
                 var updated = true;
                 node.mesh.position.x -= (node.mesh.position.x - node.layout.tmp_pos_x) / 10;
                 node.mesh.position.y -= (node.mesh.position.y - node.layout.tmp_pos_y) / 10;
-                if (node.mesh.position.y > 35) {
-                    node.mesh.position.y = 35;
-                }
-                if (node.mesh.position.y < 15) {
-                    node.mesh.position.y = 15;
+                //if (node.mesh.position.y > 45) {
+                //    node.mesh.position.y = 45;
+                //}
+                if (node.mesh.position.y < 5) {
+                    node.mesh.position.y = 5;
                 }
                 node.mesh.__dirtyPosition = true;
 
