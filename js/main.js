@@ -12,17 +12,16 @@ var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
 var currTweetArray = [];
-var graph = new Graph({Layout: "3d",scene: this.scene});
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
-        width: 2000,
-        height: 2000,
-        widthSegments: 250,
-        heightSegments: 250,
-        depth: 1500,
-        param: 4,
-        filterparam: 1
+    width: 2000,
+    height: 2000,
+    widthSegments: 250,
+    heightSegments: 250,
+    depth: 1500,
+    param: 4,
+    filterparam: 1
 };
 
 var pointCloud = null;
@@ -237,7 +236,7 @@ function init() {
 
 
 
-     //pointCloud.addBatch();
+    //pointCloud.addBatch();
 
 
     //pointCloud.addInFrontOfCamera();
@@ -255,7 +254,7 @@ function init() {
 
     //pointCloud.addBatch();
 
-    
+
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
@@ -273,21 +272,21 @@ function init() {
 //    });
 //}
 function grabTweets() {
-  setTimeout(grabTweets, 5000);
+    setTimeout(grabTweets, 5000);
     console.log(dt);
-  console.log("Getting tweets...");
-  var param = {date : dt};
-  $.get( '/api/tweets', param, function(data) {
-    if (data.tweets.length != 0) {
-        //console.log(data.tweets[data.tweets.length -1].created_at)
-      dt = Date.parse(data.tweets[data.tweets.length -1].created_at);
-      // console.log(data.tweets.length);
-      //console.log(dt);
-       currTweetArray = data.tweets.concat(currTweetArray);
-        console.log(currTweetArray);
-      //createGraph(data);
-    }
-  });
+    console.log("Getting tweets...");
+    var param = {date : dt};
+    $.get( '/api/tweets', param, function(data) {
+        if (data.tweets.length != 0) {
+            //console.log(data.tweets[data.tweets.length -1].created_at)
+            dt = Date.parse(data.tweets[data.tweets.length -1].created_at);
+            // console.log(data.tweets.length);
+            //console.log(dt);
+            currTweetArray = currTweetArray.concat(data.tweets);
+            console.log(currTweetArray);
+            //createGraph(data);
+        }
+    });
 }
 
 function createGraph(){
@@ -295,12 +294,10 @@ function createGraph(){
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
-    tweetStructure = new TweetStructure(graph); //Create tweet graph
+    tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
 
 
     if (currTweetArray.length != 0) {
-        console.log(currTweetArray);
-
         //var numTweets = tweetArray.length;
         //var timePer = 50000 / numTweets;
 
@@ -312,7 +309,7 @@ function createGraph(){
         //}
         //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
         //tweetStructure.processUserNames(usernames,tweets);
-       // tweetStructure.processTweets(tweets);
+        // tweetStructure.processTweets(tweets);
 
 
         //graph.add(edge);
@@ -377,7 +374,7 @@ function animate() {
     // cube2.__dirtyPosition = true;
     // cube1.__dirtyPosition = true;
 
-    
+
     render();
 }
 
@@ -399,7 +396,7 @@ function buildAxes( length ) {
 //Temporary for debugging while building virtual world.
 function buildAxis( src, dst, colorHex, dashed ) {
     var geom = new THREE.Geometry(),
-            mat;
+        mat;
     if(dashed) {
         mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
     } else {
@@ -428,39 +425,39 @@ function animate_sound() {
         var k = 0;
         var diff = 0;
         for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
-                var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
-                //console.log(binaries[k]);
-                if(boost  > 27){
-                    pointCloud2.changeColor(i,getRandomColor());
-                    //pointCloud2.geometry.vertices[i].x += Math.random() *scale;
-                   // pointCloud2.geometry.vertices[i].y += Math.random() * scale;
+            var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
+            //console.log(binaries[k]);
+            if(boost  > 27){
+                pointCloud2.changeColor(i,getRandomColor());
+                //pointCloud2.geometry.vertices[i].x += Math.random() *scale;
+                // pointCloud2.geometry.vertices[i].y += Math.random() * scale;
 
-                    //pointCloud2.geometry.vertices[i].setPosition(new THREE.Vector2(pointCloud2.geometry.vertices[i].x + scale, pointCloud2.geometry.vertices[i].y + scale));
-                    pointCloud.geometry.__dirtyVertices = true;
-                }
+                //pointCloud2.geometry.vertices[i].setPosition(new THREE.Vector2(pointCloud2.geometry.vertices[i].x + scale, pointCloud2.geometry.vertices[i].y + scale));
+                pointCloud.geometry.__dirtyVertices = true;
+            }
             else{
-                    pointCloud2.changeColor(i,"#000000");
-                }
-               // else if(boost > 15)
-               // {
-                   // pointCloud2.changeColor(i,getRandomColor());
-                //}
+                pointCloud2.changeColor(i,"#000000");
+            }
+            // else if(boost > 15)
+            // {
+            // pointCloud2.changeColor(i,getRandomColor());
+            //}
 
-                //var num = binaries[k].toString();
-                //var conversion = "#";
-                //conversion += parseInt(num,16);
-                //var hex = String(conversion);
-                //var result = hex.substring(0,hex.length);
-                //console.log(result);
-               // pointCloud.changeColor(i, result);
-                //if((random % 2) == 0){
-                  //  pointCloud2.geometry.vertices[i].y -= scale*0.1;
+            //var num = binaries[k].toString();
+            //var conversion = "#";
+            //conversion += parseInt(num,16);
+            //var hex = String(conversion);
+            //var result = hex.substring(0,hex.length);
+            //console.log(result);
+            // pointCloud.changeColor(i, result);
+            //if((random % 2) == 0){
+            //  pointCloud2.geometry.vertices[i].y -= scale*0.1;
 
-                //}
+            //}
 
-                //pointCloud2.geometry.vertices[i].y += scale * 0.1;
-                //pointCloud2.changeColor(i,getRandomColor());
-                //pointCloud2.geometry.vertices[i].uniforms.color.value = new THREE.Color(getRandomColor());
+            //pointCloud2.geometry.vertices[i].y += scale * 0.1;
+            //pointCloud2.changeColor(i,getRandomColor());
+            //pointCloud2.geometry.vertices[i].uniforms.color.value = new THREE.Color(getRandomColor());
 
 
             //pointCloud.changeColor(i,"#FF6600");
@@ -470,18 +467,18 @@ function animate_sound() {
             //pointCloud.changeColor(i,getRandomColor());
             //pointCloud.uniforms.color.needsUpdate = true;
             //console.log("randomColor :" + getRandomColor());
-                pointCloud2.geometry.verticesNeedUpdate = true;
+            pointCloud2.geometry.verticesNeedUpdate = true;
 
 
-                //k += (k < (binaries.length-1) ? 1 : 0);
+            //k += (k < (binaries.length-1) ? 1 : 0);
 
             //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
             //water.distortionScale += 10;
 
 
 
-            }
- //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
+        }
+        //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
 
 
     }
@@ -508,4 +505,3 @@ function randomFairColor() {
     var b = (Math.floor(Math.random() * (max - min + 1)) + min);
     return r + g + b;
 }
-

@@ -1,10 +1,10 @@
 // RkqqvYKque
 "use strict";
-var TweetStructure=function(graph){
+var TweetStructure=function(options){
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
-    var scene = graph.options.scene;
-    var graph = graph;
+    var scene = options.scene;
+    var graph = new Graph(options);
     var layoutOptions={};
     var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
     var numNodes = 0;
@@ -41,7 +41,7 @@ var TweetStructure=function(graph){
 
                 retweetEdge.draw();
 
-            // Tweet does not exist in world, add tweet then retweet node
+                // Tweet does not exist in world, add tweet then retweet node
             } else {
                 retweetText = createTweetPanel(description);
                 retweetText.retweeted++;
@@ -85,8 +85,8 @@ var TweetStructure=function(graph){
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
-       // userNode.mesh.position.copy(location); //CHECK
-       // userNode.mesh._dirtyPosition = true;
+        // userNode.mesh.position.copy(location); //CHECK
+        // userNode.mesh._dirtyPosition = true;
         //userNode.mesh.geometry =  new THREE.SphereGeometry(6, 32, 32);
 
         //userNode.id = numNodes; //NOT SURE
@@ -213,34 +213,34 @@ var TweetStructure=function(graph){
 
         ////TODO: Update position of nodes and panels
         //for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
-            //var nodeToBe =  graph.getNode(i);
-            //var nodeToBe = graph.nodes[i];
+        //var nodeToBe =  graph.getNode(i);
+        //var nodeToBe = graph.nodes[i];
 
 
-            //nodeToBe.draw();
-            //console.log(nodeToBe);
-            // nodeToBe.mesh.geometry.verticesNeedUpdate = true;
-            // nodeToBe.mesh.geometry.elementsNeedUpdate = true;
-            //console.log(nodeToBe.position);
+        //nodeToBe.draw();
+        //console.log(nodeToBe);
+        // nodeToBe.mesh.geometry.verticesNeedUpdate = true;
+        // nodeToBe.mesh.geometry.elementsNeedUpdate = true;
+        //console.log(nodeToBe.position);
 
-            // nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
+        // nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
 
-            //nodeToBe.draw();
+        //nodeToBe.draw();
 
-            // nodeToBe.mesh.position.x += Math.random() * 10;
-            // nodeToBe.mesh.position.y += Math.random() * 10; //DOESN'T WORK!
-            // nodeToBe.mesh.position.z += Math.random() * 10;
-            // nodeToBe.setPosition(new THREE.Vector3( nodeToBe.position.x, nodeToBe.position.y , nodeToBe.position.z += Math.random() + 0.001));
-            // nodeToBe.setRotation(new THREE.Vector3(0,0.2,0));
+        // nodeToBe.mesh.position.x += Math.random() * 10;
+        // nodeToBe.mesh.position.y += Math.random() * 10; //DOESN'T WORK!
+        // nodeToBe.mesh.position.z += Math.random() * 10;
+        // nodeToBe.setPosition(new THREE.Vector3( nodeToBe.position.x, nodeToBe.position.y , nodeToBe.position.z += Math.random() + 0.001));
+        // nodeToBe.setRotation(new THREE.Vector3(0,0.2,0));
 
-            //console.log(nodeToBe.position);
-
-
+        //console.log(nodeToBe.position);
 
 
-            // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
 
-       // }
+
+        // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
+
+        // }
         graph.edges.forEach(function(e){
             e.line.geometry.verticesNeedUpdate=true;
             e.line.geometry.elementsNeedUpdate = true;
@@ -320,5 +320,4 @@ var TweetStructure=function(graph){
         // tweetsInContext: tweetsInContext
     }
 };
-
 
