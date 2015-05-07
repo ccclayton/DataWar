@@ -102,8 +102,9 @@ var TweetStructure=function(options){
     var createRetweetNode = function(username, tweet) {
         //var location = lookupStartPosition(username);
         tweet.position.y = 55;
-        //tweet.position.x = tweet.position.x + (5 * tweet.retweeted);
+        //tweet.position.x += (Math.random() * tweet.retweeted);
         var location = tweet.position;
+        console.log("Setting x of retweet to " + location);
         var userNode = new TwitterNode(username,null,null,location,0);
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
