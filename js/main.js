@@ -229,7 +229,7 @@ function init() {
 
 
     pointCloud = new PointCloud(scene);
-    pointCloud.uniforms.color.value = new THREE.Color(0xFF6600);
+    pointCloud.uniforms.color.value = new THREE.Color(0xFFFFFF);
 
     pointCloud2 = new PointCloud(scene);
 
@@ -431,13 +431,16 @@ function animate_sound() {
                 var random = Math.random()*1000;
                 var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
                 //console.log(binaries[k]);
-                if(boost > 30){
+                if(boost  > 27){
                     pointCloud2.changeColor(i,getRandomColor());
                 }
-                else if(boost > 25)
-                {
-                    pointCloud2.changeColor(i,getRandomColor());
+            else{
+                    pointCloud2.changeColor(i,"#000000");
                 }
+               // else if(boost > 15)
+               // {
+                   // pointCloud2.changeColor(i,getRandomColor());
+                //}
 
                 //var num = binaries[k].toString();
                 //var conversion = "#";

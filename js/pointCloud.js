@@ -20,7 +20,7 @@ var PointCloud=function(_scene){
 	this.uniforms = {
 		amplitude: { type: "f", value: 1.0 },
 		// color:     { type: "c", value: new THREE.Color( 0x505050 ) },
-		color:     { type: "c", value: new THREE.Color( 0xffff50 ) },
+		color:     { type: "c", value: new THREE.Color( 0xFFFF66 ) },
 		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "./images/spark1.png" )},
 		// texture:   { type: "t", value: THREE.ImageUtils.loadTexture( config.bird.pcImage )},
 		offset: {type: "v2", value:new THREE.Vector2( 2, -4 ).multiplyScalar(0.01)}
