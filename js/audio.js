@@ -19,11 +19,11 @@ var interval = window.setInterval(function() {
 }, 500);
 
 try {
-	if(typeof webkitAudioContext === 'function' || 'webkitAudioContext' in window) {
-		context = new webkitAudioContext();
-	}
-	else {
+	if(typeof AudioContext === 'function' || 'AudioContext' in window) {
 		context = new AudioContext();
+	}
+	else if(typeof webkitAudioContext === 'function' || 'AudioContext' in window) {
+		context = new webkitAudioContext();
 	}
 }
 catch(e) {
