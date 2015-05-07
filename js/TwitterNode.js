@@ -10,6 +10,7 @@ function TwitterNode(username, geometry, geometryType, position, mass) {
     this.position = position;
     //this._dirtyPosition = true;
     this.mass = mass;
+    this.retweeted = 0;
     //this.mesh = null; //NEEDS TO BE THE ACTUAL MESH..
 
 
@@ -138,6 +139,10 @@ TwitterNode.prototype.draw = function (location) {
 
 TwitterNode.prototype.killNode = function () {
     scene.remove(this.node);
+};
+
+TwitterNode.prototype.incRetweets = function () {
+    this.retweeted++;
 }
 
 TwitterNode.prototype.updateMeshPosition = function(){
@@ -147,7 +152,7 @@ TwitterNode.prototype.updateMeshPosition = function(){
 
 TwitterNode.prototype.getPosition = function () {
     return this.mesh.position;
-}
+};
 
 
 TwitterNode.prototype.setPosition = function(newPos){
