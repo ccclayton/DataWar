@@ -186,7 +186,6 @@ function init() {
     axes = buildAxes(1000);
     scene.add(axes);
 
-    //buildADDS();
 
     renderer = new THREE.WebGLRenderer({clearAlpha: 1});
     renderer.setClearColor(0x000000);
@@ -358,7 +357,7 @@ function animate() {
     //tweetStructure.render();
 
     animate_sound();
-    //pointCloud.update();  //TODO: Change Movement. Pass to Shader.
+    pointCloud2.update();  //TODO: Change Movement. Pass to Shader.
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
@@ -428,11 +427,15 @@ function animate_sound() {
         var k = 0;
         var diff = 0;
         for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
-                var random = Math.random()*1000;
                 var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
                 //console.log(binaries[k]);
                 if(boost  > 27){
                     pointCloud2.changeColor(i,getRandomColor());
+                    //pointCloud2.geometry.vertices[i].x += Math.random() *scale;
+                   // pointCloud2.geometry.vertices[i].y += Math.random() * scale;
+
+                    //pointCloud2.geometry.vertices[i].setPosition(new THREE.Vector2(pointCloud2.geometry.vertices[i].x + scale, pointCloud2.geometry.vertices[i].y + scale));
+                    pointCloud.geometry.__dirtyVertices = true;
                 }
             else{
                     pointCloud2.changeColor(i,"#000000");

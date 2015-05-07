@@ -51,9 +51,45 @@ PointCloud.prototype.init = function(){
 
 // update should be called in the main render loop
 PointCloud.prototype.update=function(){
+    var time = performance.now();  //TODO: USE TIME AND DELTA IN CALCULATION.
 
-    //this.uniforms.color.value = new THREE.Color(getRandomColor());
-    //this.uniforms.needsUpdate = true;
+    var	prevTime = time;
+
+    var delta = ( time - prevTime ) / 1000;
+
+
+
+    var xHigh = 500;
+    var xLow = -500;
+    var yHigh = 150;
+    var yLow = 0;
+    var totalLength = this.geometry.vertices.length;
+    while (totalLength--) {
+
+        var particle = this.geometry.vertices[totalLength];
+        //particle.y += delta * 50;
+        if(particle.y >= yHigh){
+            particle.y = yLow;
+        }
+        if (particle.x >= xHigh){
+            particle.x = xLow;
+
+        }
+        if(particle.y < yLow){
+            particle.y = yLow;
+        }
+        if(particle.x < xLow){
+            particle.x = xLow;
+        }
+        particle.y += Math.random() * 2;
+        particle.x += Math.random() * 1;
+
+        this.geometry.__dirtyVertices = true;
+        this.geometry.verticesNeedUpdate = true;
+    }
+
+
+
 
 
 	// if (out of range) set pos to (0, -1, 0), skip
