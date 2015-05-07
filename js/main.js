@@ -38,25 +38,18 @@ function init() {
     Physijs.scripts.worker = '../Physijs/physijs_worker.js';
     Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
-
-
     scene = new Physijs.Scene;
     scene.setGravity(
         new THREE.Vector3(0, -250, 0)
     );
 
     oscControl = new OscControl(scene);
+
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100000);
     camera.position.z = 100;
     scene.add(camera);
 
-    directionalLight = new THREE.DirectionalLight(0xffff55, 1);
-    directionalLight.position.set(-1, 0.4, -1);
-    scene.add(directionalLight);
-
-    waterNormals = new THREE.ImageUtils.loadTexture('../threejs.r65/examples/textures/waternormals.jpg');
-    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
-
+    initLights();
 
     yawObject = new Physijs.BoxMesh(
         new THREE.BoxGeometry(50, 10, 50),
@@ -67,6 +60,7 @@ function init() {
         ),
         1000
     );
+
     yawObject.visible = false;
     scene.add(yawObject);
     yawObject.position.set(0, 10, 150);
@@ -78,7 +72,49 @@ function init() {
         }
     });
 
+    initSkybox();
 
+    //controls
+    controls = new THREE.PointerLockControls(yawObject, camera);
+    scene.add(controls.getObject());
+    camera.position.set(0, 10, 0);
+    // console.log("Player cube: " + PlayerCube.id);
+
+    initObjects();
+
+    buildAxes(1000);
+
+    renderer = new THREE.WebGLRenderer({clearAlpha: 1});
+    renderer.setClearColor(0x000000);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMapSoft = true;
+
+    initWater();
+
+    grabTweets();
+
+    //----------------------------------------------------------------------------------------------------------------------
+    createGraph(); //Creates Twitter Structure Graph.
+    //----------------------------------------------------------------------------------------------------------------------
+
+    pointCloud = new PointCloud(scene);
+    pointCloud.uniforms.color.value = new THREE.Color(0xFFFFFF);
+
+    pointCloud2 = new PointCloud(scene);
+
+    lineTrace = new LineTrace(scene);
+
+    pointCloud2.addBatch();
+
+    //read kinect data / build skeleton
+    var bSkeleton = true;
+    window.Kinect=connectKinect(bSkeleton);
+
+    document.body.appendChild(renderer.domElement);
+    window.addEventListener('resize', onWindowResize, false);
+}
+
+function initSkybox() {
     // ------------------------------------------------------------------------------
     //SETTING UP AND ADDING SKYBOX TO SCENE
     var prefix = "../textures/stars/";
@@ -106,8 +142,9 @@ function init() {
     );
 
     scene.add(skyMesh);
+}
 
-
+function initObjects() {
     cube1 = new Physijs.BoxMesh(
         new THREE.BoxGeometry(10, 10, 10),
         Physijs.createMaterial(
@@ -131,13 +168,6 @@ function init() {
     cube2.addEventListener('collision', function (object) {
         console.log("Object " + this.id + " collided with " + object.id);
     });
-
-
-    //controls
-    controls = new THREE.PointerLockControls(yawObject, camera);
-    scene.add(controls.getObject());
-    camera.position.set(0, 10, 0);
-    // console.log("Player cube: " + PlayerCube.id);
 
     // Ground
     ground_material = Physijs.createMaterial(
@@ -170,27 +200,11 @@ function init() {
     fence.position.z = -235;
     fence.position.y = 20;
     fence.__dirtyPosition = true;
+}
 
-
-
-    var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
-    light.position.set(0.5, 1, 0.75);
-    scene.add(light);
-
-    var light = new THREE.SpotLight(0xffffff, 1);
-    light.position.set(0, 50, 0);
-    scene.add(light);
-
-
-    // Add axes
-    axes = buildAxes(1000);
-    scene.add(axes);
-
-
-    renderer = new THREE.WebGLRenderer({clearAlpha: 1});
-    renderer.setClearColor(0x000000);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMapSoft = true;
+function initWater() {
+    waterNormals = new THREE.ImageUtils.loadTexture('../threejs.r65/examples/textures/waternormals.jpg');
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
     //WATER FROM OCEAN EXAMPLE THREEJS 65
     water = new THREE.Water(renderer, camera, scene, {
@@ -216,61 +230,22 @@ function init() {
     mirrorMesh.add(water);
     mirrorMesh.rotation.x = (-Math.PI * 0.5);
     scene.add(mirrorMesh);
-
-    grabTweets();
-
-    //----------------------------------------------------------------------------------------------------------------------
-
-    createGraph(); //Creates Twitter Structure Graph.
-
-
-    //----------------------------------------------------------------------------------------------------------------------
-
-
-    pointCloud = new PointCloud(scene);
-    pointCloud.uniforms.color.value = new THREE.Color(0xFFFFFF);
-
-    pointCloud2 = new PointCloud(scene);
-
-    lineTrace = new LineTrace(scene);
-
-
-
-    //pointCloud.addBatch();
-
-
-    //pointCloud.addInFrontOfCamera();
-
-    //pointCloud2.seedParticles(200000);
-    pointCloud2.addBatch();
-
-
-    //read kinect data / build skeleton
-    var bSkeleton = true;
-    window.Kinect=connectKinect(bSkeleton);
-
-
-
-
-    //pointCloud.addBatch();
-
-
-
-    document.body.appendChild(renderer.domElement);
-    window.addEventListener('resize', onWindowResize, false);
 }
 
-// AJAX REQUESTS
-//function grabTweets() {
-//    setTimeout(grabTweets, 5000);
-//    var param = {date : dt};
-//    $.get( '/api/tweets', param, function(data) {
-//        if (data.tweets.length != 0) {
-//            dt = Date.parse(data.tweets[data.tweets.length -1].created_at)
-//            console.log(data.tweets.length);
-//        }
-//    });
-//}
+function initLights() {
+    var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
+    light.position.set(0.5, 1, 0.75);
+    scene.add(light);
+
+    var light = new THREE.SpotLight(0xffffff, 1);
+    light.position.set(0, 50, 0);
+    scene.add(light);
+
+    directionalLight = new THREE.DirectionalLight(0xffff55, 1);
+    directionalLight.position.set(-1, 0.4, -1);
+    scene.add(directionalLight);
+}
+
 function grabTweets() {
     setTimeout(grabTweets, 5000);
     console.log(dt);
@@ -391,7 +366,7 @@ function buildAxes( length ) {
     axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
     axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
     axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
-    return axes;
+    scene.add(axes);
 }
 //Temporary for debugging while building virtual world.
 function buildAxis( src, dst, colorHex, dashed ) {
