@@ -1,10 +1,10 @@
 // RkqqvYKque
 "use strict";
-var TweetStructure=function(options){
+var TweetStructure=function(graph){
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
-    var scene = options.scene;
-    var graph = new Graph(options);
+    var scene = graph.options.scene;
+    var graph = graph;
     var layoutOptions={};
     var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
     var numNodes = 0;

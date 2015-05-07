@@ -12,6 +12,7 @@ var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
 var currTweetArray = [];
+var graph = new Graph({Layout: "3d",scene: this.scene});
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -282,7 +283,7 @@ function grabTweets() {
       dt = Date.parse(data.tweets[data.tweets.length -1].created_at);
       // console.log(data.tweets.length);
       //console.log(dt);
-       currTweetArray = currTweetArray.concat(data.tweets);
+       currTweetArray = data.tweets.concat(currTweetArray);
         console.log(currTweetArray);
       //createGraph(data);
     }
@@ -294,7 +295,7 @@ function createGraph(){
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
 
-    tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
+    tweetStructure = new TweetStructure(graph); //Create tweet graph
 
 
     if (currTweetArray.length != 0) {

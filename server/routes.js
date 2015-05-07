@@ -39,7 +39,7 @@ module.exports = function(app) {
 
 
   // Route to clear out the database
-  app.route('/')
+  app.route('/fresh')
       .get(function (req, res) {
         Tweet.remove({}, function (err) {
           if (err) return handleError(err);
@@ -53,14 +53,13 @@ module.exports = function(app) {
       });
 
     // Just load the page
-    //app.route('/')
-    //    .get(function (req, res) {
-    //        if (err) return handleError(err);
-    //        // res.set('Content-Type', 'text/html');
-    //        // var temp = options.root;
-    //        // options.root += 'src/';
-    //        // console.log(options.root);
-    //        res.render(options.root + 'src/datawar.html');
-    //        // options.root = temp;
-    //    });
+    app.route('/')
+        .get(function (req, res) {
+            // res.set('Content-Type', 'text/html');
+            // var temp = options.root;
+            // options.root += 'src/';
+            // console.log(options.root);
+            res.render(options.root + 'src/datawar.html');
+            // options.root = temp;
+        });
 };

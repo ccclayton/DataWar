@@ -21,7 +21,8 @@ TweetPanel.prototype.draw = function(location){
 	canvas.height = 1080;
 
 	var context = canvas.getContext( '2d' );
-	context.fillStyle = "white";
+	context.fillStyle = "#4099FF";
+	context.fillRect(0, 0, 1920, 1080);
 	context.font = "90px Calibri";
 
 	var maxWidth = 1920;
@@ -40,9 +41,9 @@ TweetPanel.prototype.draw = function(location){
 
 	//Create Physijs object out of canvas. This will hold the username of the Tweet.
 	this.mesh = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(50, 12, 1),
+		new THREE.CubeGeometry(50, 12, 0),
 		Physijs.createMaterial(
-			new THREE.MeshBasicMaterial( {map: tweetText, side: THREE.DoubleSide} ), 0, 0
+			new THREE.MeshBasicMaterial( {map: tweetText} ), 0, 0
 		), this.mass
 	);
 
@@ -74,8 +75,9 @@ TweetPanel.prototype.setRotation = function (newRotation){ // THREE.Vector3
 	this.mesh._dirtyRotation = true;
 }
 
-// http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+// http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/ Modified by Danny Gillies
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
+	context.fillStyle = "#333333";
 	var words = text.split(' ');
 	var line = '';
 

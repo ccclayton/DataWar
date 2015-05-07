@@ -50,7 +50,6 @@ TwitterNode.prototype.draw = function (location) {
     var canvas = document.createElement('canvas');
     canvas.width = 1920;
     canvas.height = 1080;
-    canvas.fillStyle = "#4099FF";
     var context = canvas.getContext('2d');
     var mesh;
 
