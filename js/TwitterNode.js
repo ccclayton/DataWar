@@ -1,6 +1,6 @@
 "use strict";
 var geomFlag;//global
-function TwitterNode(username, geometry, geometryType, position, mass) {
+function TwitterNode(username, geometry, geometryType, position, mass, options) {
     //ADDED THIS so it extends the Node class.
     Node.call(this);
 
@@ -12,7 +12,9 @@ function TwitterNode(username, geometry, geometryType, position, mass) {
     this.mass = mass;
     this.retweeted = 0;
     //this.mesh = null; //NEEDS TO BE THE ACTUAL MESH..
-
+    this.bgColor = options.bgColor || "#FFFFFF";
+    this.fontColor = options.fontColor || "#000000";
+    this.tweetOpac = options.opacity || 0.75;
 
 
     if ((this.geometryType == null && this.geometry == null) || (this.geometryType.toUpperCase() == "default".toUpperCase() && this.geometry == null)) {
@@ -53,18 +55,34 @@ TwitterNode.prototype.draw = function (location) {
     var context = canvas.getContext('2d');
     var mesh;
 
-    context.fillStyle = "yellow";
-    context.font = "bold 75px Arial";
+    context.beginPath();
+    context.rect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = this.bgColor;
+    context.fill();
 
-    context.fillText("@" + this.username, 300, 500); //Will eventually be parsed usernames.
-    context.textAlign = 'center';
+    context.fillStyle = this.fontColor;
+    context.font = "bold 200px Arial";
+    context.textAlign = "center";
+
+    var maxWidth = 1920;
+    var lineHeight = 120;
+    var x = canvas.width/2;
+    var y = 540;
+    var text = "@" + this.username;
+
+    wrapText(context, text, x, y, maxWidth, lineHeight);
+
+    // context.fillText(text, 300, 500); //Will eventually be parsed usernames.
+    // context.textAlign = 'center';
     var tweeterTexture = new THREE.Texture(canvas);
     tweeterTexture.needsUpdate = true;
     //tweeterTexture.magFilter = THREE.NearestFilter;
     //tweeterTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
     //NEED A SWITCH CASE FOR DIFFERENT TYPES OF GEOMETRY/Meshes
-
+    if (this.geometry == null) {
+        this.geometry = new THREE.SphereGeometry(6, 32, 32);
+    }
 
     switch (this.geomFlag) {
 
@@ -73,27 +91,27 @@ TwitterNode.prototype.draw = function (location) {
             break;
         case 2:
             this.mesh = new Physijs.BoxMesh(
-                geometry,
+                this.geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
             break;
         case 3:
             this.mesh = new Physijs.SphereMesh(
-                geometry,
+                this.geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
             break;
         case 4:    //NEED TO FIX PHYSICS. CYLINDER WILL CURRENTLY FALL OVER AND ROLL AWAY.
             this.mesh = new Physijs.CylinderMesh(
-                geometry,
+                this.geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
@@ -102,26 +120,25 @@ TwitterNode.prototype.draw = function (location) {
             this.mesh = new Physijs.ConvexMesh(
                 geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
             break;
         case 6:
             this.mesh = new Physijs.ConcaveMesh(
-                geometry,
+                this.geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
             break;
         default:
-            geometry = new THREE.SphereGeometry(6, 32, 32);
             this.mesh = new Physijs.SphereMesh(
-                geometry,
+                this.geometry,
                 Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide}), 0, 0
+                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
                 ), this.mass
             );
             this.mesh.__dirtyPosition = true;
@@ -165,4 +182,26 @@ TwitterNode.prototype.setRotation = function (newRotation){ // THREE.Vector3
     this.mesh.position.applyEuler(euler);
 
     this.mesh._dirtyRotation = true;
+}
+
+// http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/ Modified by Danny Gillies
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    // context.fillStyle = "#333333";
+    var words = text.split(' ');
+    var line = '';
+
+    for(var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + ' ';
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+        }
+        else {
+            line = testLine;
+        }
+    }
+    context.fillText(line, x, y);
 }

@@ -82,7 +82,7 @@ function init() {
 
     initObjects();
 
-    buildAxes(1000);
+    //buildAxes(1000);
 
     renderer = new THREE.WebGLRenderer({clearAlpha: 1});
     renderer.setClearColor(0x000000);
@@ -145,29 +145,29 @@ function initSkybox() {
 }
 
 function initObjects() {
-    cube1 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(10, 10, 10),
-        Physijs.createMaterial(
-            new THREE.MeshNormalMaterial(), 0.2, 0.9
-        )
-    );
-    cube1.position.x = -50;
-    scene.add(cube1);
-    console.log("cube 1: " + cube1.id);
+    // cube1 = new Physijs.BoxMesh(
+    //     new THREE.BoxGeometry(10, 10, 10),
+    //     Physijs.createMaterial(
+    //         new THREE.MeshNormalMaterial(), 0.2, 0.9
+    //     )
+    // );
+    // cube1.position.x = -50;
+    // scene.add(cube1);
+    // // console.log("cube 1: " + cube1.id);
 
-    cube2 = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(10, 10, 10),
-        Physijs.createMaterial(
-            new THREE.MeshNormalMaterial(), 0.2, 0.9
-        )
-    );
-    cube2.position.x = 50;
-    scene.add(cube2);
-    console.log("cube 2: " + cube2.id);
+    // cube2 = new Physijs.BoxMesh(
+    //     new THREE.BoxGeometry(10, 10, 10),
+    //     Physijs.createMaterial(
+    //         new THREE.MeshNormalMaterial(), 0.2, 0.9
+    //     )
+    // );
+    // cube2.position.x = 50;
+    // scene.add(cube2);
+    // // console.log("cube 2: " + cube2.id);
 
-    cube2.addEventListener('collision', function (object) {
-        console.log("Object " + this.id + " collided with " + object.id);
-    });
+    // cube2.addEventListener('collision', function (object) {
+    //     console.log("Object " + this.id + " collided with " + object.id);
+    // });
 
     // Ground
     ground_material = Physijs.createMaterial(

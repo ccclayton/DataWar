@@ -37,8 +37,8 @@ PointCloud.prototype.init = function(){
 
 		blending:       THREE.AdditiveBlending,// : THREE.NormalBlending,
 		depthTest:      false,
-		transparent:    true
-
+		transparent:    true,
+		opacity:0.5
 	});
 
 	this.seedParticles(this.maxParticles);
@@ -179,6 +179,11 @@ PointCloud.prototype.add = function(vertex, color, size){
 PointCloud.prototype.changeColor = function(idx, color){
 	this.values_color[idx].copy(new THREE.Color(color));
 	this.attributes["customColor"].needsUpdate = true;
+};
+
+PointCloud.prototype.changeOpacity = function(idx, opacity){
+	window.pc[idx].material.opacity = opacity
+	// this.attributes["customColor"].needsUpdate = true;
 };
 
 

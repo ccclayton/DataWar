@@ -313,8 +313,8 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
 }
 
 //Changed by Colin Clayton
-Edge.prototype.draw=function(){
-    material = new THREE.LineBasicMaterial({ linewidth: 1, transparent: false});
+Edge.prototype.draw=function(options){
+    material = new THREE.LineBasicMaterial({ linewidth: options.linewidth, transparent: true, opacity:options.opacity, color:parseInt(options.color.substr(1),16)});
     material.side = THREE.DoubleSide;
     material.needsUpdate = true;
     // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});

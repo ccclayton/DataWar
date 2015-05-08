@@ -51,11 +51,13 @@
 </script>
 
 <script id="glowFragmentShader" type="x-shader/x-vertex"> 
+	uniform float c;
+	uniform float p;
 	varying vec3 vNormal;
 	void main() 
 	{
-		float intensity = pow( 0.7 - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), 10.0 ); 
-	    gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
+		float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p ); 
+		gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
 	}
 </script>
 
@@ -203,6 +205,7 @@
 	<script type = "text/javascript" src = "../js/Graph.js"></script>
 	<script type = "text/javascript" src = "../js/force-directed-layout.js"></script>
 	<script type = "text/javascript" src = "../js/TwitterNode.js"></script>
+	<script type = "text/javascript" src = "../js/shapes.js"></script>
 	<script type = "text/javascript" src = "../js/TweetPanel.js"></script>
 	<script type = "text/javascript" src = "../js/main.js"> </script>
 	</body>
