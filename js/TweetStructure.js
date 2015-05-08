@@ -2,7 +2,7 @@
 "use strict";
 var TweetStructure=function(options){
 
-    var tweetOpacity = 0.90;
+    var tweetOpacity = 1;
     var bgColor = "#121252";
     var lineColor = "#121252";
     var fontColor = "#FFFFFF";

@@ -134,15 +134,6 @@ function connectKinect(bSkeleton) {
           if (!jointObjects[i]) {
             var material = new THREE.MeshBasicMaterial( { color:0xffffff } );
             // var material = new THREE.MeshNormalMaterial();
-            var customMaterial = new THREE.ShaderMaterial( 
-            {
-              uniforms: {},
-              vertexShader:   document.getElementById( 'glowVertexShader'   ).textContent,
-              fragmentShader: document.getElementById( 'glowFragmentShader' ).textContent,
-              side: THREE.BackSide,
-              blending: THREE.AdditiveBlending,
-              transparent: true
-            });
 
             var sphere = new THREE.Mesh( new THREE.SphereGeometry( jointSizes[i], 10, 10 ), material );
             
