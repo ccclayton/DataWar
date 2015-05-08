@@ -258,7 +258,7 @@ function grabTweets() {
             // console.log(data.tweets.length);
             //console.log(dt);
             currTweetArray = currTweetArray.concat(data.tweets);
-            console.log(currTweetArray);
+            // console.log(currTweetArray);
             //createGraph(data);
         }
     });
@@ -402,7 +402,7 @@ function animate_sound() {
         for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
             var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
             //console.log(binaries[k]);
-            if(boost  > 27){
+            if(boost  > 10){
                 pointCloud2.changeColor(i,getRandomColor());
                 //pointCloud2.geometry.vertices[i].x += Math.random() *scale;
                 // pointCloud2.geometry.vertices[i].y += Math.random() * scale;
