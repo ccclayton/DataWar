@@ -58,7 +58,6 @@ var TweetStructure=function(sceneGraph){
 
                 tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
                 retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-                console.log(tweetEdge.source.layout);
             }
 
         } else {
@@ -67,7 +66,6 @@ var TweetStructure=function(sceneGraph){
 
             var edge = graph.addEdge(node, panel);
             edge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-            console.log(edge.source.layout);
             storedTweets.push(description);
 
             //for(var i = 0; i < 2; i++){

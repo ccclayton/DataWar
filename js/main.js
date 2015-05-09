@@ -183,7 +183,7 @@ function initObjects() {
     ground_material.map.repeat.set(10, 10);
 
     ground = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(100000, 1, 100000),
+        new THREE.BoxGeometry(256000, 1, 256000),
         ground_material,
         0 // mass
     );
@@ -269,7 +269,7 @@ function grabTweets() {
 }
 
 function createGraph(){
-    setTimeout(createGraph, 6000);
+    setTimeout(function() {createGraph()}, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
     console.log(graph.layout);
