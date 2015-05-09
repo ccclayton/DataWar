@@ -90,57 +90,63 @@ TwitterNode.prototype.draw = function (location) {
             alert("Error at creation of node.");
             break;
         case 2:
-            this.mesh = new Physijs.BoxMesh(
-                this.geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}));
+            // this.mesh = new Physijs.BoxMesh(
+            //     this.geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
             break;
         case 3:
-            this.mesh = new Physijs.SphereMesh(
-                this.geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}) );
+            // this.mesh = new Physijs.SphereMesh(
+            //     this.geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
             break;
         case 4:    //NEED TO FIX PHYSICS. CYLINDER WILL CURRENTLY FALL OVER AND ROLL AWAY.
-            this.mesh = new Physijs.CylinderMesh(
-                this.geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}));
+            // this.mesh = new Physijs.CylinderMesh(
+            //     this.geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
             break;
         case 5:
-            this.mesh = new Physijs.ConvexMesh(
-                geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}));
+            // this.mesh = new Physijs.ConvexMesh(
+            //     geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
             break;
         case 6:
-            this.mesh = new Physijs.ConcaveMesh(
-                this.geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}));
+            // this.mesh = new Physijs.ConcaveMesh(
+            //     this.geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
             break;
         default:
-            this.mesh = new Physijs.SphereMesh(
-                this.geometry,
-                Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
-                ), this.mass
-            );
+            this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}));
+            // this.mesh = new Physijs.SphereMesh(
+            //     this.geometry,
+            //     Physijs.createMaterial(
+            //         new THREE.MeshBasicMaterial({map: tweeterTexture, side: THREE.DoubleSide, transparent:true, opacity:this.tweetOpac}), 0, 0
+            //     ), this.mass
+            // );
             this.mesh.__dirtyPosition = true;
 
             break;
