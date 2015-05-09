@@ -12,6 +12,7 @@ var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
 var currTweetArray = [];
+var graph;
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -90,6 +91,9 @@ function init() {
     renderer.shadowMapSoft = true;
 
     initWater();
+    var options = {Layout: "3d",scene: this.scene};
+    graph = new Graph(options);
+    graph.layout = new Layout.ForceDirected(graph);
 
     grabTweets();
 
@@ -268,9 +272,8 @@ function createGraph(){
     setTimeout(createGraph, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
-
-    tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
-
+    console.log(graph.layout);
+    tweetStructure = new TweetStructure(graph); //Create tweet graph
 
     if (currTweetArray.length != 0) {
         //var numTweets = tweetArray.length;
@@ -279,43 +282,10 @@ function createGraph(){
         //setTimeout(tweetStructure.drawGraph(tweetArray)
         tweetStructure.drawGraph(currTweetArray.pop());
         tweetStructure.drawGraph(currTweetArray.pop());
-        //for (var i = 0; i < 2; i++) {
-        //    tweetStructure.drawGraph(tweetArray[i]);
-        //}
-        //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
-        //tweetStructure.processUserNames(usernames,tweets);
-        // tweetStructure.processTweets(tweets);
 
+        graph.layout.init({iterations: 100000});
 
-        //graph.add(edge);
-
-
-
-
-
-
-        //var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
-
-        //node.draw(); //Overridden draw function
-        //var node2 = new TwitterNode("wei",null,null,new THREE.Vector3(0,40,-40),0);
-        //node2.draw(); //Overridden draw function
-
-
-        //Create new tweetPanel to display tweet.
-        //var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
-        //scene.add(tweetPanel);
-
-        //var edge = new Edge(node,tweetPanel);
-        //edge.draw();
-
-        //var edge2 = new Edge(node2,tweetPanel);
-        //edge2.draw();
     }
-
-
-
-
-
 }
 
 

@@ -1,6 +1,6 @@
 // RkqqvYKque
 "use strict";
-var TweetStructure=function(options){
+var TweetStructure=function(sceneGraph){
 
     var tweetOpacity = 1;
     var bgColor = "#121252";
@@ -10,9 +10,8 @@ var TweetStructure=function(options){
 
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
-    var scene = options.scene;
-    var graph = new Graph(options);
-    var layoutOptions={};
+    //var scene = sceneGraph.scene;
+    var graph = sceneGraph;
     var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
     var numNodes = 0;
     var storedTweets = [];
@@ -21,7 +20,7 @@ var TweetStructure=function(options){
     // var tweetsInContext=[];
     // tweetsInContext = tweetsInContext;
 
-    graph.layout = new Layout.ForceDirected(graph, layoutOptions);
+    //graph.layout = new Layout.ForceDirected(graph, layoutOptions);
     //graph.layout.init(); //TODO: CALL WHEN EVERYTHING IS READY
 
     // options = {scene:drawing.scene};
@@ -59,6 +58,7 @@ var TweetStructure=function(options){
 
                 tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
                 retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+                console.log(tweetEdge.source.layout);
             }
 
         } else {
@@ -67,14 +67,13 @@ var TweetStructure=function(options){
 
             var edge = graph.addEdge(node, panel);
             edge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+            console.log(edge.source.layout);
             storedTweets.push(description);
 
             //for(var i = 0; i < 2; i++){
             //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
             //}
         }
-        graph.layout.init({iterations: 100000});
-
     };
 
     var getASCIIvalue = function(tweet) {
