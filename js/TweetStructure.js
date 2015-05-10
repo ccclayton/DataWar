@@ -86,6 +86,10 @@ var TweetStructure=function(sceneGraph){
         //var location = lookupStartPosition(username);
         tweet.position.y = 5;
         var location = tweet.position;
+        //location.x = 158;
+
+        //console.log("tweet position " + tweet.position.x);
+        //console.log("location = " + location.x + " " + location.y);
         var userNode = new TwitterNode(username,new THREE.BoxGeometry(10, 10, 10), "Cube",location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         userNode.desired_y = 5;
         userNode.id = numNodes; //NOT SURE
@@ -129,6 +133,7 @@ var TweetStructure=function(sceneGraph){
     var createTweetPanel = function(tweet){
         var location = lookupStartPosition(tweet);
         //location.y = 25;
+        //console.log("Location: "+ location.x + " " + location.y);
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         tweetPanel.id = getASCIIvalue(tweet);
 
@@ -158,9 +163,9 @@ var TweetStructure=function(sceneGraph){
     //Modified by Colin Clayton
     var lookupStartPosition=function(twitterHandle){
         //Todo: Hook to db of tracked users and their model positions
-        var position = new THREE.Vector3((Math.random()-0.5)*50,
+        var position = new THREE.Vector3((Math.random()-0.5)*1000,
             25,
-            (Math.random()-0.5)*50);
+            (Math.random()-0.5)*1000);
         return position;
     };
 
@@ -204,105 +209,16 @@ var TweetStructure=function(sceneGraph){
 
         // Generate layout if not finished
         if(!graph.layout.finished) {
-            // info_text.calc = "<span style='color: red'>Calculating layout...</span>";
-            //graph.layout.generate(new THREE.Vector3(40,10,-60));
             graph.layout.generate();
-            //graph.layout.repulsion_multiplier = 1;
-            //graph.layout.attraction_multiplier = 0
-            //graph.layout.speedUpFactor = 100;
+
 
         }
 
-        //// Update position of lines (edges)
-        //for(var i=0; i<graph.geometries.length; i++) {
-        //    graph.geometries[i].verticesNeedUpdate = true;
-        //}
-
-        ////TODO: Update position of nodes and panels
-        //for(var i = 0; i < graph.nodes.length; i++){ //was nodeSet
-        //var nodeToBe =  graph.getNode(i);
-        //var nodeToBe = graph.nodes[i];
-
-
-        //nodeToBe.draw();
-        //console.log(nodeToBe);
-        // nodeToBe.mesh.geometry.verticesNeedUpdate = true;
-        // nodeToBe.mesh.geometry.elementsNeedUpdate = true;
-        //console.log(nodeToBe.position);
-
-        // nodeToBe.position = new THREE.Vector3(nodeToBe.position.x+Math.random()*10,nodeToBe.position.y+Math.random()*10,nodeToBe.position.z + Math.random() * 10);
-
-        //nodeToBe.draw();
-
-        // nodeToBe.mesh.position.x += Math.random() * 10;
-        // nodeToBe.mesh.position.y += Math.random() * 10; //DOESN'T WORK!
-        // nodeToBe.mesh.position.z += Math.random() * 10;
-        // nodeToBe.setPosition(new THREE.Vector3( nodeToBe.position.x, nodeToBe.position.y , nodeToBe.position.z += Math.random() + 0.001));
-        // nodeToBe.setRotation(new THREE.Vector3(0,0.2,0));
-
-        //console.log(nodeToBe.position);
-
-
-
-
-        // console.log("x = " +nodeToBe.position.x + "y = "+ nodeToBe.position.y + "z = "+ nodeToBe.position.z);
-
-        // }
         graph.edges.forEach(function(e){
             e.line.geometry.verticesNeedUpdate=true;
             e.line.geometry.elementsNeedUpdate = true;
         })
 
-
-
-
-
-
-        //
-        //
-        //// Show labels if set
-        //// It creates the labels when this options is set during visualization
-        //if(that.show_labels) {
-        //    var length = graph.nodes.length;
-        //    for(var i=0; i<length; i++) {
-        //        var node = graph.nodes[i];
-        //        if (node != undefined) {
-        //            node.position.x = node.position.x;
-        //            node.position.y = node.position.y - 100;
-        //            node.position.z = node.position.z;
-        //           // node.data.label_object.lookAt(camera.position);
-        //        }
-        //    }
-        //        } else {
-        //            if(node.data.title != undefined) {
-        //                var label_object = new THREE.Label(node.data.title, node.data.draw_object);
-        //            } else {
-        //                var label_object = new THREE.Label(node.id, node.data.draw_object);
-        //            }
-        //            node.data.label_object = label_object;
-        //            scene.add( node.data.label_object );
-        //        }
-        //    }
-        //} else {
-        //    var length = graph.nodes.length;
-        //    for(var i=0; i<length; i++) {
-        //        var node = graph.nodes[i];
-        //        if(node.data.label_object != undefined) {
-        //            scene.remove( node.data.label_object );
-        //            node.data.label_object = undefined;
-        //        }
-        //    }
-        //}
-        //
-        //// render selection
-        //if(that.selection) {
-        //    object_selection.render(scene, camera);
-        //}
-        //
-        //// update stats
-        //if(that.show_stats) {
-        //    stats.update();
-        //}
 
     };
 
