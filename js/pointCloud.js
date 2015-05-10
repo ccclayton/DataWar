@@ -159,18 +159,7 @@ PointCloud.prototype.update=function() {
 };
 
 function getLevel(average){
-    if (average > 2) {
-        return 1;
-    } else if (average > 1.5) {
-        return .6;
-    } else if (average > 1) {
-        return .3;
-    } else if (average > .1) {
-        return .1;
-    } else {
-        return -5;
-    }
-
+	return average - 4;
 }
 
 
