@@ -30,7 +30,7 @@ var TweetStructure=function(sceneGraph){
         graph.addEdge(origin,dest);
     };
 
-    var drawGraph=function(tweet){
+    var drawTweet=function(tweet){
         //console.log("batch processing usernames");
         var user = tweet.user;
         var description = tweet.description;
@@ -87,6 +87,7 @@ var TweetStructure=function(sceneGraph){
         tweet.position.y = 5;
         var location = tweet.position;
         var userNode = new TwitterNode(username,new THREE.BoxGeometry(10, 10, 10), "Cube",location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        userNode.desired_y = 5;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
         // userNode.mesh.position.copy(location); //CHECK
@@ -105,11 +106,10 @@ var TweetStructure=function(sceneGraph){
 
     var createRetweetNode = function(username, tweet) {
         //var location = lookupStartPosition(username);
-        tweet.position.y = 55;
-        //tweet.position.x += (Math.random() * tweet.retweeted);
+        tweet.position.y = 65;
         var location = tweet.position;
-        console.log("Setting x of retweet to " + location);
         var userNode = new TwitterNode(username,null,null,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        userNode.desired_y = 65;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
         // userNode.mesh.position.copy(location); //CHECK
@@ -130,6 +130,7 @@ var TweetStructure=function(sceneGraph){
         //location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         tweetPanel.id = getASCIIvalue(tweet);
+        tweetPanel.desired_y = 35;
         console.log(tweetPanel.id);
         //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
@@ -316,7 +317,7 @@ var TweetStructure=function(sceneGraph){
         render:render,
         resetLastTweetTime:function(){lastTweetTime=new Date(Date.now() - 24*3600*1000);},
 
-        drawGraph: drawGraph,
+        drawTweet: drawTweet,
         processTweets: processTweets,
         createUserNode: createUserNode,
         createTweetPanel: createTweetPanel

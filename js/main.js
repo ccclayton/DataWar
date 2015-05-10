@@ -13,6 +13,7 @@ var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
 var dt = Date.parse(curdate)
 var currTweetArray = [];
 var graph;
+var tweetStructure;
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -94,11 +95,12 @@ function init() {
     var options = {Layout: "3d",scene: this.scene};
     graph = new Graph(options);
     graph.layout = new Layout.ForceDirected(graph);
+    tweetStructure = new TweetStructure(graph); //Create tweet graph
 
     grabTweets();
 
     //----------------------------------------------------------------------------------------------------------------------
-    createGraph(); //Creates Twitter Structure Graph.
+    createTweet(); //Creates Twitter Structure Graph.
     //----------------------------------------------------------------------------------------------------------------------
 
     pointCloud = new PointCloud(scene);
@@ -251,7 +253,7 @@ function initLights() {
 }
 
 function grabTweets() {
-    setTimeout(grabTweets, 5000);
+    setTimeout(grabTweets, 50000);
     console.log(dt);
     console.log("Getting tweets...");
     var param = {date : dt};
@@ -268,22 +270,24 @@ function grabTweets() {
     });
 }
 
-function createGraph(){
-    setTimeout(function() {createGraph()}, 6000);
+function createTweet(){
+    setTimeout(function() {createTweet()}, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
     console.log(graph.layout);
-    tweetStructure = new TweetStructure(graph); //Create tweet graph
 
     if (currTweetArray.length != 0) {
         //var numTweets = tweetArray.length;
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
-        tweetStructure.drawGraph(currTweetArray.pop());
-        tweetStructure.drawGraph(currTweetArray.pop());
+        console.log(graph.nodes.length);
+        if (graph.nodes.length < 80) {
+            tweetStructure.drawTweet(currTweetArray.pop());
+            tweetStructure.drawTweet(currTweetArray.pop());
+        }
 
-        graph.layout.init({iterations: 100000});
+        graph.layout.init({iterations: 10000});
 
     }
 }
