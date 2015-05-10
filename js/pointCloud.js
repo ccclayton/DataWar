@@ -55,11 +55,14 @@ PointCloud.prototype.update=function() {
 
     //this.geometry.__dirtyVertices = true;
     //this.geometry.verticesNeedUpdate = true;
+    //console.log("length: " +binaries.length);
+    //console.log("binaries " + binaries.values);
     var desired_y = 0;
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
 
+            //console.log("Binary" +binaries[j]);
         for (var i = 0; i < this.geometry.vertices.length; i++) {
-
+            //console.log("Binary: " + binaries[i]);
             //var pos = get partible position;
             var position = this.geometry.vertices[i];
 
@@ -72,15 +75,42 @@ PointCloud.prototype.update=function() {
             if(index >= 0 && index <= 3){
                 //console.log("index 0-3");
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
             }
             else if(index >= 4 && index <= 7){
                 this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
             }
             else if(index >= 8 && index <= 11){
                 this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
             }
             else if(index >= 12 && index <= 15){
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
             }
             //var color = this.values_color[i];
             //console.log(color);
@@ -95,7 +125,7 @@ PointCloud.prototype.update=function() {
             ////    y
             ////    to
             ////    pointCloud.vertices[i];
-            //this.geometry.vertices[i].y = desired_y;
+            this.geometry.vertices[i].y = position.y;
 
 
         }
@@ -105,6 +135,21 @@ PointCloud.prototype.update=function() {
 
     }
 };
+
+function getLevel(index){
+    if (binaries[index] > 250) {
+        return 1;
+    } else if (binaries[index] > 200) {
+        return .6;
+    } else if (binaries[index] > 150) {
+        return .3;
+    } else if (binaries[index] > 120) {
+        return .1;
+    } else {
+        return -5;
+    }
+
+}
 
 
 
