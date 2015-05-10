@@ -412,8 +412,8 @@ function createTweet(){
 function animate() {
     requestAnimationFrame(animate);
     
-    pointCloud2.updateGrid();  //TODO: Change Movement. Pass to Shader.
-    
+    //pointCloud2.updateGrid();  //TODO: Change Movement. Pass to Shader.
+    pointCloud2.updateLinear();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
