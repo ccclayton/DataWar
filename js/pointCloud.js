@@ -159,7 +159,7 @@ PointCloud.prototype.update=function() {
 };
 
 function getLevel(average){
-	return average - 4;
+	return average - 13;
 }
 
 

@@ -145,9 +145,6 @@ Layout.ForceDirected = function(graph, options) {
                         }
                         node_u.layout.offset_x -= (delta_x / delta_length) * force;
                         node_u.layout.offset_y -= (delta_y / delta_length) * force;
-                        //if (node_u.layout.offset_y > 45) {
-                        //    node_u.layout.offset_y = 45);
-                        //}
 
                         if (this.layout === "3d") {
                             node_v.layout.offset_z += (delta_z / delta_length_z) * force_z;
