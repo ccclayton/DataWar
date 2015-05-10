@@ -235,9 +235,9 @@ function initLights() {
     light.position.set(0.5, 1, 0.75);
     scene.add(light);
 
-    var light = new THREE.SpotLight(0xffffff, 1);
-    light.position.set(0, 50, 0);
-    scene.add(light);
+    //var light = new THREE.SpotLight(0xffffff, 1);
+    //light.position.set(0, 50, 0);
+    //scene.add(light);
 
     directionalLight = new THREE.DirectionalLight(0xffff55, 1);
     directionalLight.position.set(-1, 0.4, -1);
@@ -247,7 +247,6 @@ function initLights() {
 function grabTweets() {
 
     setTimeout(grabTweets, 50000);
-    console.log(dt);
     console.log("Getting tweets...");
     var param = {date : dt};
     $.get( '/api/tweets', param, function(data) {
@@ -274,7 +273,6 @@ function createTweet(){
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
-        console.log(graph.nodes.length);
         if (graph.nodes.length < 110) {
             tweetStructure.drawTweet(currTweetArray.pop());
             tweetStructure.drawTweet(currTweetArray.pop());
@@ -282,9 +280,6 @@ function createTweet(){
         }
     }
 }
-
-
-
 
 function animate() {
     requestAnimationFrame(animate);
@@ -294,7 +289,8 @@ function animate() {
     // PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
     //tweetStructure.render();
     //animate_sound();
-    pointCloud2.update();  //TODO: Change Movement. Pass to Shader.
+    pointCloud2.updateGrid();  //TODO: Change Movement. Pass to Shader.
+    //pointCloud2.updateLinear();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
