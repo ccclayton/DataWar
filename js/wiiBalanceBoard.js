@@ -45,7 +45,7 @@ WiiBalanceBoard.prototype.messageIn=function(msg){
 		var vel = this.y-0.5;
 		var velSign = vel > 0 ? 1 : -1;
 		var sqrtVel = Math.sqrt(velSign*vel)
-		if(Math.abs(vel)>0.0002){
+		if(Math.abs(vel)>0.1){
 			controls.enabled = true;
 			controls.moving(velSign * sqrtVel*50);
 			// console.log(velSign*sqrtVel*50);
