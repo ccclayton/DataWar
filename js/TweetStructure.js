@@ -108,6 +108,7 @@ var TweetStructure=function(sceneGraph){
         //var location = lookupStartPosition(username);
         tweet.position.y = 65;
         var location = tweet.position;
+
         var userNode = new TwitterNode(username,null,null,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         userNode.desired_y = 65;
         userNode.id = numNodes; //NOT SURE
@@ -130,8 +131,9 @@ var TweetStructure=function(sceneGraph){
         //location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         tweetPanel.id = getASCIIvalue(tweet);
+
         tweetPanel.desired_y = 35;
-        console.log(tweetPanel.id);
+
         //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
         //tweetPanel.mesh.position.copy(location); //mesh is undefined...
@@ -145,7 +147,7 @@ var TweetStructure=function(sceneGraph){
         //var numTweets = tweets.length;
         //lastTweetTime.setTime(new Date(tweets[numTweets-1].created_at).getTime());
         //doProcessTweets(tweets);
-        console.log("Creating tweet panels!");
+        //console.log("Creating tweet panels!");
         tweets.forEach(function(tweet){
             createTweetPanel(tweet);
         })
@@ -306,7 +308,7 @@ var TweetStructure=function(sceneGraph){
 
 
     var clear=function(){
-        console.log("clearing graph to start new");
+        //console.log("clearing graph to start new");
         graph.removeAllNodes();
         tweetsInContext.length = 0;
     };

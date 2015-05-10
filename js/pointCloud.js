@@ -6,6 +6,7 @@ var PointCloud=function(_scene){
 	this.maxParticles = 20000;
 	this.idx = -1;
 	this.geometry = new THREE.Geometry();
+	this.frequencyRange = 0; //Default.
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -20,7 +21,7 @@ var PointCloud=function(_scene){
 	this.uniforms = {
 		amplitude: { type: "f", value: 1.0 },
 		// color:     { type: "c", value: new THREE.Color( 0x505050 ) },
-		color:     { type: "c", value: new THREE.Color( 0xFFFF66 ) },
+		color:     { type: "c", value: new THREE.Color( 0xFFFF66 ) },//0xFFFF66
 		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "./images/spark1.png" )},
 		// texture:   { type: "t", value: THREE.ImageUtils.loadTexture( config.bird.pcImage )},
 		offset: {type: "v2", value:new THREE.Vector2( 2, -4 ).multiplyScalar(0.01)}
@@ -50,62 +51,122 @@ PointCloud.prototype.init = function(){
 
 
 // update should be called in the main render loop
-PointCloud.prototype.update=function(){
-    var time = performance.now();  //TODO: USE TIME AND DELTA IN CALCULATION.
+PointCloud.prototype.update=function() {
 
-    var	prevTime = time;
+    //this.geometry.__dirtyVertices = true;
+    //this.geometry.verticesNeedUpdate = true;
+    //console.log("length: " +binaries.length);
+    //console.log("binaries " + binaries.values);
+    var desired_y = 0;
+    if (typeof binaries === 'object' && binaries.length - 1 > 0) {
 
-    var delta = ( time - prevTime ) / 1000;
+            //console.log("Binary" +binaries[j]);
+        for (var i = 0; i < this.geometry.vertices.length; i++) {
+            //console.log("Binary: " + binaries[i]);
+            //var pos = get partible position;
+            var position = this.geometry.vertices[i];
+
+            //var idx = round(scale_move(pos.y) / 100) * 16 + round(scale_move(pos.y));
+            var index = Math.floor((position.x / 100) + 8); //TODO: FIX
+            //console.log(index);
+            //get index from 0 to 255
+
+            var binaryVal = binaries[index];
+            if(index >= 0 && index <= 3){
+                //console.log("index 0-3");
+                this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+            }
+            else if(index >= 4 && index <= 7){
+                this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
+            }
+            else if(index >= 8 && index <= 11){
+                this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
+            }
+            else if(index >= 12 && index <= 15){
+                this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+                position.y += getLevel(index);
+                if (position.y > 100) {
+                    position.y = 100;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
+            }
+            //var color = this.values_color[i];
+            //console.log(color);
+           // this.values_color[i].copy(new THREE.Color());
+            //apply color to pointCloud.attributes.color[i];
+            desired_y = position.y + binaryVal;
+            //    var desired y = get_y(val, current
+            ////    pos.y
+            ////)
+            ////    ;
+            ////    apply
+            ////    y
+            ////    to
+            ////    pointCloud.vertices[i];
+            this.geometry.vertices[i].y = position.y;
 
 
-
-    var xHigh = 500;
-    var xLow = -500;
-    var yHigh = 150;
-    var yLow = 0;
-    var totalLength = this.geometry.vertices.length;
-    while (totalLength--) {
-
-        var particle = this.geometry.vertices[totalLength];
-        //particle.y += delta * 50;
-        if(particle.y >= yHigh){
-            particle.y = yLow;
         }
-        if (particle.x >= xHigh){
-            particle.x = xLow;
-
-        }
-        if(particle.y < yLow){
-            particle.y = yLow;
-        }
-        if(particle.x < xLow){
-            particle.x = xLow;
-        }
-        particle.y += Math.random() * 2;
-        particle.x += Math.random() * 1;
-
-        this.geometry.__dirtyVertices = true;
         this.geometry.verticesNeedUpdate = true;
+        this.geometry.__dirtyVertices = true;
+        this.attributes["customColor"].needsUpdate = true;
+
     }
-
-
-
-
-
-	// if (out of range) set pos to (0, -1, 0), skip
-	// if ( y < 0) skip
-
-	// if (not visible) return
-	// // calculate time delta
-	// // apply vel*delta => vertices
-	// v_x += rand() * factor;
-	// v_y ...
-	// v_z ...
-	// pos_x += v_x * delta;
-	// pos_y += v_y * delta;
 };
 
+function getLevel(index){
+    if (binaries[index] > 250) {
+        return 1;
+    } else if (binaries[index] > 200) {
+        return .6;
+    } else if (binaries[index] > 150) {
+        return .3;
+    } else if (binaries[index] > 120) {
+        return .1;
+    } else {
+        return -5;
+    }
 
+}
+
+
+
+
+
+function getRandomColor() {
+    var color = '#';
+    var letters = '0123456789ABCDEF'.split('');
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+
+    var colorWithoutQuotes = String(color);
+    colorWithoutQuotes = colorWithoutQuotes.substring(0,colorWithoutQuotes.length);
+
+    return colorWithoutQuotes;
+}
 
 
 PointCloud.prototype.seedParticles=function(numVertices){
@@ -127,9 +188,10 @@ PointCloud.prototype.addBatch = function(){
 	for ( var i = 0; i < 2000; i ++ ) {
 		var vertex = new THREE.Vector3();
 		vertex.x = (Math.random() - 0.5);
-		vertex.y = Math.random()*0.03+0.01;
+		vertex.y = Math.random() * 0.03 + 0.01;
+        //vertex.y = -100;
 		vertex.z = (Math.random() - 0.5);
-		vertex.multiplyScalar( 2000);
+		vertex.multiplyScalar( 1600);
 
 		// this.add( vertex, 0xffaa00 , 10 );
 		this.add( vertex, 0xffffff , 40 );
