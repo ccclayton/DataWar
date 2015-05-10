@@ -282,13 +282,11 @@ function createTweet(){
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
         console.log(graph.nodes.length);
-        if (graph.nodes.length < 80) {
+        if (graph.nodes.length < 110) {
             tweetStructure.drawTweet(currTweetArray.pop());
             tweetStructure.drawTweet(currTweetArray.pop());
+            graph.layout.init({iterations: 10000});
         }
-
-        graph.layout.init({iterations: 10000});
-
     }
 }
 

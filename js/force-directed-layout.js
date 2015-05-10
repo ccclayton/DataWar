@@ -35,9 +35,9 @@ Layout.ForceDirected = function(graph, options) {
     var options = options || {};
 
     this.layout = "3d";
-    this.attraction_multiplier = options.attraction || 0.1;
-    this.repulsion_multiplier = options.repulsion || 0.2;
-    this.max_iterations = options.iterations || 3000;
+    this.attraction_multiplier = options.attraction || 0.7;
+    this.repulsion_multiplier = options.repulsion || 0.1;
+    this.max_iterations = options.iterations || 300000;
     this.graph = graph;
     this.width = options.width || 800;
     this.height = options.height || 70;
@@ -214,7 +214,7 @@ Layout.ForceDirected = function(graph, options) {
                     node.mesh.position.z -= (node.mesh.position.z - node.layout.tmp_pos_z) / 10;
                     node.mesh.__dirtyPosition = true;
                 }
-                node.mesh.position.y = (.2 * node.mesh.position.y) + (.8 * node.desired_y);
+                node.mesh.position.y = (0 * node.mesh.position.y) + (1* node.desired_y);
                 node.mesh.__dirtyPosition = true;
 
                 // execute callback function if positions has been updated
