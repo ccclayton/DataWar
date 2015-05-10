@@ -2,7 +2,7 @@
 "use strict";
 var TweetStructure=function(sceneGraph){
 
-    var tweetOpacity = 1;
+    var tweetOpacity = 0.75;
     var bgColor = "#121252";
     var lineColor = "#121252";
     var fontColor = "#FFFFFF";
