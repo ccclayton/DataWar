@@ -69,9 +69,9 @@ function init() {
     // window.PlayerCube = pitchObject;
     yawObject.addEventListener('collision', function (object) {
         //console.log("Object " + this.id + " collided with " + object.id);
-        if (object.id == fence.id) {
-            //console.log("PLAYER HIT WALL");
-        }
+        //if (object.id == fence.id) {
+        //    //console.log("PLAYER HIT WALL");
+        //}
     });
 
     initSkybox();
@@ -169,12 +169,12 @@ function initObjects() {
     
     // Ground
     ground_material = Physijs.createMaterial(
-        new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture('../textures/brick.jpg')}),
+        new THREE.MeshLambertMaterial(),
         .8, // high friction
         0.1 // low restitution
     );
-    ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-    ground_material.map.repeat.set(10, 10);
+    //ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+    //ground_material.map.repeat.set(10, 10);
 
     ground = new Physijs.BoxMesh(
         new THREE.BoxGeometry(256000, 1, 256000),
@@ -267,7 +267,7 @@ function createTweet(){
     setTimeout(function() {createTweet()}, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
-    console.log(graph.layout);
+   // console.log(graph.layout);
 
     if (currTweetArray.length != 0) {
         //var numTweets = tweetArray.length;
