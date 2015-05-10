@@ -93,47 +93,24 @@ PointCloud.prototype.updateLinear=function() {
 			//console.log(sum);
 
             if(index >= 0 && index <= 3){
-				//console.log(sum);
-                //console.log("index 0-3");
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
             }
             else if(index >= 4 && index <= 7){
                 this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
-
             }
             else if(index >= 8 && index <= 11){
                 this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
-
             }
             else if(index >= 12 && index <= 15){
-				//console.log(average);
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
 
             }
+			position.y += getLevel(average);
+			if (position.y > 100) {
+				position.y = 95;
+			} else if (position.y < 0) {
+				position.y = 0;
+			}
             //var color = this.values_color[i];
             //console.log(color);
            // this.values_color[i].copy(new THREE.Color());
@@ -185,153 +162,65 @@ PointCloud.prototype.updateGrid=function() {
 			if(x_index >= 0 && x_index <= 3){
 				if (z_index >= 0 && z_index <=3) {
 					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				} else if (z_index >= 4 && z_index <= 7) {
 					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 8 && z_index <= 11) {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				}
 			}
 			else if(x_index >= 4 && x_index <= 7){
 				if (z_index >= 0 && z_index <=3) {
 					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				} else if (z_index >= 4 && z_index <= 7) {
 					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 8 && z_index <= 11) {
 					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				}
 
 			}
 			else if(x_index >= 8 && x_index <= 11){
 				if (z_index >= 0 && z_index <=3) {
 					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
+
 				} else if (z_index >= 4 && z_index <= 7) {
 					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 8 && z_index <= 11) {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				}
 
 			}
 			else if(x_index >= 12 && x_index <= 15){
 				if (z_index >= 0 && z_index <=3) {
 					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
+
 				} else if (z_index >= 4 && z_index <= 7) {
 					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 8 && z_index <= 11) {
 					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
-					position.y += getLevelGrid(binaries[i]);
-					if (position.y > 100) {
-						position.y = 95;
-					} else if (position.y < 0) {
-						position.y = 0;
-					}
 				}
 
+			}
+			position.y += getLevelGrid(binaries[i]);
+			if (position.y > 100) {
+				position.y = 95;
+			} else if (position.y < 0) {
+				position.y = 0;
 			}
 			//var color = this.values_color[i];
 			//console.log(color);
