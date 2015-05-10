@@ -111,7 +111,7 @@ var TweetStructure=function(options){
         tweet.position.y = 55;
         //tweet.position.x += (Math.random() * tweet.retweeted);
         var location = tweet.position;
-        console.log("Setting x of retweet to " + location);
+        //console.log("Setting x of retweet to " + location);
         var userNode = new TwitterNode(username,null,null,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -133,7 +133,7 @@ var TweetStructure=function(options){
         //location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         tweetPanel.id = getASCIIvalue(tweet);
-        console.log(tweetPanel.id);
+        //console.log(tweetPanel.id);
         //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
         //tweetPanel.mesh.position.copy(location); //mesh is undefined...
@@ -147,7 +147,7 @@ var TweetStructure=function(options){
         //var numTweets = tweets.length;
         //lastTweetTime.setTime(new Date(tweets[numTweets-1].created_at).getTime());
         //doProcessTweets(tweets);
-        console.log("Creating tweet panels!");
+        //console.log("Creating tweet panels!");
         tweets.forEach(function(tweet){
             createTweetPanel(tweet);
         })
@@ -308,7 +308,7 @@ var TweetStructure=function(options){
 
 
     var clear=function(){
-        console.log("clearing graph to start new");
+        //console.log("clearing graph to start new");
         graph.removeAllNodes();
         tweetsInContext.length = 0;
     };

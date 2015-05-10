@@ -9,8 +9,8 @@ var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
 var waterNormals;
 var tweetStructure;
-var curdate = "Wed, 18 Oct 2000 13:00:00 EST"
-var dt = Date.parse(curdate)
+var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
+var dt = Date.parse(curdate);
 var currTweetArray = [];
 
 //From Three.js ocean example that is included with the library.
@@ -34,7 +34,7 @@ animate();
 
 function init() {
 
-    console.log("Beginning of Init..");
+    //console.log("Beginning of Init..");
     Physijs.scripts.worker = '../Physijs/physijs_worker.js';
     Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
@@ -66,9 +66,9 @@ function init() {
     yawObject.position.set(0, 10, 150);
     // window.PlayerCube = pitchObject;
     yawObject.addEventListener('collision', function (object) {
-        console.log("Object " + this.id + " collided with " + object.id);
+        //console.log("Object " + this.id + " collided with " + object.id);
         if (object.id == fence.id) {
-            console.log("PLAYER HIT WALL");
+            //console.log("PLAYER HIT WALL");
         }
     });
 
@@ -100,9 +100,11 @@ function init() {
     pointCloud = new PointCloud(scene);
     pointCloud.uniforms.color.value = new THREE.Color(0xFFFFFF);
 
+
     pointCloud2 = new PointCloud(scene);
 
     lineTrace = new LineTrace(scene);
+    pointCloud2.maxParticles = 50000;
 
     pointCloud2.addBatch();
 
@@ -248,8 +250,8 @@ function initLights() {
 
 function grabTweets() {
     setTimeout(grabTweets, 5000);
-    console.log(dt);
-    console.log("Getting tweets...");
+    //console.log(dt);
+    //console.log("Getting tweets...");
     var param = {date : dt};
     $.get( '/api/tweets', param, function(data) {
         if (data.tweets.length != 0) {
@@ -328,8 +330,7 @@ function animate() {
     // PlayerCube.__dirtyPosition = true;
     // PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
     //tweetStructure.render();
-
-    animate_sound();
+    //animate_sound();
     pointCloud2.update();  //TODO: Change Movement. Pass to Shader.
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
@@ -395,68 +396,70 @@ function onWindowResize() {
 }
 //Temporary Animation function for sound visualization: https://github.com/srchea/Sound-Visualizer.
 function animate_sound() {
-
-    if(typeof binaries === 'object' && binaries.length-1 > 0) {
-        var k = 0;
-        var diff = 0;
-        for(var i = 0; i < pointCloud.geometry.vertices.length-1; i++) {
-            var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
-            //console.log(binaries[k]);
-            if(boost  > 10){
-                pointCloud2.changeColor(i,getRandomColor());
-                //pointCloud2.geometry.vertices[i].x += Math.random() *scale;
-                // pointCloud2.geometry.vertices[i].y += Math.random() * scale;
-
-                //pointCloud2.geometry.vertices[i].setPosition(new THREE.Vector2(pointCloud2.geometry.vertices[i].x + scale, pointCloud2.geometry.vertices[i].y + scale));
-                pointCloud.geometry.__dirtyVertices = true;
-            }
-            else{
-                pointCloud2.changeColor(i,"#000000");
-            }
-            // else if(boost > 15)
-            // {
-            // pointCloud2.changeColor(i,getRandomColor());
-            //}
-
-            //var num = binaries[k].toString();
-            //var conversion = "#";
-            //conversion += parseInt(num,16);
-            //var hex = String(conversion);
-            //var result = hex.substring(0,hex.length);
-            //console.log(result);
-            // pointCloud.changeColor(i, result);
-            //if((random % 2) == 0){
-            //  pointCloud2.geometry.vertices[i].y -= scale*0.1;
-
-            //}
-
-            //pointCloud2.geometry.vertices[i].y += scale * 0.1;
-            //pointCloud2.changeColor(i,getRandomColor());
-            //pointCloud2.geometry.vertices[i].uniforms.color.value = new THREE.Color(getRandomColor());
-
-
-            //pointCloud.changeColor(i,"#FF6600");
-            //pointCloud2.changeColor(i,"#ffee23");
-
-            //}
-            //pointCloud.changeColor(i,getRandomColor());
-            //pointCloud.uniforms.color.needsUpdate = true;
-            //console.log("randomColor :" + getRandomColor());
-            pointCloud2.geometry.verticesNeedUpdate = true;
-
-
-            //k += (k < (binaries.length-1) ? 1 : 0);
-
-            //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
-            //water.distortionScale += 10;
-
-
-
-        }
-        //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
-
-
-    }
+    //if(binaries invalid return);
+    //
+    //for(var i=0; i<pointCloud.vertices.length; i++){
+    //    var pos = get partible position;
+    //    var idx = round(scale_move(pos.y)/100) * 16 + round(scale_move(pos.y));
+    //    //get index from 0 to 255
+    //
+    //    var val = binaries[idx];
+    //    var color = get_color(val);
+    //    apply color to pointCloud.attributes.color[i];
+    //    var desired y = get_y(val, current pos.y);
+    //    apply y to pointCloud.vertices[i];
+    //
+    //}
+    //
+    //
+    //if (typeof binaries === 'object' && binaries.length - 1 > 0) {
+    //    var k = 0;
+    //    var diff = 0;
+    //    for (var i = 0; i < pointCloud2.geometry.vertices.length - 1; i++) {
+    //        //
+    //        //var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
+    //        if (binaries[i] > 0 && binaries[i] <= 50) {
+    //            pointCloud2.changeColor(i, '#FF0000'); //Red
+    //            pointCloud2.frequencyRange = 50;
+    //        }
+    //        else if (binaries[i] > 50 && binaries[i] <= 100) {
+    //            pointCloud2.changeColor(i, '#66CCFF');  // Light Blue
+    //            pointCloud2.frequencyRange = 100;
+    //        }
+    //        else if (binaries[i] > 100 && binaries[i] <= 150) {
+    //            pointCloud2.changeColor(i, '#47B247');  //Green
+    //            pointCloud2.frequencyRange = 150;
+    //        }
+    //        else if (binaries[i] > 150 && binaries[i] <= 200) {
+    //            pointCloud2.changeColor(i, '#FF9900');   //Orange
+    //            pointCloud2.frequencyRange = 200;
+    //        }
+    //        else if (binaries[i] > 200 && binaries[i] <= 250) {
+    //            pointCloud2.changeColor(i, '#EEEEEE');  //White
+    //            pointCloud2.frequencyRange = 250;
+    //        }
+    //        else if (binaries[i] > 250 && binaries[i] <= 300) {
+    //            pointCloud2.changeColor(i, '#CC66FF'); //Light Purple
+    //            pointCloud2.frequencyRange = 300;
+    //        }
+    //        else {
+    //            pointCloud2.changeColor(i, '#000000'); //000000
+    //            pointCloud2.frequencyRange = 0;
+    //        }
+    //
+    //
+    //        pointCloud2.geometry.verticesNeedUpdate = true;
+    //
+    //
+    //        //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
+    //        //water.distortionScale += 0.1;
+    //
+    //
+    //        //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
+    //
+    //
+    //    }
+    //}
 }
 function getRandomColor() {
     var color = '#';
