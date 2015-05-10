@@ -152,31 +152,21 @@ function initSkybox() {
     scene.add(skyMesh);
 }
 
+function modelLoaded(obj, scope){
+    
+    obj.rotation.x = -Math.PI/2;
+    obj.scale.x = obj.scale.y = obj.scale.z = 8;
+
+    scene.add(obj);
+
+    // if (scope.personObj.position !== scope.targetPos) {
+    //  scope.moveTween(scope.targetPos, scope.duration);
+    // }
+};
+
 function initObjects() {
-    // cube1 = new Physijs.BoxMesh(
-    //     new THREE.BoxGeometry(10, 10, 10),
-    //     Physijs.createMaterial(
-    //         new THREE.MeshNormalMaterial(), 0.2, 0.9
-    //     )
-    // );
-    // cube1.position.x = -50;
-    // scene.add(cube1);
-    // // console.log("cube 1: " + cube1.id);
-
-    // cube2 = new Physijs.BoxMesh(
-    //     new THREE.BoxGeometry(10, 10, 10),
-    //     Physijs.createMaterial(
-    //         new THREE.MeshNormalMaterial(), 0.2, 0.9
-    //     )
-    // );
-    // cube2.position.x = 50;
-    // scene.add(cube2);
-    // // console.log("cube 2: " + cube2.id);
-
-    // cube2.addEventListener('collision', function (object) {
-    //     console.log("Object " + this.id + " collided with " + object.id);
-    // });
-
+    modelLoader(['/3dModels/pyramid.stl'], this.modelLoaded, this);
+    
     // Ground
     ground_material = Physijs.createMaterial(
         new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture('../textures/brick.jpg')}),
@@ -195,19 +185,19 @@ function initObjects() {
     ground.position.setY(-1);
     scene.add(ground);
 
-    fence = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(193, 40, 2),
-        Physijs.createMaterial(
-            new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
-        ),
-        1000000
-    );
+    // fence = new Physijs.BoxMesh(
+    //     new THREE.BoxGeometry(193, 40, 2),
+    //     Physijs.createMaterial(
+    //         new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
+    //     ),
+    //     1000000
+    // );
 
-    scene.add(fence);
-    fence.position.x = -150;
-    fence.position.z = -235;
-    fence.position.y = 20;
-    fence.__dirtyPosition = true;
+    // scene.add(fence);
+    // fence.position.x = -150;
+    // fence.position.z = -235;
+    // fence.position.y = 20;
+    // fence.__dirtyPosition = true;
 }
 
 function initWater() {
