@@ -74,7 +74,7 @@ function init() {
 
     yawObject.visible = false;
     scene.add(yawObject);
-    yawObject.position.set(0, 10, 375);
+    yawObject.position.set(0, 10, 650);
     // window.PlayerCube = pitchObject;
     yawObject.addEventListener('collision', function (object) {
         //console.log("Object " + this.id + " collided with " + object.id);
@@ -120,8 +120,9 @@ function init() {
 
     lineTrace = new LineTrace(scene);
     pointCloud2.maxParticles = 50000;
+    pointCloud2.fieldSize = worldSize*0.75;
 
-    pointCloud2.addBatch(worldSize);
+    pointCloud2.addBatch(2000);
 
     //read kinect data / build skeleton
     var bSkeleton = true;
@@ -410,14 +411,9 @@ function createTweet(){
 
 function animate() {
     requestAnimationFrame(animate);
-    // mesh.__dirtyPosition = true;
-    // yawObject.__dirtyPosition = true;
-    // PlayerCube.__dirtyPosition = true;
-    // PlayerCube.position.set(controls.getObject().position.x, controls.getObject().position.y/2, controls.getObject().position.z);
-    //tweetStructure.render();
-    //animate_sound();
+    
     pointCloud2.updateGrid();  //TODO: Change Movement. Pass to Shader.
-    //pointCloud2.updateLinear();
+    
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
@@ -428,15 +424,7 @@ function animate() {
     }
     scene.simulate(); // run physics
     water.render();
-    //tweetStructure.render();
-    //animate_sound();
-
-    // ground.__dirtyPosition = true;
-    // fence.__dirtyPosition = true;
-    // cube2.__dirtyPosition = true;
-    // cube1.__dirtyPosition = true;
-
-
+  
     render();
 }
 
@@ -482,73 +470,7 @@ function onWindowResize() {
 
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
-//Temporary Animation function for sound visualization: https://github.com/srchea/Sound-Visualizer.
-function animate_sound() {
-    //if(binaries invalid return);
-    //
-    //for(var i=0; i<pointCloud.vertices.length; i++){
-    //    var pos = get partible position;
-    //    var idx = round(scale_move(pos.y)/100) * 16 + round(scale_move(pos.y));
-    //    //get index from 0 to 255
-    //
-    //    var val = binaries[idx];
-    //    var color = get_color(val);
-    //    apply color to pointCloud.attributes.color[i];
-    //    var desired y = get_y(val, current pos.y);
-    //    apply y to pointCloud.vertices[i];
-    //
-    //}
-    //
-    //
-    //if (typeof binaries === 'object' && binaries.length - 1 > 0) {
-    //    var k = 0;
-    //    var diff = 0;
-    //    for (var i = 0; i < pointCloud2.geometry.vertices.length - 1; i++) {
-    //        //
-    //        //var scale = (binaries[i] + boost) / 30; //Boost comes from audio.js file.
-    //        if (binaries[i] > 0 && binaries[i] <= 50) {
-    //            pointCloud2.changeColor(i, '#FF0000'); //Red
-    //            pointCloud2.frequencyRange = 50;
-    //        }
-    //        else if (binaries[i] > 50 && binaries[i] <= 100) {
-    //            pointCloud2.changeColor(i, '#66CCFF');  // Light Blue
-    //            pointCloud2.frequencyRange = 100;
-    //        }
-    //        else if (binaries[i] > 100 && binaries[i] <= 150) {
-    //            pointCloud2.changeColor(i, '#47B247');  //Green
-    //            pointCloud2.frequencyRange = 150;
-    //        }
-    //        else if (binaries[i] > 150 && binaries[i] <= 200) {
-    //            pointCloud2.changeColor(i, '#FF9900');   //Orange
-    //            pointCloud2.frequencyRange = 200;
-    //        }
-    //        else if (binaries[i] > 200 && binaries[i] <= 250) {
-    //            pointCloud2.changeColor(i, '#EEEEEE');  //White
-    //            pointCloud2.frequencyRange = 250;
-    //        }
-    //        else if (binaries[i] > 250 && binaries[i] <= 300) {
-    //            pointCloud2.changeColor(i, '#CC66FF'); //Light Purple
-    //            pointCloud2.frequencyRange = 300;
-    //        }
-    //        else {
-    //            pointCloud2.changeColor(i, '#000000'); //000000
-    //            pointCloud2.frequencyRange = 0;
-    //        }
-    //
-    //
-    //        pointCloud2.geometry.verticesNeedUpdate = true;
-    //
-    //
-    //        //water.waterColor.setRGB(0,Math.random() * 20,Math.random()* 20);
-    //        //water.distortionScale += 0.1;
-    //
-    //
-    //        //TODO: USE 2 POINT CLOUDS. One to follow camera movement. One to span the space (and update color and position with sound)
-    //
-    //
-    //    }
-    //}
-}
+
 function getRandomColor() {
     var color = '#';
     var letters = '0123456789ABCDEF'.split('');

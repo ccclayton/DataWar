@@ -4,9 +4,11 @@ var PointCloud=function(_scene){
 	// we have to pre seed the particles. hide them with color black and size 0.
 	this.scene = _scene;
 	this.maxParticles = 20000;
+	this.fieldSize = 10000;
 	this.idx = -1;
 	this.geometry = new THREE.Geometry();
 	this.frequencyRange = 0; //Default.
+	this.maxHeight = 250;
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -240,8 +242,8 @@ PointCloud.prototype.updateGrid=function() {
 
 			}
 			position.y += getLevelGrid(binaries[i]);
-			if (position.y > 100) {
-				position.y = 95;
+			if (position.y > this.maxHeight) {
+				position.y = this.maxHeight-5;
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
@@ -310,19 +312,19 @@ PointCloud.prototype.seedParticles=function(numVertices){
 
 };
 
-PointCloud.prototype.addBatch = function(){
-	for ( var i = 0; i < 2000; i ++ ) {
+PointCloud.prototype.addBatch = function(batchSize){
+	for ( var i = 0; i < batchSize; i ++ ) {
 		var vertex = new THREE.Vector3();
 		vertex.x = (Math.random() - 0.5);
 		vertex.y = Math.random() * 0.03 + 0.01;
         //vertex.y = -100;
 		vertex.z = (Math.random() - 0.5);
-		vertex.multiplyScalar( 1600);
+		vertex.multiplyScalar(this.fieldSize);
 
 		// this.add( vertex, 0xffaa00 , 10 );
-		this.add( vertex, 0xffffff , 40 );
+		this.add( vertex, 0xffffff , (Math.random()*50)+75 );
 	}
-	this.idx=2000;
+	this.idx=batchSize;
 };
 
 //pull camera back 50, now we add particle at the center of yawObject
@@ -344,7 +346,7 @@ PointCloud.prototype.addInFrontOfCamera = function(){
 PointCloud.prototype.add = function(vertex, color, size){
 	this.idx ++;
 	if(this.idx == this.maxParticles){ //when max particle exceeded, we stop adding new points.
-		this.idx=2000;
+		return this.idx--;
 	}
 
 	// console.log(this.idx);
