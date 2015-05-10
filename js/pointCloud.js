@@ -12,7 +12,7 @@ var PointCloud=function(_scene){
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
-		customColor: { type: 'c', value: [] },
+		customColor: { type: 'c', value: [] }
 		// velocity_x: { type: 'f', value: []}
 	};
 
@@ -69,7 +69,7 @@ PointCloud.prototype.updateLinear=function() {
             var position = this.geometry.vertices[i];
 
             //var idx = round(scale_move(pos.y) / 100) * 16 + round(scale_move(pos.y));
-            var index = Math.floor((position.x / 100) + 8); //TODO: FIX
+            var index = Math.floor((position.x / 200) + 8); //TODO: FIX
             //console.log(index);
             //get index from 0 to 255
 
@@ -95,47 +95,24 @@ PointCloud.prototype.updateLinear=function() {
 			//console.log(sum);
 
             if(index >= 0 && index <= 3){
-				//console.log(sum);
-                //console.log("index 0-3");
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
             }
             else if(index >= 4 && index <= 7){
                 this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
-
             }
             else if(index >= 8 && index <= 11){
                 this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
-
             }
             else if(index >= 12 && index <= 15){
-				//console.log(average);
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
-                position.y += getLevel(average);
-                if (position.y > 100) {
-                    position.y = 95;
-                } else if (position.y < 0) {
-                    position.y = 0;
-                }
 
             }
+			position.y += getLevel(average);
+			if (position.y > 100) {
+				position.y = 95;
+			} else if (position.y < 0) {
+				position.y = 0;
+			}
             //var color = this.values_color[i];
             //console.log(color);
            // this.values_color[i].copy(new THREE.Color());
@@ -272,7 +249,7 @@ PointCloud.prototype.updateGrid=function() {
 };
 
 function getLevel(average){
-	return average - 10;
+	return average - 14;
 }
 
 function getLevelGrid(value) {
@@ -319,10 +296,10 @@ PointCloud.prototype.addBatch = function(batchSize){
 		vertex.y = Math.random() * 0.03 + 0.01;
         //vertex.y = -100;
 		vertex.z = (Math.random() - 0.5);
-		vertex.multiplyScalar(this.fieldSize);
+		vertex.multiplyScalar(3200);
 
-		// this.add( vertex, 0xffaa00 , 10 );
-		this.add( vertex, 0xffffff , (Math.random()*50)+75 );
+		//this.add( vertex, 0x000000 , 50 );
+		this.add( vertex, 0x000000 , (Math.random()*50)+75 );
 	}
 	this.idx=batchSize;
 };
