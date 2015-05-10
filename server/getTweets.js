@@ -6,7 +6,7 @@ var T = new Twit({
   , consumer_secret:      'viFqJBbVDt0DygZV6pI5UzpsBR5GkLQYBLdHQnKASSSUmFMynl'
   , access_token:         '416540180-SX6iJGrZZ3dfe7Y7Te6D8iRo8yAXHmxVb1vcIywI'
   , access_token_secret:  'h7raMD2P8mfODYCeElvTTQVHdJbrmNcEhX0dlkN8xUhHA'
-})
+});
 
 // Read in all the models
 // fs.readdirSync(__dirname + '/../models').forEach(function(filename) {
@@ -49,7 +49,9 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	var stream = T.stream('statuses/filter', { track: ['#apple', 'elephant'], language: 'en' })
+	//var stream = T.stream('statuses/filter', { track: ['#3DWeb', '#3dwebfest', "#webfest", "#autodesk"], language: 'en' })
+	var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' })
+
 
 	// Start the stream, and store the JSON information in data
 	stream.on('tweet', function (data) {

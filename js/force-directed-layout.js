@@ -63,7 +63,7 @@ Layout.ForceDirected = function(graph, options) {
      */
     this.init = function () {
         this.finished = false;
-        temperature = this.width / 10.0;
+        temperature = this.width / 800.0;
         nodes_length = this.graph.nodes.length;
         edges_length = this.graph.edges.length;
         forceConstant = Math.sqrt(this.height * this.width / nodes_length);
