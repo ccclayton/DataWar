@@ -72,21 +72,42 @@ PointCloud.prototype.update=function() {
             //get index from 0 to 255
 
             var binaryVal = binaries[index];
+			var low = (index*10);
+			var high = (index+1) * 10;
+			//var segment = binaries.slice((index-1)*16, index*16);
+			var segment = [];
+
+			for (var k = low; k < high; k++) {
+				segment.push(binaries[k]);
+			}
+
+			var sum = 0;
+			for (var j = 0; j < segment.length; j++) {
+				sum =+ segment[j];
+			}
+			if (sum == null) {
+				console.log(sum);
+			}
+			var average = sum/segment.length;
+
+			//console.log(sum);
+
             if(index >= 0 && index <= 3){
+				//console.log(sum);
                 //console.log("index 0-3");
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
-                position.y += getLevel(index);
+                position.y += getLevel(average);
                 if (position.y > 100) {
-                    position.y = 100;
+                    position.y = 95;
                 } else if (position.y < 0) {
                     position.y = 0;
                 }
             }
             else if(index >= 4 && index <= 7){
                 this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
-                position.y += getLevel(index);
+                position.y += getLevel(average);
                 if (position.y > 100) {
-                    position.y = 100;
+                    position.y = 95;
                 } else if (position.y < 0) {
                     position.y = 0;
                 }
@@ -94,19 +115,20 @@ PointCloud.prototype.update=function() {
             }
             else if(index >= 8 && index <= 11){
                 this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
-                position.y += getLevel(index);
+                position.y += getLevel(average);
                 if (position.y > 100) {
-                    position.y = 100;
+                    position.y = 95;
                 } else if (position.y < 0) {
                     position.y = 0;
                 }
 
             }
             else if(index >= 12 && index <= 15){
+				//console.log(average);
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
-                position.y += getLevel(index);
+                position.y += getLevel(average);
                 if (position.y > 100) {
-                    position.y = 100;
+                    position.y = 95;
                 } else if (position.y < 0) {
                     position.y = 0;
                 }
@@ -136,14 +158,14 @@ PointCloud.prototype.update=function() {
     }
 };
 
-function getLevel(index){
-    if (binaries[index] > 250) {
+function getLevel(average){
+    if (average > 2) {
         return 1;
-    } else if (binaries[index] > 200) {
+    } else if (average > 1.5) {
         return .6;
-    } else if (binaries[index] > 150) {
+    } else if (average > 1) {
         return .3;
-    } else if (binaries[index] > 120) {
+    } else if (average > .1) {
         return .1;
     } else {
         return -5;
