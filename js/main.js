@@ -1,7 +1,7 @@
 //------------LATEST REVISION:
 
 var renderer, scene, camera, cube1, cube2, directionalLight, water;
-
+var composer2, finalComposer;
 var geometry, material, mesh, fence, cube1, cube2, ground, PlayerCube, yawObject;
 var controls;
 var materials = [];
@@ -14,6 +14,8 @@ var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
 var tweetStructure;
+
+var worldSize = 10000;
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -29,6 +31,13 @@ var parameters = {
 var pointCloud = null;
 var pointCloud2 = null;
 var lineTrace = null;
+
+var VIEW_ANGLE = 75;
+var ASPECT = window.innerWidth/window.innerHeight;
+var NEAR = 1;
+var FAR = 100000;
+
+var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 
 init();
 animate();
@@ -46,8 +55,8 @@ function init() {
     );
 
     oscControl = new OscControl(scene);
-
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100000);
+    
+    camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     camera.position.z = 100;
     scene.add(camera);
 
@@ -65,7 +74,7 @@ function init() {
 
     yawObject.visible = false;
     scene.add(yawObject);
-    yawObject.position.set(0, 10, 150);
+    yawObject.position.set(0, 10, 375);
     // window.PlayerCube = pitchObject;
     yawObject.addEventListener('collision', function (object) {
         //console.log("Object " + this.id + " collided with " + object.id);
@@ -112,7 +121,7 @@ function init() {
     lineTrace = new LineTrace(scene);
     pointCloud2.maxParticles = 50000;
 
-    pointCloud2.addBatch();
+    pointCloud2.addBatch(worldSize);
 
     //read kinect data / build skeleton
     var bSkeleton = true;
@@ -123,12 +132,14 @@ function init() {
 }
 
 function initSkybox() {
-    // ------------------------------------------------------------------------------
-    //SETTING UP AND ADDING SKYBOX TO SCENE
-    var prefix = "../textures/stars/";
-    var urls = [prefix + "stars_back.jpg", prefix + "stars_front.jpg",
-        prefix + "stars_top.jpg", prefix + "stars_top.jpg",
-        prefix + "stars_left.jpg", prefix + "stars_right.jpg"];
+    var prefix = "images/nebula-";
+    var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+    var imageSuffix = ".png";
+    
+    var urls = [];
+    for (var i = 0; i < 6; i++)
+        urls.push( prefix + directions[i] + imageSuffix );
+
     var skybox = THREE.ImageUtils.loadTextureCube(urls); // load textures
     skybox.format = THREE.RGBFormat;
     var shader = THREE.ShaderLib['cube'];
@@ -143,61 +154,155 @@ function initSkybox() {
         side: THREE.BackSide
     });
 
-
+    var grow = 25;
     var skyMesh = new THREE.Mesh(
-        new THREE.BoxGeometry(20000, 20000, 2000),
+        new THREE.BoxGeometry(worldSize+grow, worldSize+grow, worldSize+grow),
         skyMaterial
     );
-
     scene.add(skyMesh);
+
+    // background stars
+    var skyboxGeometry = new THREE.CubeGeometry(worldSize, worldSize, worldSize);
+    var skyboxMaterial = new THREE.MeshBasicMaterial({transparent:true, opacity:0.80, map: THREE.ImageUtils.loadTexture('/textures/stars/bsg-stars.png'), side: THREE.BackSide });
+    var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+    scene.add(skybox);
 }
 
-function modelLoaded(obj, scope){
-    
+function modelLoaded(obj){
     obj.rotation.x = -Math.PI/2;
-    obj.scale.x = obj.scale.y = obj.scale.z = 8;
+    obj.scale.x = obj.scale.y = obj.scale.z = 8.25;
 
     scene.add(obj);
-
-    // if (scope.personObj.position !== scope.targetPos) {
-    //  scope.moveTween(scope.targetPos, scope.duration);
-    // }
 };
 
-function initObjects() {
-    modelLoader(['/3dModels/pyramid.stl'], this.modelLoaded, this);
+function makeMoon() {
+    var customMaterialAtmosphere = new THREE.ShaderMaterial( 
+    {
+        uniforms:       
+        { 
+            "c":   { type: "f", value: 0.5 },
+            "p":   { type: "f", value: 4.0 }
+        },
+        vertexShader:   document.getElementById( 'vertexShaderAtmosphere'   ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShaderAtmosphere' ).textContent
+    }   );
+
+    var sphereGeo = new THREE.SphereGeometry(100, 32, 16);
     
-    // Ground
-    ground_material = Physijs.createMaterial(
-        new THREE.MeshLambertMaterial(),
-        .8, // high friction
-        0.1 // low restitution
-    );
-    //ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-    //ground_material.map.repeat.set(10, 10);
+    var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.jpg' );
+    var moonMaterial = new THREE.MeshBasicMaterial( {
+        map: moonTexture,
+        transparent:true,
+        opacity:0.7, } );
+    var moon = new THREE.Mesh(sphereGeo, moonMaterial);
+    scene.add(moon);
+    
+    moon.position.set(0,900,0);
 
-    ground = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(256000, 1, 256000),
-        ground_material,
-        0 // mass
-    );
-    ground.receiveShadow = true;
-    ground.position.setY(-1);
-    scene.add(ground);
+    // create secondary scene to add atmosphere effect
+    
+    // atmosphereScene = new THREE.Scene();
+    
+    // camera2 = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+    // camera2.position = camera.position;
+    // camera2.rotation = camera.rotation; 
+    // atmosphereScene.add( camera2 );
+    
+    // var mesh = new THREE.Mesh( sphereGeo.clone(), customMaterialAtmosphere );
+    // mesh.scale.x = mesh.scale.y = mesh.scale.z = 1.2;
+    // // atmosphere should provide light from behind the sphere, so only render the back side
+    // mesh.material.side = THREE.BackSide;
+    // atmosphereScene.add(mesh);
+    
+    // // clone earlier sphere geometry to block light correctly
+    // // and make it a bit smaller so that light blends into surface a bit
+    // var blackMaterial = new THREE.MeshBasicMaterial( {color: 0x000000} ); 
+    // var sphere = new THREE.Mesh(sphereGeo.clone(), blackMaterial);
+    // sphere.scale.x = sphere.scale.y = sphere.scale.z = 1;
+    // atmosphereScene.add(sphere);
+    
+    // ////////////////////////////////////////////////////////////////////////
+    // // final composer will blend composer2.render() results with the scene 
+    // ////////////////////////////////////////////////////////////////////////
+    
+    // // prepare secondary composer
+    // var renderTargetParameters = 
+    //     { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, 
+    //       format: THREE.RGBFormat, stencilBuffer: false };
+    // var renderTarget = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
+    // composer2 = new THREE.EffectComposer( renderer, renderTarget );
+    
+    // // prepare the secondary render's passes
+    // var render2Pass = new THREE.RenderPass( atmosphereScene, camera2 );
+    // composer2.addPass( render2Pass );
+    
+    // // prepare final composer
+    // finalComposer = new THREE.EffectComposer( renderer, renderTarget );
 
-    // fence = new Physijs.BoxMesh(
-    //     new THREE.BoxGeometry(193, 40, 2),
-    //     Physijs.createMaterial(
-    //         new THREE.MeshLambertMaterial({map: boxText, shading: THREE.FlatShading}), 0.8, 0
-    //     ),
-    //     1000000
-    // );
+    // // prepare the final render's passes
+    // var renderModel = new THREE.RenderPass( scene, camera );
+    // finalComposer.addPass( renderModel );
 
-    // scene.add(fence);
-    // fence.position.x = -150;
-    // fence.position.z = -235;
-    // fence.position.y = 20;
-    // fence.__dirtyPosition = true;
+    // var effectBlend = new THREE.ShaderPass( THREE.AdditiveBlendShader, "tDiffuse" );
+    // effectBlend.uniforms[ 'tDiffuse2' ].value = composer2.renderTarget2;
+    // effectBlend.renderToScreen = true;
+    // finalComposer.addPass( effectBlend );
+}
+
+function drawGrid() {
+
+        var numAreas = 2;
+
+
+        var l2rGeometry = new THREE.Geometry();
+        l2rGeometry.vertices.push(new THREE.Vector3(-worldSize/2, 0.25, 0));
+        l2rGeometry.vertices.push(new THREE.Vector3(worldSize/2, 0.25, 0));
+
+        var f2bGeometry = new THREE.Geometry();
+        f2bGeometry.vertices.push(new THREE.Vector3(0, 0.25, -worldSize/2));
+        f2bGeometry.vertices.push(new THREE.Vector3(0, 0.25, worldSize/2));
+
+        var material = new THREE.LineBasicMaterial({
+            transparent:true,
+            color: 0xFF0000,
+            opacity: 0.95
+        });
+
+        for (var i=1; i<numAreas; i++) {
+            var lineLR = new THREE.Line(l2rGeometry, material);
+            lineLR.position.z = (i*(worldSize/numAreas))-worldSize/2;
+            scene.add(lineLR);
+
+            var lineFB = new THREE.Line(f2bGeometry, material);
+            lineFB.position.x = (i*(worldSize/numAreas))-worldSize/2;
+            scene.add(lineFB);
+        }
+
+    }
+
+function initObjects() {
+    modelLoader(['/3dModels/pyramid.stl'], this.modelLoaded);
+    makeMoon();
+    drawGrid();
+
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    geometry.vertices.push(new THREE.Vector3(0, 900, 0));
+
+    var beam = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 2000, 50, 50, true), new THREE.MeshPhongMaterial({
+        transparent:true,
+        opacity: 0.25,
+        color:0xFFFFFF,
+        uniforms:       
+        { 
+            "c":   { type: "f", value: 0.54 },
+            "p":   { type: "f", value: 6.0 }
+        },
+        vertexShader:   document.getElementById( 'vertexShaderAtmosphere'   ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShaderAtmosphere' ).textContent,
+        side: THREE.BothSides
+    }));
+    scene.add(beam);
 }
 
 function initWater() {
@@ -211,16 +316,15 @@ function initWater() {
         waterNormals: waterNormals,
         alpha: 1.0,
         sunDirection: directionalLight.position.normalize(),
-        sunColor: 0xffffff,
+        sunColor: 0xd1f8ff,
         waterColor: 0x001e0f,
         distortionScale: 20.0
 
     });
     //alert(water.geometry);
 
-
     mirrorMesh = new THREE.Mesh(
-        new THREE.PlaneBufferGeometry(parameters.width * 500, parameters.height * 500, 50, 50),
+        new THREE.PlaneBufferGeometry(worldSize, worldSize, 50, 50),
         water.material
     );
 
@@ -228,19 +332,42 @@ function initWater() {
     mirrorMesh.add(water);
     mirrorMesh.rotation.x = (-Math.PI * 0.5);
     scene.add(mirrorMesh);
+
+    // Ground
+    ground_material = Physijs.createMaterial(
+        new THREE.MeshLambertMaterial(),
+        .8, // high friction
+        0.1 // low restitution
+    );
+    //ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+    //ground_material.map.repeat.set(10, 10);
+
+    ground = new Physijs.BoxMesh(
+        new THREE.BoxGeometry(worldSize, 1, worldSize),
+        ground_material,
+        0 // mass
+    );
+    ground.receiveShadow = true;
+    ground.position.setY(-1);
+    scene.add(ground);
 }
 
 function initLights() {
-    var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
-    light.position.set(0.5, 1, 0.75);
+    var light = new THREE.HemisphereLight(0xd1f8ff, 0x777788, 0.5);
+    // light.position.set(0.5, 1, 0.75);
     scene.add(light);
 
-    //var light = new THREE.SpotLight(0xffffff, 1);
-    //light.position.set(0, 50, 0);
-    //scene.add(light);
+    // // var light = new THREE.SpotLight(0xffffff, 1);
+    // // light.position.set(0, 50, 0);
+    // // scene.add(light);
 
-    directionalLight = new THREE.DirectionalLight(0xffff55, 1);
-    directionalLight.position.set(-1, 0.4, -1);
+    // directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+    // directionalLight.position.set(-1, 0.4, -1);
+    // scene.add(directionalLight);
+
+    // LIGHT
+    directionalLight = new THREE.PointLight(0xd1f8ff);
+    directionalLight.position.set(0,500,500);
     scene.add(directionalLight);
 }
 
@@ -315,6 +442,8 @@ function animate() {
 
 function render() {
     renderer.render(scene, camera);
+    // composer2.render(scene, camera);
+    // finalComposer.render(scene, camera);
 }
 
 // Temporary for debugging while building virtual world. Borrowed from example: http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/

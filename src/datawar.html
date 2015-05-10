@@ -41,24 +41,26 @@
 
 </script>
 
-<script id="glowVertexShader" type="x-shader/x-vertex">
-	varying vec3 vNormal;
-	void main() 
-	{
-	    vNormal = normalize( normalMatrix * normal );
-	    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-	}
+<!-- ------ Custom Shader Code for atmospheric glow ------ -->
+<script id="vertexShaderAtmosphere" type="x-shader/x-vertex">
+varying vec3 vNormal;
+void main() 
+{
+    vNormal = normalize( normalMatrix * normal );
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
 </script>
 
-<script id="glowFragmentShader" type="x-shader/x-vertex"> 
-	uniform float c;
-	uniform float p;
-	varying vec3 vNormal;
-	void main() 
-	{
-		float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p ); 
-		gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
-	}
+<!-- fragment shader a.k.a. pixel shader -->
+<script id="fragmentShaderAtmosphere" type="x-shader/x-vertex"> 
+uniform float c;
+uniform float p;
+varying vec3 vNormal;
+void main() 
+{
+	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p ); 
+	gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
+}
 </script>
 
 
@@ -96,8 +98,11 @@
 	<script type="text/javascript" src="../js/loaders/STLLoader.js"></script>
 	<script type="text/javascript" src="../js/modelLoader.js"></script>
 
-
-
+	<script src="../js/postprocessing/EffectComposer.js"></script>
+	<script src="../js/postprocessing/RenderPass.js"></script>
+	<script src="../js/postprocessing/ShaderPass.js"></script>
+	<script src="../js/postprocessing/MaskPass.js"></script>
+	<script src="../js/shaders/CopyShader.js"></script>
 
 	<div id="blocker">
 

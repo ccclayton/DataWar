@@ -93,24 +93,47 @@ PointCloud.prototype.updateLinear=function() {
 			//console.log(sum);
 
             if(index >= 0 && index <= 3){
+				//console.log(sum);
+                //console.log("index 0-3");
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+                position.y += getLevel(average);
+                if (position.y > 100) {
+                    position.y = 95;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
             }
             else if(index >= 4 && index <= 7){
                 this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
+                position.y += getLevel(average);
+                if (position.y > 100) {
+                    position.y = 95;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
             }
             else if(index >= 8 && index <= 11){
                 this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
-            }
-            else if(index >= 12 && index <= 15){
-                this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+                position.y += getLevel(average);
+                if (position.y > 100) {
+                    position.y = 95;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
 
             }
-			position.y += getLevel(average);
-			if (position.y > 100) {
-				position.y = 95;
-			} else if (position.y < 0) {
-				position.y = 0;
-			}
+            else if(index >= 12 && index <= 15){
+				//console.log(average);
+                this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+                position.y += getLevel(average);
+                if (position.y > 100) {
+                    position.y = 95;
+                } else if (position.y < 0) {
+                    position.y = 0;
+                }
+
+            }
             //var color = this.values_color[i];
             //console.log(color);
            // this.values_color[i].copy(new THREE.Color());
@@ -247,11 +270,11 @@ PointCloud.prototype.updateGrid=function() {
 };
 
 function getLevel(average){
-	return average - 13;
+	return average - 10;
 }
 
 function getLevelGrid(value) {
-	return (value/10) - 13;
+	return (value/10) - 10;
 }
 
 
