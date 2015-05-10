@@ -132,7 +132,7 @@ function connectKinect(bSkeleton) {
     for(var i=0; i<joints.length; i++){
         if (joints[i] !== "rthumb" && joints[i] !== "rhandtip" && joints[i] !== "lthumb" && joints[i] !== "lhandtip") {
           if (!jointObjects[i]) {
-            var material = new THREE.MeshBasicMaterial( { color:0xffffff } );
+            var material = new THREE.MeshBasicMaterial( { color:0x44ffff, transparent: true, opacity: 0.4} );
             // var material = new THREE.MeshNormalMaterial();
 
             var sphere = new THREE.Mesh( new THREE.SphereGeometry( jointSizes[i], 10, 10 ), material );

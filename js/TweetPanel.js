@@ -62,6 +62,7 @@ TweetPanel.prototype.draw = function(location){
 	this.geometry = this.shapes.squareGeometry(this.w, this.h, this.radius, this.depth);
 	Shapes.prototype.assignUVs(this.geometry);
 	this.geometry.applyMatrix( new THREE.Matrix4().makeTranslation(-this.w/2, -this.h/2, 0) );
+	//console.log("w/2" + this.w/2 + " h/2" + this.h/2);
 	//Create Physijs object out of canvas. This will hold the username of the Tweet.
 	this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial( {map: tweetText, transparent:true, opacity:this.tweetOpac} ));
 	// this.mesh = new Physijs.BoxMesh(
@@ -76,9 +77,10 @@ TweetPanel.prototype.draw = function(location){
 	// this.mesh.position.copy( this.mesh.centroid );
 
 	this.mesh.position.set(location.x,location.y,location.z);
+	//console.log("tweet panel pos " + this.mesh.position.x + " " + this.mesh.position.y + " " + this.mesh.position.z );
 	this.mesh.geometry.verticesNeedUpdate = true;
 	this.mesh.geometry.elementsNeedUpdate = true;
-	this.mesh.__dirtyPosition = true;
+	//this.mesh.__dirtyPosition = true;
 
 	scene.add(this.mesh);
 };

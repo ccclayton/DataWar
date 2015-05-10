@@ -316,11 +316,13 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
 //Changed by Colin Clayton
 Edge.prototype.draw=function(options){
     material = new THREE.LineBasicMaterial({ linewidth: options.linewidth, transparent: true, opacity:options.opacity, color:parseInt(options.color.substr(1),16)});
+    //material.transparent = false;
     material.side = THREE.DoubleSide;
     material.needsUpdate = true;
     // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
     var tmp_geo = new THREE.Geometry();
+    //console.log("target mesh pos = " + this.target.mesh.position.x + " " + this.target.mesh.position.y);
     tmp_geo.vertices.push(this.source.mesh.position); // was data.draw_object.position
     tmp_geo.vertices.push(this.target.mesh.position);
     this.line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
@@ -333,6 +335,8 @@ Edge.prototype.draw=function(options){
 
     this.line.scale.x = this.line.scale.y = this.line.scale.z = 1;
     this.line.originalScale = 0.1;
+
+
     //this.data.draw_object = line;
 
     //this.geometries.push(tmp_geo);  //TODO: NEED TO FIX THIS!!
