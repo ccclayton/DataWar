@@ -177,6 +177,7 @@ function Node(node_id) {
     this.position = null; //use THREE.Vector3
     this.data = {};
     this.geometry = null;
+    this.desired_y = null;
 }
 
 Node.prototype.kill = function(){

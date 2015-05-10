@@ -1,6 +1,6 @@
 // RkqqvYKque
 "use strict";
-var TweetStructure=function(options){
+var TweetStructure=function(sceneGraph){
 
     var tweetOpacity = 1;
     var bgColor = "#121252";
@@ -10,9 +10,8 @@ var TweetStructure=function(options){
 
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
-    var scene = options.scene;
-    var graph = new Graph(options);
-    var layoutOptions={};
+    //var scene = sceneGraph.scene;
+    var graph = sceneGraph;
     var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
     var numNodes = 0;
     var storedTweets = [];
@@ -21,7 +20,7 @@ var TweetStructure=function(options){
     // var tweetsInContext=[];
     // tweetsInContext = tweetsInContext;
 
-    graph.layout = new Layout.ForceDirected(graph, layoutOptions);
+    //graph.layout = new Layout.ForceDirected(graph, layoutOptions);
     //graph.layout.init(); //TODO: CALL WHEN EVERYTHING IS READY
 
     // options = {scene:drawing.scene};
@@ -31,7 +30,7 @@ var TweetStructure=function(options){
         graph.addEdge(origin,dest);
     };
 
-    var drawGraph=function(tweet){
+    var drawTweet=function(tweet){
         //console.log("batch processing usernames");
         var user = tweet.user;
         var description = tweet.description;
@@ -73,8 +72,6 @@ var TweetStructure=function(options){
             //    var node = createUserNode(usernames[i]);  //Small number of nodes for debugging animation.
             //}
         }
-        graph.layout.init({iterations: 100000});
-
     };
 
     var getASCIIvalue = function(tweet) {
@@ -90,6 +87,7 @@ var TweetStructure=function(options){
         tweet.position.y = 5;
         var location = tweet.position;
         var userNode = new TwitterNode(username,new THREE.BoxGeometry(10, 10, 10), "Cube",location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        userNode.desired_y = 5;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
         // userNode.mesh.position.copy(location); //CHECK
@@ -108,11 +106,11 @@ var TweetStructure=function(options){
 
     var createRetweetNode = function(username, tweet) {
         //var location = lookupStartPosition(username);
-        tweet.position.y = 55;
-        //tweet.position.x += (Math.random() * tweet.retweeted);
+        tweet.position.y = 65;
         var location = tweet.position;
-        //console.log("Setting x of retweet to " + location);
+
         var userNode = new TwitterNode(username,null,null,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        userNode.desired_y = 65;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
         // userNode.mesh.position.copy(location); //CHECK
@@ -133,7 +131,9 @@ var TweetStructure=function(options){
         //location.y = 25;
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
         tweetPanel.id = getASCIIvalue(tweet);
-        //console.log(tweetPanel.id);
+
+        tweetPanel.desired_y = 35;
+
         //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
         //tweetPanel.mesh.position.copy(location); //mesh is undefined...
@@ -319,7 +319,7 @@ var TweetStructure=function(options){
         render:render,
         resetLastTweetTime:function(){lastTweetTime=new Date(Date.now() - 24*3600*1000);},
 
-        drawGraph: drawGraph,
+        drawTweet: drawTweet,
         processTweets: processTweets,
         createUserNode: createUserNode,
         createTweetPanel: createTweetPanel

@@ -12,6 +12,8 @@ var tweetStructure;
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
 var dt = Date.parse(curdate);
 var currTweetArray = [];
+var graph;
+var tweetStructure;
 
 //From Three.js ocean example that is included with the library.
 var parameters = {
@@ -90,11 +92,15 @@ function init() {
     renderer.shadowMapSoft = true;
 
     initWater();
+    var options = {Layout: "3d",scene: this.scene};
+    graph = new Graph(options);
+    graph.layout = new Layout.ForceDirected(graph);
+    tweetStructure = new TweetStructure(graph); //Create tweet graph
 
     grabTweets();
 
     //----------------------------------------------------------------------------------------------------------------------
-    createGraph(); //Creates Twitter Structure Graph.
+    createTweet(); //Creates Twitter Structure Graph.
     //----------------------------------------------------------------------------------------------------------------------
 
     pointCloud = new PointCloud(scene);
@@ -181,7 +187,7 @@ function initObjects() {
     ground_material.map.repeat.set(10, 10);
 
     ground = new Physijs.BoxMesh(
-        new THREE.BoxGeometry(100000, 1, 100000),
+        new THREE.BoxGeometry(256000, 1, 256000),
         ground_material,
         0 // mass
     );
@@ -249,9 +255,10 @@ function initLights() {
 }
 
 function grabTweets() {
-    setTimeout(grabTweets, 5000);
-    //console.log(dt);
-    //console.log("Getting tweets...");
+
+    setTimeout(grabTweets, 50000);
+    console.log(dt);
+    console.log("Getting tweets...");
     var param = {date : dt};
     $.get( '/api/tweets', param, function(data) {
         if (data.tweets.length != 0) {
@@ -266,58 +273,24 @@ function grabTweets() {
     });
 }
 
-function createGraph(){
-    setTimeout(createGraph, 6000);
+function createTweet(){
+    setTimeout(function() {createTweet()}, 6000);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
-
-    tweetStructure = new TweetStructure({Layout: "3d",scene: this.scene}); //Create tweet graph
-
+    console.log(graph.layout);
 
     if (currTweetArray.length != 0) {
         //var numTweets = tweetArray.length;
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
-        tweetStructure.drawGraph(currTweetArray.pop());
-        tweetStructure.drawGraph(currTweetArray.pop());
-        //for (var i = 0; i < 2; i++) {
-        //    tweetStructure.drawGraph(tweetArray[i]);
-        //}
-        //tweetStructure.makeConnections(tweetStructure.processUserNames(usernames),tweetStructure.processTweets(tweets));
-        //tweetStructure.processUserNames(usernames,tweets);
-        // tweetStructure.processTweets(tweets);
-
-
-        //graph.add(edge);
-
-
-
-
-
-
-        //var node = new TwitterNode(username,null,null,position,0); //username, geometry, position, mass.
-
-        //node.draw(); //Overridden draw function
-        //var node2 = new TwitterNode("wei",null,null,new THREE.Vector3(0,40,-40),0);
-        //node2.draw(); //Overridden draw function
-
-
-        //Create new tweetPanel to display tweet.
-        //var tweetPanel = new TweetPanel(tweets[1],new THREE.Vector3( 20, 10, -80 ),0);
-        //scene.add(tweetPanel);
-
-        //var edge = new Edge(node,tweetPanel);
-        //edge.draw();
-
-        //var edge2 = new Edge(node2,tweetPanel);
-        //edge2.draw();
+        console.log(graph.nodes.length);
+        if (graph.nodes.length < 110) {
+            tweetStructure.drawTweet(currTweetArray.pop());
+            tweetStructure.drawTweet(currTweetArray.pop());
+            graph.layout.init({iterations: 10000});
+        }
     }
-
-
-
-
-
 }
 
 
