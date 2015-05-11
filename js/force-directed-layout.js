@@ -227,7 +227,7 @@ Layout.ForceDirected = function(graph, options) {
             mean_time += end - start;
         } else {
             if (!this.finished) {
-                console.log("Average time: " + (mean_time / layout_iterations) + " ms");
+                //console.log("Average time: " + (mean_time / layout_iterations) + " ms");
             }
             this.finished = true;
             return false;

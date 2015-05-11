@@ -9,6 +9,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	camera.rotation.set( 0, 0, 0 );
 
 	var pitchObject = new THREE.Object3D();
+	window.pitchObject = pitchObject;
 	pitchObject.position.set(0,0, 20);
 	pitchObject.add( camera );
 
@@ -148,7 +149,7 @@ THREE.PointerLockControls = function (yawObject, camera ) {
 	this.getDirection = function() {
 
 		// assumes the camera itself is not rotated
-		console.log("getting direction");
+		//console.log("getting direction");
 
 		var direction = new THREE.Vector3( 0, 0, -1 );
 		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );

@@ -87,7 +87,7 @@ Graph.prototype.timeSpan=function(){
     var nOld = this.getOldestNode();
     var nNew = this.getNewestNode();
     var span = nNew.data.date - nOld.data.date;
-    console.log("Graph nodes time span is: "+Math.round(span/60000 * 10)/10+"min");
+    //console.log("Graph nodes time span is: "+Math.round(span/60000 * 10)/10+"min");
     return span;
 };
 

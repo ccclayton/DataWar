@@ -163,8 +163,10 @@ function initSkybox() {
     scene.add(skyMesh);
 
     // background stars
-    var skyboxGeometry = new THREE.CubeGeometry(worldSize, worldSize, worldSize);
-    var skyboxMaterial = new THREE.MeshBasicMaterial({transparent:true, opacity:0.80, map: THREE.ImageUtils.loadTexture('/textures/stars/bsg-stars.png'), side: THREE.BackSide });
+    var skyboxGeometry = new THREE.BoxGeometry(worldSize, worldSize, worldSize);
+    var skyboxMaterial = new THREE.MeshBasicMaterial({transparent:true, opacity:0.80, map: THREE.ImageUtils.loadTexture('/textures/stars/bsg-stars.png')});
+    skyboxMaterial.side = THREE.BackSide;
+    // side: THREE.BackSide
     var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 }
@@ -300,8 +302,8 @@ function initObjects() {
             "p":   { type: "f", value: 6.0 }
         },
         vertexShader:   document.getElementById( 'vertexShaderAtmosphere'   ).textContent,
-        fragmentShader: document.getElementById( 'fragmentShaderAtmosphere' ).textContent,
-        side: THREE.BothSides
+        fragmentShader: document.getElementById( 'fragmentShaderAtmosphere' ).textContent//,
+        //side: THREE.BothSides
     }));
     scene.add(beam);
 }
@@ -375,7 +377,7 @@ function initLights() {
 function grabTweets() {
 
     setTimeout(grabTweets, 50000);
-    console.log("Getting tweets...");
+    //console.log("Getting tweets...");
     var param = {date : dt};
     $.get( '/api/tweets', param, function(data) {
         if (data.tweets.length != 0) {
@@ -489,6 +491,7 @@ function getRandomColor() {
     return colorWithoutQuotes;
 }
 
+
 // Temporary Random Color Generator for temp data sculpture. http://srchea.com/experimenting-with-web-audio-api-three-js-webgl
 function randomFairColor() {
     var min = 64;
@@ -501,5 +504,6 @@ function randomFairColor() {
 
 function resetScene() {
     graph.removeAllNodes();
-    console.log("Reset scene");
+    //console.log("Reset scene");
 }
+
