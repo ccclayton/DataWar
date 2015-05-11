@@ -194,7 +194,7 @@ function makeMoon() {
     var moonMaterial = new THREE.MeshBasicMaterial( {
         map: moonTexture,
         transparent:true,
-        opacity:0.7, } );
+        opacity:0.7 } );
     var moon = new THREE.Mesh(sphereGeo, moonMaterial);
     scene.add(moon);
     
@@ -411,9 +411,14 @@ function createTweet(){
 
 function animate() {
     requestAnimationFrame(animate);
-    
-    //pointCloud2.updateGrid();
-    pointCloud2.updateLinear();
+
+    if (pointCloud2.animation % 3 == 0) {
+        pointCloud2.updateLinear();
+    } else if (pointCloud2.animation % 3 == 1) {
+        pointCloud2.updateLinear32();
+    } else if (pointCloud2.animation % 3 == 2) {
+        pointCloud2.updateGrid();
+    }
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();

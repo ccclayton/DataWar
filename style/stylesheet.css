@@ -75,3 +75,10 @@ button:hover {
 #buttons_cars button {
 	color:#fa0
 }
+
+#controls{
+	color: white;
+	position:absolute;
+	bottom:0;
+	right:0;
+}

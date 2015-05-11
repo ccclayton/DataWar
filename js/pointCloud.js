@@ -11,6 +11,7 @@ var PointCloud=function(_scene){
 	this.maxHeight = 250;
 	this.divisor = 1;
 	this.subtractor = 0;
+	this.animation = 0;
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -57,42 +58,22 @@ PointCloud.prototype.init = function(){
 // update should be called in the main render loop
 PointCloud.prototype.updateLinear=function() {
 
-    //this.geometry.__dirtyVertices = true;
-    //this.geometry.verticesNeedUpdate = true;
-    //console.log("length: " +binaries.length);
-    //console.log("binaries " + binaries.values);
-    var desired_y = 0;
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
 
-            //console.log("Binary" +binaries[j]);
         for (var i = 0; i < this.geometry.vertices.length; i++) {
-            //console.log("Binary: " + binaries[i]);
-            //var pos = get partible position;
+
             var position = this.geometry.vertices[i];
 
-            //var idx = round(scale_move(pos.y) / 100) * 16 + round(scale_move(pos.y));
-            var index = Math.floor((position.x / 200) + 8); //TODO: FIX
-            //console.log(index);
-            //get index from 0 to 255
+			// gets index (0 - 15)
+            var index = Math.floor((position.x / 200) + 8);
 
-            var binaryVal = binaries[index];
 			var low = (index*10);
 			var high = (index+1) * 10;
-			//var segment = binaries.slice((index-1)*16, index*16);
 			var segment = [];
 
 			for (var k = low; k < high; k++) {
 				segment.push(binaries[k]);
 			}
-
-			//var sum = 0;
-			//for (var j = 0; j < segment.length; j++) {
-			//	sum =+ segment[j];
-			//}
-			//if (sum == null) {
-			//	console.log(sum);
-			//}
-			//var average = sum/segment.length;
 
 			var max = 0;
 			for (var j = 0; j < segment.length; j++) {
@@ -100,10 +81,6 @@ PointCloud.prototype.updateLinear=function() {
 					max = segment[j];
 				}
 			}
-
-			//var average = sum/segment.length;
-
-			//console.log(sum);
 
             if(index >= 0 && index <= 3){
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
@@ -124,11 +101,6 @@ PointCloud.prototype.updateLinear=function() {
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
-            //var color = this.values_color[i];
-            //console.log(color);
-           // this.values_color[i].copy(new THREE.Color());
-            //apply color to pointCloud.attributes.color[i];
-            desired_y = position.y + binaryVal;
 
             this.geometry.vertices[i].y = position.y;
 
@@ -141,29 +113,103 @@ PointCloud.prototype.updateLinear=function() {
     }
 };
 
-PointCloud.prototype.updateGrid=function() {
+PointCloud.prototype.updateLinear32=function() {
 
-	//this.geometry.__dirtyVertices = true;
-	//this.geometry.verticesNeedUpdate = true;
-	//console.log("length: " +binaries.length);
-	//console.log("binaries " + binaries.values);
-	var desired_y = 0;
 	if (typeof binaries === 'object' && binaries.length - 1 > 0) {
 
-		//console.log("Binary" +binaries[j]);
 		for (var i = 0; i < this.geometry.vertices.length; i++) {
-			//console.log("Binary: " + binaries[i]);
-			//var pos = get partible position;
+
 			var position = this.geometry.vertices[i];
 
-			//var idx = round(scale_move(pos.y) / 100) * 16 + round(scale_move(pos.y));
+			var index = Math.floor((position.x / 100) + 16);
+
+			var low = (index*5);
+			var high = (index+1) * 5;
+			var segment = [];
+
+			for (var k = low; k < high; k++) {
+				segment.push(binaries[k]);
+			}
+
+			var max = 0;
+			for (var j = 0; j < segment.length; j++) {
+				if (max < segment[j]) {
+					max = segment[j];
+				}
+			}
+
+			if(index >= 0 && index <= 3){
+				this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+			}
+			else if(index >= 4 && index <= 7){
+				this.values_color[i].copy(new THREE.Color(0x0088FF)); //Light Blue
+			}
+			else if(index >= 8 && index <= 11){
+				this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
+			}
+			else if(index >= 12 && index <= 15){
+				this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+			}
+			else if(index >= 16 && index <= 19){
+				this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
+			}
+			else if(index >= 20 && index <= 23){
+				this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Fuschia
+			}
+			else if(index >= 24 && index <= 27){
+				this.values_color[i].copy(new THREE.Color(0x006600)); //Dark Green
+			}
+			else if(index >= 28 && index <= 31){
+				this.values_color[i].copy(new THREE.Color(0x660066)); //Dark purple
+			}
+			position.y += this.getLevelHighest(max);
+			if (position.y > 500) {
+				position.y = 495;
+			} else if (position.y < 0) {
+				position.y = 0;
+			}
+
+			this.geometry.vertices[i].y = position.y;
+
+
+		}
+		this.geometry.verticesNeedUpdate = true;
+		this.geometry.__dirtyVertices = true;
+		this.attributes["customColor"].needsUpdate = true;
+
+	}
+};
+
+
+PointCloud.prototype.updateGrid=function() {
+
+	if (typeof binaries === 'object' && binaries.length - 1 > 0) {
+
+		for (var i = 0; i < this.geometry.vertices.length; i++) {
+			var position = this.geometry.vertices[i];
+
 			var x_index = Math.floor((position.x / 200) + 8);
 			var z_index = Math.floor((position.z / 200) + 8);
-			//console.log(index);
-			//get index from 0 to 255
 
+			var x_low = x_index*1;
+			var x_high = (x_index+1)*1;
+			var z_low = z_index*1;
+			var z_high = (z_index+1)*1;
+			var segment = [];
 
-			//console.log(sum);
+			for (var k = x_low; k < x_high; k++) {
+				for (var j = z_low; j < z_high; j++) {
+					segment.push(binaries[j*8 + k]);
+				}
+			}
+
+			var max = 0;
+			for (var j = 0; j < segment.length; j++) {
+				if (max < segment[j]) {
+					max = segment[j];
+				}
+			}
+
 
 			if(x_index >= 0 && x_index <= 3){
 				if (z_index >= 0 && z_index <=3) {
@@ -207,8 +253,8 @@ PointCloud.prototype.updateGrid=function() {
 				}
 
 			}
-			else if(x_index >= 12 && x_index <= 15){
-				if (z_index >= 0 && z_index <=3) {
+			else if(x_index >= 12 && x_index <= 15) {
+				if (z_index >= 0 && z_index <= 3) {
 					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
 
 				} else if (z_index >= 4 && z_index <= 7) {
@@ -220,29 +266,14 @@ PointCloud.prototype.updateGrid=function() {
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
 				}
-
-			} else {
-				this.values_color[i].copy(new THREE.color(0xFFFFFF)); // WHITE
 			}
-			position.y += getLevelHighest(binaries[i]);
-			if (position.y > this.maxHeight) {
-				position.y = this.maxHeight-5;
+			position.y += this.getLevelHighest(max);
+			if (position.y > 500) {
+				position.y = 495;
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
-			//var color = this.values_color[i];
-			//console.log(color);
-			// this.values_color[i].copy(new THREE.Color());
-			//apply color to pointCloud.attributes.color[i];
-			//desired_y = position.y + binaryVal;
-			//    var desired y = get_y(val, current
-			////    pos.y
-			////)
-			////    ;
-			////    apply
-			////    y
-			////    to
-			////    pointCloud.vertices[i];
+
 			this.geometry.vertices[i].y = position.y;
 
 
