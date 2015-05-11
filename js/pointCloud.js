@@ -127,14 +127,7 @@ PointCloud.prototype.updateLinear=function() {
            // this.values_color[i].copy(new THREE.Color());
             //apply color to pointCloud.attributes.color[i];
             desired_y = position.y + binaryVal;
-            //    var desired y = get_y(val, current
-            ////    pos.y
-            ////)
-            ////    ;
-            ////    apply
-            ////    y
-            ////    to
-            ////    pointCloud.vertices[i];
+
             this.geometry.vertices[i].y = position.y;
 
 
