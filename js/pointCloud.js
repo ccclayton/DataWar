@@ -9,6 +9,8 @@ var PointCloud=function(_scene){
 	this.geometry = new THREE.Geometry();
 	this.frequencyRange = 0; //Default.
 	this.maxHeight = 250;
+	this.divisor = 1;
+	this.subtractor = 0;
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -74,8 +76,8 @@ PointCloud.prototype.updateLinear=function() {
             //get index from 0 to 255
 
             var binaryVal = binaries[index];
-			var low = (index*11);
-			var high = (index+1) * 11;
+			var low = (index*10);
+			var high = (index+1) * 10;
 			//var segment = binaries.slice((index-1)*16, index*16);
 			var segment = [];
 
@@ -116,7 +118,7 @@ PointCloud.prototype.updateLinear=function() {
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
 
             }
-			position.y += getLevelHighest(max);
+			position.y += this.getLevelHighest(max);
 			if (position.y > 500) {
 				position.y = 495;
 			} else if (position.y < 0) {
@@ -260,8 +262,8 @@ function getLevelGrid(value) {
 	return (value/10) - 10;
 }
 
-function getLevelHighest(value) {
-	return value/5 - 30;
+PointCloud.prototype.getLevelHighest = function(value) {
+	return value/(this.divisor) - this.subtractor;
 }
 
 

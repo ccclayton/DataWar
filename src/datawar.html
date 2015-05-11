@@ -211,6 +211,24 @@ void main()
 	}
 	</script> 
 	<!-- <script src = "TweetStructure.js"></script> -->
+	<div id="d">
+
+		<div id="buttons_cars" class="bwrap">
+			<button id="cave">Cave Trolls</button>
+			<button id="star">Star Wars</button>
+			<button id="fortuna">O Fortuna</button>
+			<button id="skyrim">Skyrim</button>
+		</div>
+
+		<div id="buttons_materials" class="bwrap"></div>
+	</div>
+
+	<script type="text/javascript">
+		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
+		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
+		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
+		document.getElementById("skyrim").onclick = function() {chooseSong(4); pointCloud2.subtractor = 80};
+	</script>
 
 	<script type = "text/javascript" src = "../js/TweetStructure.js"></script>
 	<script type = "text/javascript" src = "../js/Graph.js"></script>
@@ -219,6 +237,8 @@ void main()
 	<script type = "text/javascript" src = "../js/shapes.js"></script>
 	<script type = "text/javascript" src = "../js/TweetPanel.js"></script>
 	<script type = "text/javascript" src = "../js/main.js"> </script>
+
+
 	</body>
 
 
