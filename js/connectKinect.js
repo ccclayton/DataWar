@@ -432,6 +432,15 @@ function connectKinect(bSkeleton) {
         // drawing.camera.rotation.y -= diff_hand_z / 100000;
 
       }
+      ////TODO: PRobably take out
+      //if(jointPositions[0].z > jointPositions[8].z){
+      //
+      //  controls.
+      //}
+      //else if( jointPositions[0].z < jointPositions[8].z){
+      //  controls.enabled = true;
+      //  controls.pitchObject.rotateX();
+      //}
       // }
 
     };

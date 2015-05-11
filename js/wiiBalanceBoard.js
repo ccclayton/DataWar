@@ -71,7 +71,7 @@ WiiBalanceBoard.prototype.messageIn=function(msg){
 WiiBalanceBoard.prototype.detectJump = function(){
 	var scope = this;
 	if(this.sum>(this.weight*1.2) && this.sum< this.sumOld){//jump
-		console.log(this.sum);
+		//console.log(this.sum);
 		if(this.canJump){
 			yawObject.applyCentralImpulse(new THREE.Vector3(0, 300000*(this.sum/this.weight - 0.8), 0));
 			this.canJump = false;
