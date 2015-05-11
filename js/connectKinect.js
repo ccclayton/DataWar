@@ -147,9 +147,16 @@ function connectKinect(bSkeleton) {
       }
   }
   
+  var setHeadLevel=function(){
+    var zHead = jointPositions[0].z;
+    var zTorso = jointPositions[8].z;
+    var adjustment = 0;
+    pitchObject.rotation.x = 0.9 * pitchObject.rotation.x + 0.1 * (zHead - zTorso) * adjustment;
+  }
 
   drawJoints();
   drawBones();
+  setHeadLevel();
 
 
   scene.add(skeleton);
