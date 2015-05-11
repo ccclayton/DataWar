@@ -212,35 +212,40 @@ void main()
 	</script> 
 	<!-- <script src = "TweetStructure.js"></script> -->
 	<div id="d">
-
-		<div id="buttons_cars" class="bwrap">
-			<button id="cave">Cave Trolls</button>
-			<button id="star">Star Wars</button>
-			<button id="fortuna">O Fortuna</button>
-			<button id="skyrim">Skyrim</button>
-		</div>
-
-		<div id="buttons_materials" class="bwrap"></div>
+		<div id="inst">Click or press corresponding number to change song</div>
+			<div id="buttons_cars" class="bwrap">
+				<button id="cave">1=Cave Trolls</button>
+				<button id="star">2=Star Wars</button>
+				<button id="fortuna">3=O Fortuna</button>
+				<button id="skyrim">4=Skyrim</button>
+			</div>
 	</div>
 
 	<script type="text/javascript">
 		document.addEventListener('keydown', function(event) {
 			if(event.keyCode == 49) {
+				document.getElementById('inst').style.display='none';
 				chooseSong(1);
 				pointCloud2.subtractor = 150
 			}
 			else if(event.keyCode == 50) {
+				document.getElementById('inst').style.display='none';
 				chooseSong(2);
 				pointCloud2.subtractor = 110
 			}
 			else if(event.keyCode == 51) {
+				document.getElementById('inst').style.display='none';
 				chooseSong(3);
 				pointCloud2.subtractor = 150;
 				pointCloud2.divisor = .5
 			}
 			else if(event.keyCode == 52) {
+				document.getElementById('inst').style.display='none';
 				chooseSong(4);
 				pointCloud2.subtractor = 80
+			}
+			else if(event.keyCode == 46) {
+				stop();
 			}
 		});
 		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};

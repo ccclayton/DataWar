@@ -493,3 +493,8 @@ function randomFairColor() {
     var b = (Math.floor(Math.random() * (max - min + 1)) + min);
     return r + g + b;
 }
+
+function resetScene() {
+    graph.removeAllNodes();
+    console.log("Reset scene");
+}

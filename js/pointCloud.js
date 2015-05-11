@@ -109,10 +109,10 @@ PointCloud.prototype.updateLinear=function() {
                 this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
             }
             else if(index >= 4 && index <= 7){
-                this.values_color[i].copy(new THREE.Color(0x66CCFF)); //Light Blue
+                this.values_color[i].copy(new THREE.Color(0x0088FF)); //Light Blue
             }
             else if(index >= 8 && index <= 11){
-                this.values_color[i].copy(new THREE.Color(0x47B247)); //Green
+                this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
             }
             else if(index >= 12 && index <= 15){
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple

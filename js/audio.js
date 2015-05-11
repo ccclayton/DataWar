@@ -7,10 +7,6 @@ var source, sourceJs;
 var analyser;
 //var url = '../data/01_Aqua.mp3';
 //var url = '../data/08_Spring_Summer.mp3';
-//var url = '../data/requiem.mp3';
-//var url = '../data/skyrim.mp3';
-//var url = '../data/cavetrolls.mp3';
-//var url = '../data/O_Fortuna.mp3';
 var binaries = new Array();
 var boost = 0;
 
@@ -36,7 +32,6 @@ catch(e) {
 }
 var chooseSong = function(choice) {
 	stop();
-	console.log("in chooseSong" + choice);
 	if (choice == 1) {
 		var url = '../data/cavetrolls.mp3';
 	} else if (choice == 2) {
