@@ -224,6 +224,25 @@ void main()
 	</div>
 
 	<script type="text/javascript">
+		document.addEventListener('keydown', function(event) {
+			if(event.keyCode == 49) {
+				chooseSong(1);
+				pointCloud2.subtractor = 150
+			}
+			else if(event.keyCode == 50) {
+				chooseSong(2);
+				pointCloud2.subtractor = 110
+			}
+			else if(event.keyCode == 51) {
+				chooseSong(3);
+				pointCloud2.subtractor = 150;
+				pointCloud2.divisor = .5
+			}
+			else if(event.keyCode == 52) {
+				chooseSong(4);
+				pointCloud2.subtractor = 80
+			}
+		});
 		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
 		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
 		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
