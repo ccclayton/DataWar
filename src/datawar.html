@@ -226,6 +226,8 @@ void main()
 		<ul>
 			<li>1-4 = change songs</li>
 			<li>q = toggle 16/32/grid</li>
+			<li>+ = increase particle count</li>
+			<li>x = increase max tweets</li>
 			<li>del = stop music</li>
 		</ul>
 	</div>
@@ -262,6 +264,16 @@ void main()
 			else if(event.keyCode == 46) {
 				stop();
 			}
+			else if(event.keyCode == 88) {
+				maxTweets += 10;
+			}
+			else if(event.keyCode == 107) {
+				pointCloud2.addExtra(200);
+			}
+//			else if(event.keyCode == 109) {
+//				pointCloud2.removePoints(200);
+//				console.log("Decreased batch size to: " + pointCloud2.idx);
+//			}
 		});
 		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
 		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};

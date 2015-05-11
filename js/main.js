@@ -14,6 +14,7 @@ var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
 var tweetStructure;
+var maxTweets = 110;
 
 var worldSize = 10000;
 
@@ -403,7 +404,7 @@ function createTweet(){
         //var timePer = 50000 / numTweets;
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
-        if (graph.nodes.length < 110) {
+        if (graph.nodes.length < maxTweets) {
             tweetStructure.drawTweet(currTweetArray.pop());
             tweetStructure.drawTweet(currTweetArray.pop());
             graph.layout.init({iterations: 10000});
@@ -503,7 +504,13 @@ function randomFairColor() {
 }
 
 function resetScene() {
-    graph.removeAllNodes();
-    //console.log("Reset scene");
+    for (var i = graph.nodes.length-1; i >= 0; i--) {
+        scene.remove(graph.nodes.pop());
+    }
+    var options = {Layout: "3d",scene: this.scene};
+    graph = new Graph(options);
+    graph.layout = new Layout.ForceDirected(graph);
+    tweetStructure = new TweetStructure(graph);
+    graph.layout.init({iterations: 10000});
 }
 

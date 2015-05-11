@@ -358,7 +358,28 @@ PointCloud.prototype.addInFrontOfCamera = function(){
 			(Math.random()-0.5) * 4
 			));
 	pointCloud.add(pos, 0x50ffff , 2);
+};
+
+PointCloud.prototype.addExtra = function(count){
+	for (var i = 0; i < count; i++) {
+		var vertex = new THREE.Vector3();
+		vertex.x = (Math.random() - 0.5);
+		vertex.y = Math.random() * 0.03 + 0.01;
+		//vertex.y = -100;
+		vertex.z = (Math.random() - 0.5);
+		vertex.multiplyScalar(3200);
+
+		//this.add( vertex, 0x000000 , 50 );
+		this.add( vertex, 0x000000 , (Math.random()*50)+75 );
+	}
+	//this.idx += count;
 }
+
+PointCloud.prototype.removePoints = function(count) {
+	for (var i = 0; i < count; i++) {
+		this.geometry.vertices.pop();
+	}
+};
 
 PointCloud.prototype.add = function(vertex, color, size){
 	this.idx ++;

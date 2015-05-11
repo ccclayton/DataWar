@@ -52,7 +52,13 @@ body {
 	font-size: 150%;
 }
 
-#d { position:absolute; width: 100%; text-align:center; margin:1em 0 -4.5em 0; z-index:1000; color: white;}
+#d { position:absolute;
+	width: 100%;
+	text-align:center;
+	margin:1em 0 -4.5em 0;
+	z-index:1000;
+	color: white;
+}
 
 .bwrap {
 	margin:0.5em 0 0 0
@@ -81,4 +87,5 @@ button:hover {
 	position:absolute;
 	bottom:0;
 	right:0;
+	border-radius:3px;
 }
