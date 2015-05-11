@@ -215,38 +215,38 @@ PointCloud.prototype.updateGrid=function() {
 				if (z_index >= 0 && z_index <=3) {
 					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
+					this.values_color[i].copy(new THREE.Color(0x990099)); //Purple
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
+					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
+					this.values_color[i].copy(new THREE.Color(0xFFFF00)); //Yellow
 				}
 			}
 			else if(x_index >= 4 && x_index <= 7){
 				if (z_index >= 0 && z_index <=3) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
+					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+					this.values_color[i].copy(new THREE.Color(0xFFFF00)); //Yellow
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
+					this.values_color[i].copy(new THREE.Color(0x0088FF)); //Baby blue
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
+					this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Red
 				}
 
 			}
 			else if(x_index >= 8 && x_index <= 11){
 				if (z_index >= 0 && z_index <=3) {
-					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+					this.values_color[i].copy(new THREE.Color(0x0088FF)); //Baby blue
 
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
+					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
+					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
 
 				} else if (z_index >= 12 && z_index <= 15) {
 					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
@@ -255,16 +255,16 @@ PointCloud.prototype.updateGrid=function() {
 			}
 			else if(x_index >= 12 && x_index <= 15) {
 				if (z_index >= 0 && z_index <= 3) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark blue
+					this.values_color[i].copy(new THREE.Color(0xFF8800)); //Orange
 
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+					this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Fuschia
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
+					this.values_color[i].copy(new THREE.Color(0x8800FF)); //Dark Green
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
+					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
 				}
 			}
 			position.y += this.getLevelHighest(max);
