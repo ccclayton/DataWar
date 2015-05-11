@@ -74,8 +74,8 @@ PointCloud.prototype.updateLinear=function() {
             //get index from 0 to 255
 
             var binaryVal = binaries[index];
-			var low = (index*10);
-			var high = (index+1) * 10;
+			var low = (index*11);
+			var high = (index+1) * 11;
 			//var segment = binaries.slice((index-1)*16, index*16);
 			var segment = [];
 
@@ -83,14 +83,23 @@ PointCloud.prototype.updateLinear=function() {
 				segment.push(binaries[k]);
 			}
 
-			var sum = 0;
+			//var sum = 0;
+			//for (var j = 0; j < segment.length; j++) {
+			//	sum =+ segment[j];
+			//}
+			//if (sum == null) {
+			//	console.log(sum);
+			//}
+			//var average = sum/segment.length;
+
+			var max = 0;
 			for (var j = 0; j < segment.length; j++) {
-				sum =+ segment[j];
+				if (max < segment[j]) {
+					max = segment[j];
+				}
 			}
-			if (sum == null) {
-				console.log(sum);
-			}
-			var average = sum/segment.length;
+
+			//var average = sum/segment.length;
 
 			//console.log(sum);
 
@@ -107,9 +116,9 @@ PointCloud.prototype.updateLinear=function() {
                 this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
 
             }
-			position.y += getLevel(average);
-			if (position.y > 100) {
-				position.y = 95;
+			position.y += getLevelHighest(max);
+			if (position.y > 500) {
+				position.y = 495;
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
@@ -153,8 +162,8 @@ PointCloud.prototype.updateGrid=function() {
 			var position = this.geometry.vertices[i];
 
 			//var idx = round(scale_move(pos.y) / 100) * 16 + round(scale_move(pos.y));
-			var x_index = Math.floor((position.x / 100) + 8); //TODO: FIX
-			var z_index = Math.floor((position.z / 100) + 8);
+			var x_index = Math.floor((position.x / 200) + 8);
+			var z_index = Math.floor((position.z / 200) + 8);
 			//console.log(index);
 			//get index from 0 to 255
 
@@ -217,8 +226,10 @@ PointCloud.prototype.updateGrid=function() {
 					this.values_color[i].copy(new THREE.Color(0xCC00CC)); //Purpleish
 				}
 
+			} else {
+				this.values_color[i].copy(new THREE.color(0xFFFFFF)); // WHITE
 			}
-			position.y += getLevelGrid(binaries[i]);
+			position.y += getLevelHighest(binaries[i]);
 			if (position.y > this.maxHeight) {
 				position.y = this.maxHeight-5;
 			} else if (position.y < 0) {
@@ -249,13 +260,16 @@ PointCloud.prototype.updateGrid=function() {
 };
 
 function getLevel(average){
-	return average - 14;
+	return average - 5;
 }
 
 function getLevelGrid(value) {
 	return (value/10) - 10;
 }
 
+function getLevelHighest(value) {
+	return value/5 - 30;
+}
 
 
 

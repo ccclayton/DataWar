@@ -39,7 +39,7 @@ Layout.ForceDirected = function(graph, options) {
     this.repulsion_multiplier = options.repulsion || 0.1;
     this.max_iterations = options.iterations || 300000;
     this.graph = graph;
-    this.width = options.width || 800;
+    this.width = options.width || 400;
     this.height = options.height || 70;
     this.finished = false;
 
