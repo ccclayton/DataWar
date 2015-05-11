@@ -199,7 +199,7 @@ PointCloud.prototype.updateGrid=function() {
 
 			for (var k = x_low; k < x_high; k++) {
 				for (var j = z_low; j < z_high; j++) {
-					segment.push(binaries[j*8 + k]);
+					segment.push(binaries[j*4 + k]);
 				}
 			}
 
