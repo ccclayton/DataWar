@@ -220,11 +220,12 @@ void main()
 			<button id="star">2=Star Wars</button>
 			<button id="fortuna">3=O Fortuna</button>
 			<button id="skyrim">4=Skyrim</button>
+			<button id="ambient">5=Ambient</button>
 		</div>
 	</div>
 	<div id = "controls">
 		<ul>
-			<li>1-4 = change songs</li>
+			<li>1-5 = change songs</li>
 			<li>q = toggle 16/32/grid</li>
 			<li>+ = increase particle count</li>
 			<li>x = increase max tweets</li>
@@ -255,6 +256,11 @@ void main()
 				chooseSong(4);
 				pointCloud2.subtractor = 100;
 			}
+			else if(event.keyCode == 53 || event.keyCode == 101) {
+				document.getElementById('inst').style.display='none';
+				chooseSong(5);
+				pointCloud2.subtractor = 150;
+			}
 			else if (event.keyCode == 81) {
 				pointCloud2.animation++;
 				if (pointCloud2.animation == 3) {
@@ -279,6 +285,8 @@ void main()
 		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
 		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
 		document.getElementById("skyrim").onclick = function() {chooseSong(4); pointCloud2.subtractor = 80};
+		document.getElementById("ambient").onclick = function() {chooseSong(5); pointCloud2.subtractor = 150};
+
 	</script>
 
 	<script type = "text/javascript" src = "../js/TweetStructure.js"></script>
