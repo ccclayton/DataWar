@@ -1,19 +1,20 @@
 // RkqqvYKque
 "use strict";
-var TweetStructure=function(sceneGraph){
+var TweetStructure=function(sceneGraph) {
 
     var tweetOpacity = 0.75;
     var bgColor = "#121252";
     var lineColor = "#121252";
     var fontColor = "#FFFFFF";
     var linewidth = 5;
+    var tweetsInScene = [];
     var count = 0;
 
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
     //var scene = sceneGraph.scene;
     var graph = sceneGraph;
-    var lastTweetTime=new Date(Date.now() - 24*3600*1000); //seed date to 24 hours back
+    var lastTweetTime = new Date(Date.now() - 24 * 3600 * 1000); //seed date to 24 hours back
     var numNodes = 0;
     var storedTweets = [];
 
@@ -27,47 +28,48 @@ var TweetStructure=function(sceneGraph){
     // options = {scene:drawing.scene};
     // var graph = new Graph(options);
 
-    var makeConnections = function(origin,dest){
-        graph.addEdge(origin,dest);
+    var makeConnections = function (origin, dest) {
+        graph.addEdge(origin, dest);
     };
 
-    var drawTweet=function(tweet){
+    var drawTweet = function (tweet) {
         //console.log("batch processing usernames");
         var user = tweet.user;
         var description = tweet.description;
         var retweet = tweet.retweet;
+        var retweetText;
 
         if (retweet != null) {
-            // var node_id = getASCIIvalue(description);
-            // var retweetText = graph.getNode(node_id);
-            // Tweet exists in world, add retweet node
-            // if (retweetText != null) {
-                // retweetText.retweeted++;
-                // var retweetNode = createRetweetNode(user, retweetText);
-                // var retweetEdge = graph.addEdge(retweetNode, retweetText);
+            for (var i = 0; i < tweetsInScene.length; i++) {
+                if (description == tweetsInScene[i].tweet) {
+                    retweetText = graph.getNode(tweetsInScene[i].id);
+                }
+            }
+            // Tweet exists in world, just add retweeet node
+            if (retweetText != null) {
+                var retweetNode = createRetweetNode(user, retweetText);
+                var retweetEdge = graph.addEdge(retweetNode, retweetText);
+                 retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
 
-                // retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+            // Tweet does not exist in world, add tweet then retweet node
+            } else {
+                 var retweetText = createTweetPanel(description);
+                 retweetText.retweeted++;
+                 var retweetNode = createRetweetNode(user, retweetText);
+                 var originalNode = createUserNode(retweet, retweetText);
+                 var tweetEdge = graph.addEdge(originalNode, retweetText);
+                 var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
-                // Tweet does not exist in world, add tweet then retweet node
-            // } 
-            // // else {
-            //     var retweetText = createTweetPanel(description);
-            //     retweetText.retweeted++;
-            //     var retweetNode = createRetweetNode(user, retweetText);
-            //     var originalNode = createUserNode(retweet, retweetText);
-            //     var tweetEdge = graph.addEdge(originalNode, retweetText);
-            //     var retweetEdge = graph.addEdge(retweetNode, retweetText);
-
-            //     tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-            //     retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-            // }
+                 tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+                 retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+             }
 
         } else {
             var panel = createTweetPanel(description);
             var node = createUserNode(user, panel);
 
             var edge = graph.addEdge(node, panel);
-            edge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+            edge.draw({linewidth: linewidth, color: lineColor, opacity: tweetOpacity});
             storedTweets.push(description);
 
             //for(var i = 0; i < 2; i++){
@@ -76,7 +78,7 @@ var TweetStructure=function(sceneGraph){
         }
     };
 
-    var getASCIIvalue = function(tweet) {
+    var getASCIIvalue = function (tweet) {
         var value = 0;
         for (var i = 0; i < tweet.length; i++) {
             value += tweet.charCodeAt(i);
@@ -84,7 +86,7 @@ var TweetStructure=function(sceneGraph){
         return value;
     }
 
-    var createUserNode = function(username, tweet){
+    var createUserNode = function (username, tweet) {
         //var location = lookupStartPosition(username);
         tweet.position.y = 5;
         var location = tweet.position;
@@ -92,7 +94,11 @@ var TweetStructure=function(sceneGraph){
 
         //console.log("tweet position " + tweet.position.x);
         //console.log("location = " + location.x + " " + location.y);
-        var userNode = new TwitterNode(username,new THREE.BoxGeometry(10, 10, 10), "Cube",location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        var userNode = new TwitterNode(username, new THREE.BoxGeometry(10, 10, 10), "Cube", location, 0, {
+            bgColor: bgColor,
+            fontColor: fontColor,
+            opacity: tweetOpacity
+        });
         userNode.desired_y = 5;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -110,12 +116,16 @@ var TweetStructure=function(sceneGraph){
 
     };
 
-    var createRetweetNode = function(username, tweet) {
+    var createRetweetNode = function (username, tweet) {
         //var location = lookupStartPosition(username);
         tweet.position.y = 65;
         var location = tweet.position;
 
-        var userNode = new TwitterNode(username,null,null,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        var userNode = new TwitterNode(username, null, null, location, 0, {
+            bgColor: bgColor,
+            fontColor: fontColor,
+            opacity: tweetOpacity
+        });
         userNode.desired_y = 65;
         userNode.id = numNodes; //NOT SURE
         graph.addNode(userNode);
@@ -132,11 +142,15 @@ var TweetStructure=function(sceneGraph){
 
     };
 
-    var createTweetPanel = function(tweet){
+    var createTweetPanel = function (tweet) {
         var location = lookupStartPosition(tweet);
         //location.y = 25;
         //console.log("Location: "+ location.x + " " + location.y);
-        var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
+        var tweetPanel = new TweetPanel(tweet, location, 0, {
+            bgColor: bgColor,
+            fontColor: fontColor,
+            opacity: tweetOpacity
+        });
         // tweetPanel.id = getASCIIvalue(tweet);
         tweetPanel.id = numNodes;
 
@@ -144,6 +158,7 @@ var TweetStructure=function(sceneGraph){
 
         //tweetPanel.id = numNodes;
         graph.addNode(tweetPanel);
+        tweetsInScene.push(tweetPanel);
         //tweetPanel.mesh.position.copy(location); //mesh is undefined...
         //tweetPanel.mesh._dirtyPosition = true;
         numNodes++;
@@ -151,29 +166,25 @@ var TweetStructure=function(sceneGraph){
         return tweetPanel; //Testing
     };
 
-    var processTweets=function(tweets){
+    var processTweets = function (tweets) {
         //var numTweets = tweets.length;
         //lastTweetTime.setTime(new Date(tweets[numTweets-1].created_at).getTime());
         //doProcessTweets(tweets);
         //console.log("Creating tweet panels!");
-        tweets.forEach(function(tweet){
+        tweets.forEach(function (tweet) {
             createTweetPanel(tweet);
         })
     };
 
 
-
     //Modified by Colin Clayton
-    var lookupStartPosition=function(twitterHandle){
+    var lookupStartPosition = function (twitterHandle) {
         //Todo: Hook to db of tracked users and their model positions
-        var position = new THREE.Vector3((Math.random()-0.5)*1000,
+        var position = new THREE.Vector3((Math.random() - 0.5) * 1000,
             25,
-            (Math.random()-0.5)*1000);
+            (Math.random() - 0.5) * 1000);
         return position;
     };
-
-
-
 
 
     //var processOneTweet=function(tweet, nodeOrigin){
@@ -205,20 +216,17 @@ var TweetStructure=function(sceneGraph){
     //};
 
 
-
-
-
-    var render=function(){
+    var render = function () {
 
         // Generate layout if not finished
-        if(!graph.layout.finished) {
+        if (!graph.layout.finished) {
             graph.layout.generate();
 
 
         }
 
-        graph.edges.forEach(function(e){
-            e.line.geometry.verticesNeedUpdate=true;
+        graph.edges.forEach(function (e) {
+            e.line.geometry.verticesNeedUpdate = true;
             e.line.geometry.elementsNeedUpdate = true;
         })
 
@@ -226,7 +234,7 @@ var TweetStructure=function(sceneGraph){
     };
 
 
-    var clear=function(){
+    var clear = function () {
         //console.log("clearing graph to start new");
         graph.removeAllNodes();
         tweetsInContext.length = 0;
@@ -234,16 +242,15 @@ var TweetStructure=function(sceneGraph){
 
     return {
         // graph:function(){return graph;},
-        graph:graph,
-        render:render,
-        resetLastTweetTime:function(){lastTweetTime=new Date(Date.now() - 24*3600*1000);},
+        graph: graph,
+        render: render,
+        resetLastTweetTime: function () {
+            lastTweetTime = new Date(Date.now() - 24 * 3600 * 1000);
+        },
 
         drawTweet: drawTweet,
         processTweets: processTweets,
         createUserNode: createUserNode,
         createTweetPanel: createTweetPanel
-
-        // tweetsInContext: tweetsInContext
     }
 };
-
