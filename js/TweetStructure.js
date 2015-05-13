@@ -7,6 +7,7 @@ var TweetStructure=function(sceneGraph){
     var lineColor = "#121252";
     var fontColor = "#FFFFFF";
     var linewidth = 5;
+    var count = 0;
 
     var maxNumUser = 150;
     //this.Layout = options.layout; //Check
@@ -37,28 +38,29 @@ var TweetStructure=function(sceneGraph){
         var retweet = tweet.retweet;
 
         if (retweet != null) {
-            var node_id = getASCIIvalue(description);
-            var retweetText = graph.getNode(node_id);
+            // var node_id = getASCIIvalue(description);
+            // var retweetText = graph.getNode(node_id);
             // Tweet exists in world, add retweet node
-            if (retweetText != null) {
-                retweetText.retweeted++;
-                var retweetNode = createRetweetNode(user, retweetText);
-                var retweetEdge = graph.addEdge(retweetNode, retweetText);
+            // if (retweetText != null) {
+                // retweetText.retweeted++;
+                // var retweetNode = createRetweetNode(user, retweetText);
+                // var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
-                retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+                // retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
 
                 // Tweet does not exist in world, add tweet then retweet node
-            } else {
-                retweetText = createTweetPanel(description);
-                retweetText.retweeted++;
-                var retweetNode = createRetweetNode(user, retweetText);
-                var originalNode = createUserNode(retweet, retweetText);
-                var tweetEdge = graph.addEdge(originalNode, retweetText);
-                var retweetEdge = graph.addEdge(retweetNode, retweetText);
+            // } 
+            // // else {
+            //     var retweetText = createTweetPanel(description);
+            //     retweetText.retweeted++;
+            //     var retweetNode = createRetweetNode(user, retweetText);
+            //     var originalNode = createUserNode(retweet, retweetText);
+            //     var tweetEdge = graph.addEdge(originalNode, retweetText);
+            //     var retweetEdge = graph.addEdge(retweetNode, retweetText);
 
-                tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-                retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
-            }
+            //     tweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+            //     retweetEdge.draw({linewidth:linewidth, color:lineColor, opacity:tweetOpacity});
+            // }
 
         } else {
             var panel = createTweetPanel(description);
@@ -135,7 +137,8 @@ var TweetStructure=function(sceneGraph){
         //location.y = 25;
         //console.log("Location: "+ location.x + " " + location.y);
         var tweetPanel = new TweetPanel(tweet,location,0, {bgColor:bgColor,fontColor:fontColor, opacity:tweetOpacity});
-        tweetPanel.id = getASCIIvalue(tweet);
+        // tweetPanel.id = getASCIIvalue(tweet);
+        tweetPanel.id = numNodes;
 
         tweetPanel.desired_y = 35;
 

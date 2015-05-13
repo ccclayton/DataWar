@@ -16,7 +16,12 @@ var T = new Twit({
 var Tweet = require('../models/tweet.js');
 var mongoose = require('mongoose');
 
+<<<<<<< HEAD
 mongoose.connect('mongodb://localhost/test');
+=======
+var Tweet = require('../models/tweet.js');
+var config = require('../js/config.js');
+>>>>>>> b0d3d72ed2497c11a54776daeb9cf149b1f341a6
 
 var db = mongoose.connection;
 
@@ -39,8 +44,13 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
+<<<<<<< HEAD
 	var stream = T.stream('statuses/filter', { track: ['#3DWeb', '#3dwebfest', "#webfest", "#autodesk", "#cfsummit", "#MondayMotivation", "#putin"], language: 'en' });
 	//var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' });
+=======
+	var stream = T.stream('statuses/filter', { track: ['3DWeb', '3dwebfest', "webfest", "autodesk", "webgl", "dataviz", "threejs"], language: 'en' })
+	// var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' })
+>>>>>>> b0d3d72ed2497c11a54776daeb9cf149b1f341a6
 
 
 	// Start the stream, and store the JSON information in data

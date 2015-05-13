@@ -32,7 +32,9 @@ catch(e) {
 }
 var chooseSong = function(choice) {
 	stop();
-	if (choice == 1) {
+	if (choice == 0) {
+		var url = '../data/01_Aqua.mp3';
+	} else if (choice == 1) {
 		var url = '../data/cavetrolls.mp3';
 	} else if (choice == 2) {
 		var url = '../data/starwars.mp3';
@@ -147,3 +149,7 @@ $(window).resize(function() {
 		}
 	}
 });
+
+if (config.audio.autoplay == true) {
+	chooseSong(config.audio.selectedSong);
+}

@@ -14,6 +14,13 @@ var HandState={Unknown:0, NotTracked:1, Open:2, Closed:3, Lasso:4};
 var TrackingState = {NotTracked:0, Inferred:1, Tracked:2};
 var TrackColor = [new THREE.Color('red'), new THREE.Color('blue'), new THREE.Color('green')];
 
+var worldScale = config.user.skeleton.scale || 0.01;    
+var yOffset = config.user.skeleton.yOffset || 5;
+var zOffset = config.user.skeleton.zOffset || -25;
+
+var boneColor = config.user.skeleton.boneColor || 0xffffff;
+var jointColor = config.user.skeleton.jointColor || 0x44ffff;
+
 function connectKinect(bSkeleton) {
   var socket;
   var lineObjects = [];
@@ -111,7 +118,7 @@ function connectKinect(bSkeleton) {
     for(var i=0; i<jointPath.length; i++){
         if (!lineObjects[i]) {
           var lineMaterial = new THREE.LineBasicMaterial({
-              color: 0xffffff,
+              color: boneColor,
               linewidth:10
           });
 
@@ -132,7 +139,7 @@ function connectKinect(bSkeleton) {
     for(var i=0; i<joints.length; i++){
         if (joints[i] !== "rthumb" && joints[i] !== "rhandtip" && joints[i] !== "lthumb" && joints[i] !== "lhandtip") {
           if (!jointObjects[i]) {
-            var material = new THREE.MeshBasicMaterial( { color:0x44ffff, transparent: true, opacity: 0.4} );
+            var material = new THREE.MeshBasicMaterial( { color:jointColor, transparent: true, opacity: 0.4} );
             // var material = new THREE.MeshNormalMaterial();
 
             var sphere = new THREE.Mesh( new THREE.SphereGeometry( jointSizes[i], 10, 10 ), material );
@@ -150,13 +157,12 @@ function connectKinect(bSkeleton) {
   var setHeadLevel=function(){
     var zHead = jointPositions[0].z;
     var zTorso = jointPositions[8].z;
-    var adjustment = 0;
+    var adjustment = 0.4;
     pitchObject.rotation.x = 0.9 * pitchObject.rotation.x + 0.1 * (zHead - zTorso) * adjustment;
   }
 
   drawJoints();
   drawBones();
-  setHeadLevel();
 
 
   scene.add(skeleton);
@@ -176,13 +182,10 @@ function connectKinect(bSkeleton) {
     .on("skeleton", function(msg){
        // console.log(msg.length);
       // console.log(msg[3]);
-      var worldScale = 0.01;    
-      var yOffset = 5;
-      var zOffset = -25;
       if(msg.length> 10){ //has valid skeleton data
 
         //get all the joint positions
-        console.log(msg[0][5]*worldScale);
+        // console.log(msg[0][5]*worldScale);
         for(var i=0; i<joints.length; i++){
           jointPositions[i].copy(new THREE.Vector3(msg[i][3]*worldScale,
                                                   msg[i][4]*worldScale + yOffset,
@@ -194,6 +197,7 @@ function connectKinect(bSkeleton) {
 
         updateBones();
         updateJoints();
+        //setHeadLevel();
 
         // skeleton.position.copy(yawObject.position.clone());
         
@@ -390,7 +394,8 @@ function connectKinect(bSkeleton) {
         var drift = new THREE.Vector3(xshift, yshift, zshift);
         kinectInfo.push({name:"DL", val: Math.round(drift.length())});
 
-        var driftScale = 1/100, driftLimit = 60;
+        var driftScale = config.wii.driftScale || 1/100;
+        var driftLimit = config.wii.driftLimit || 60;
         drift.x = -limitDrift(drift.x, driftLimit, driftScale);
         drift.y = limitDrift(drift.y, driftLimit, driftScale);
         drift.z = -limitDrift(drift.z, driftLimit, driftScale);
