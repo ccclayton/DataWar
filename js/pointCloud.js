@@ -8,10 +8,13 @@ var PointCloud=function(_scene){
 	this.idx = -1;
 	this.geometry = new THREE.Geometry();
 	this.frequencyRange = 0; //Default.
-	this.maxHeight = 250;
+	this.maxHeight = config.eq.maxHeight || 250;
+	this.minSize = config.eq.minSize || 25;
+	this.maxSize = config.eq.maxSize || 50;
 	this.divisor = 1;
-	this.subtractor = 0;
-	this.animation = 0;
+	this.subtractor = 150;
+	this.animation = config.eq.animType || 2;
+	this.colors = config.eq.colors;
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -54,6 +57,18 @@ PointCloud.prototype.init = function(){
 	this.scene.add( pc );
 };
 
+PointCloud.prototype.update=function() {
+	if (this.animation % 4 == 0) {
+        this.updateLinear();
+    } else if (this.animation % 4 == 1) {
+        this.updateLinear32();
+    } else if (this.animation % 4 == 2) {
+        this.updateGrid();
+    } else if (this.animation % 4 == 3) {
+		this.updateGridRandom();
+	}
+}
+
 
 // update should be called in the main render loop
 PointCloud.prototype.updateLinear=function() {
@@ -65,7 +80,7 @@ PointCloud.prototype.updateLinear=function() {
             var position = this.geometry.vertices[i];
 
 			// gets index (0 - 15)
-            var index = Math.floor((position.x / 200) + 8);
+            var index = Math.floor((position.x  / (this.fieldSize/50)) + 8);
 
 			var low = (index*10);
 			var high = (index+1) * 10;
@@ -83,16 +98,16 @@ PointCloud.prototype.updateLinear=function() {
 			}
 
             if(index >= 0 && index <= 3){
-                this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+                this.values_color[i].setHex(this.colors[0]);
             }
             else if(index >= 4 && index <= 7){
-                this.values_color[i].copy(new THREE.Color(0x0088FF)); //Light Blue
+                this.values_color[i].setHex(this.colors[1]);
             }
             else if(index >= 8 && index <= 11){
-                this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
+                this.values_color[i].setHex(this.colors[2]);
             }
             else if(index >= 12 && index <= 15){
-                this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+                this.values_color[i].setHex(this.colors[3]);
 
             }
 			position.y += this.getLevelHighest(max);
@@ -121,7 +136,7 @@ PointCloud.prototype.updateLinear32=function() {
 
 			var position = this.geometry.vertices[i];
 
-			var index = Math.floor((position.x / 100) + 16);
+			var index = Math.floor((position.x  / (this.fieldSize/30)) + 16);
 
 			var low = (index*5);
 			var high = (index+1) * 5;
@@ -139,32 +154,32 @@ PointCloud.prototype.updateLinear32=function() {
 			}
 
 			if(index >= 0 && index <= 3){
-				this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+				this.values_color[i].setHex(this.colors[0]);
 			}
 			else if(index >= 4 && index <= 7){
-				this.values_color[i].copy(new THREE.Color(0x0088FF)); //Light Blue
+				this.values_color[i].setHex(this.colors[1]);
 			}
 			else if(index >= 8 && index <= 11){
-				this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
+				this.values_color[i].setHex(this.colors[2]);
 			}
 			else if(index >= 12 && index <= 15){
-				this.values_color[i].copy(new THREE.Color(0xCC66FF)); //Light purple
+				this.values_color[i].setHex(this.colors[3]);
 			}
 			else if(index >= 16 && index <= 19){
-				this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
+				this.values_color[i].setHex(this.colors[4]);
 			}
 			else if(index >= 20 && index <= 23){
-				this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Fuschia
+				this.values_color[i].setHex(this.colors[5]);
 			}
 			else if(index >= 24 && index <= 27){
-				this.values_color[i].copy(new THREE.Color(0x006600)); //Dark Green
+				this.values_color[i].setHex(this.colors[6]);
 			}
 			else if(index >= 28 && index <= 31){
-				this.values_color[i].copy(new THREE.Color(0x660066)); //Dark purple
+				this.values_color[i].setHex(this.colors[7]);
 			}
 			position.y += this.getLevelHighest(max);
-			if (position.y > 500) {
-				position.y = 495;
+			if (position.y > this.maxHeight) {
+				position.y = this.maxHeight-5;
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
@@ -188,8 +203,9 @@ PointCloud.prototype.updateGrid=function() {
 		for (var i = 0; i < this.geometry.vertices.length; i++) {
 			var position = this.geometry.vertices[i];
 
-			var x_index = Math.floor((position.x / 200) + 8);
-			var z_index = Math.floor((position.z / 200) + 8);
+			var x_index = Math.floor((position.x / (this.fieldSize/16.25)) + 8);
+			var z_index = Math.floor((position.z / (this.fieldSize/16.25)) + 8);
+
 
 			var x_low = x_index*1;
 			var x_high = (x_index+1)*1;
@@ -213,63 +229,90 @@ PointCloud.prototype.updateGrid=function() {
 
 			if(x_index >= 0 && x_index <= 3){
 				if (z_index >= 0 && z_index <=3) {
-					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+					this.values_color[i].setHex(this.colors[0]);
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0x990099)); //Purple
+					this.values_color[i].setHex(this.colors[1]);
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
+					this.values_color[i].setHex(this.colors[2]);
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0xFFFF00)); //Yellow
+					this.values_color[i].setHex(this.colors[3]);
 				}
 			}
 			else if(x_index >= 4 && x_index <= 7){
 				if (z_index >= 0 && z_index <=3) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Green
+					this.values_color[i].setHex(this.colors[4]);
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0xFFFF00)); //Yellow
+					this.values_color[i].setHex(this.colors[5]);
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0x0088FF)); //Baby blue
+					this.values_color[i].setHex(this.colors[6]);
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Red
+					this.values_color[i].setHex(this.colors[7]);
 				}
 
 			}
 			else if(x_index >= 8 && x_index <= 11){
 				if (z_index >= 0 && z_index <=3) {
-					this.values_color[i].copy(new THREE.Color(0x0088FF)); //Baby blue
+					this.values_color[i].setHex(this.colors[8]);
 
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
+					this.values_color[i].setHex(this.colors[9]);
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0xFF0000)); //Red
+					this.values_color[i].setHex(this.colors[10]);
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0x00FF00)); //Dark Green
+					this.values_color[i].setHex(this.colors[11]);
 				}
 
 			}
 			else if(x_index >= 12 && x_index <= 15) {
 				if (z_index >= 0 && z_index <= 3) {
-					this.values_color[i].copy(new THREE.Color(0xFF8800)); //Orange
+					this.values_color[i].setHex(this.colors[12]);
 
 				} else if (z_index >= 4 && z_index <= 7) {
-					this.values_color[i].copy(new THREE.Color(0xFF00FF)); //Fuschia
+					this.values_color[i].setHex(this.colors[13]);
 
 				} else if (z_index >= 8 && z_index <= 11) {
-					this.values_color[i].copy(new THREE.Color(0x8800FF)); //Dark Green
+					this.values_color[i].setHex(this.colors[14]);
 
 				} else if (z_index >= 12 && z_index <= 15) {
-					this.values_color[i].copy(new THREE.Color(0x0000FF)); //Dark Blue
+					this.values_color[i].setHex(this.colors[15]);
 				}
 			}
 			position.y += this.getLevelHighest(max);
-			if (position.y > 500) {
-				position.y = 495;
+			if (position.y > this.maxHeight) {
+				position.y = this.maxHeight-5;
+			} else if (position.y < 0) {
+				position.y = 0;
+			}
+
+			this.geometry.vertices[i].y = position.y;
+
+
+		}
+		this.geometry.verticesNeedUpdate = true;
+		this.geometry.__dirtyVertices = true;
+		this.attributes["customColor"].needsUpdate = true;
+
+	}
+};
+
+PointCloud.prototype.updateGridRandom=function() {
+
+	if (typeof binaries === 'object' && binaries.length - 1 > 0) {
+
+		for (var i = 0; i < this.geometry.vertices.length; i++) {
+			var position = this.geometry.vertices[i];
+
+			this.values_color[i].setHex(this.colors[i%12]);
+
+			position.y += this.getLevelHighest(binaries[i%(binaries.length)]);
+			if (position.y > this.maxHeight) {
+				position.y = this.maxHeight;
 			} else if (position.y < 0) {
 				position.y = 0;
 			}
@@ -317,9 +360,10 @@ function getRandomColor() {
 PointCloud.prototype.seedParticles=function(numVertices){
 	for ( var i = 0; i < numVertices; i ++ ) {
 		var vertex = new THREE.Vector3();
-		vertex.x = Math.random() * 2 - 1;
+		vertex.x = (Math.random() - 0.5);
 		vertex.y = -1 ; //hide underneath water
-		vertex.z = Math.random() * 2 - 1;
+		vertex.z = (Math.random() - 0.5);
+		vertex.multiplyScalar(this.fieldSize);
 		this.geometry.vertices.push(vertex);
 
 		// add( vertex, 0xffaa00 , 10 );
@@ -336,10 +380,10 @@ PointCloud.prototype.addBatch = function(batchSize){
 		vertex.y = Math.random() * 0.03 + 0.01;
         //vertex.y = -100;
 		vertex.z = (Math.random() - 0.5);
-		vertex.multiplyScalar(3200);
+		vertex.multiplyScalar(this.fieldSize);
 
 		//this.add( vertex, 0x000000 , 50 );
-		this.add( vertex, 0x000000 , (Math.random()*50)+75 );
+		this.add( vertex, 0x000000 , (Math.random()*this.maxSize)+this.minSize );
 	}
 	this.idx=batchSize;
 };
@@ -367,10 +411,10 @@ PointCloud.prototype.addExtra = function(count){
 		vertex.y = Math.random() * 0.03 + 0.01;
 		//vertex.y = -100;
 		vertex.z = (Math.random() - 0.5);
-		vertex.multiplyScalar(3200);
+		vertex.multiplyScalar(this.fieldSize);
 
 		//this.add( vertex, 0x000000 , 50 );
-		this.add( vertex, 0x000000 , (Math.random()*50)+75 );
+		this.add( vertex, 0x000000 , (Math.random()*this.maxSize)+this.minSize );
 	}
 	//this.idx += count;
 }

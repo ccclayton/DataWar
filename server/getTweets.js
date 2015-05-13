@@ -26,7 +26,8 @@ mongoose.connect('mongodb://localhost/test');
 //     created_at : String
 // })
 
-var Tweet = require('../models/tweet.js')
+var Tweet = require('../models/tweet.js');
+var config = require('../js/config.js');
 
 var db = mongoose.connection;
 
@@ -49,8 +50,8 @@ var waitForTweets = function(db, callback) {
 	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	//var stream = T.stream('statuses/filter', { track: ['#3DWeb', '#3dwebfest', "#webfest", "#autodesk"], language: 'en' })
-	var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' })
+	var stream = T.stream('statuses/filter', { track: ['3DWeb', '3dwebfest', "webfest", "autodesk", "webgl", "dataviz", "threejs"], language: 'en' })
+	// var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' })
 
 
 	// Start the stream, and store the JSON information in data

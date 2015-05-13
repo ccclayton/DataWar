@@ -14,7 +14,7 @@ var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
 var tweetStructure;
-var maxTweets = 110;
+var maxTweets = config.tweets.maxTweets || 110;
 
 var worldSize = 10000;
 
@@ -75,7 +75,7 @@ function init() {
 
     yawObject.visible = false;
     scene.add(yawObject);
-    yawObject.position.set(0, 10, 650);
+    yawObject.position.set(config.user.position.x,config.user.position.y,config.user.position.z);
     // window.PlayerCube = pitchObject;
     yawObject.addEventListener('collision', function (object) {
         //console.log("Object " + this.id + " collided with " + object.id);
@@ -104,7 +104,7 @@ function init() {
     initWater();
     var options = {Layout: "3d",scene: this.scene};
     graph = new Graph(options);
-    graph.layout = new Layout.ForceDirected(graph);
+    graph.layout = new Layout.ForceDirected(graph, {width:config.tweets.width, repulsion:config.tweets.repulsion});
     tweetStructure = new TweetStructure(graph); //Create tweet graph
 
     grabTweets();
@@ -121,9 +121,11 @@ function init() {
 
     lineTrace = new LineTrace(scene);
     pointCloud2.maxParticles = 50000;
-    pointCloud2.fieldSize = worldSize*0.75;
+    pointCloud2.fieldSize = worldSize;
 
-    pointCloud2.addBatch(2000);
+    pointCloud2.addBatch(20000);
+
+    init_keys(renderer.domElement);
 
     //read kinect data / build skeleton
     var bSkeleton = true;
@@ -165,7 +167,7 @@ function initSkybox() {
 
     // background stars
     var skyboxGeometry = new THREE.BoxGeometry(worldSize, worldSize, worldSize);
-    var skyboxMaterial = new THREE.MeshBasicMaterial({transparent:true, opacity:0.80, map: THREE.ImageUtils.loadTexture('/textures/stars/bsg-stars.png')});
+    var skyboxMaterial = new THREE.MeshBasicMaterial({transparent:true, opacity:0.25, map: THREE.ImageUtils.loadTexture('/textures/stars/bsg-stars.png')});
     skyboxMaterial.side = THREE.BackSide;
     // side: THREE.BackSide
     var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
@@ -286,6 +288,7 @@ function drawGrid() {
 
 function initObjects() {
     modelLoader(['/3dModels/pyramid.stl'], this.modelLoaded);
+    // modelLoader(['/3dModels/danny/model_mesh.obj', '/3dModels/danny/model_mesh.obj.mtl'], this.modelLoaded);
     makeMoon();
     drawGrid();
 
@@ -394,7 +397,7 @@ function grabTweets() {
 }
 
 function createTweet(){
-    setTimeout(function() {createTweet()}, 6000);
+    setTimeout(function() {createTweet()}, config.tweets.spawnTime);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
    // console.log(graph.layout);
@@ -405,7 +408,7 @@ function createTweet(){
 
         //setTimeout(tweetStructure.drawGraph(tweetArray)
         if (graph.nodes.length < maxTweets) {
-            tweetStructure.drawTweet(currTweetArray.pop());
+            // tweetStructure.drawTweet(currTweetArray.pop());
             tweetStructure.drawTweet(currTweetArray.pop());
             graph.layout.init({iterations: 10000});
         }
@@ -415,13 +418,7 @@ function createTweet(){
 function animate() {
     requestAnimationFrame(animate);
 
-    if (pointCloud2.animation % 3 == 0) {
-        pointCloud2.updateLinear();
-    } else if (pointCloud2.animation % 3 == 1) {
-        pointCloud2.updateLinear32();
-    } else if (pointCloud2.animation % 3 == 2) {
-        pointCloud2.updateGrid();
-    }
+    pointCloud2.update();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
     controls.update();
@@ -433,6 +430,8 @@ function animate() {
     scene.simulate(); // run physics
     water.render();
   
+
+
     render();
 }
 

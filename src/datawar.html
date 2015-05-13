@@ -74,6 +74,9 @@ void main()
 </head>
 	<body>
 	<script type = "text/javascript" src ="../threejs.r70/build/three.js"></script>
+
+	<script src="../js/config.js"></script>
+	
 	<script type = "text/javascript" src = "../Physijs/physi.js"></script>
 	<script type = "text/javascript" src = "../Physijs/physiPointerLockControls.js"></script>
 	<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
@@ -103,6 +106,9 @@ void main()
 	<script src="../js/postprocessing/ShaderPass.js"></script>
 	<script src="../js/postprocessing/MaskPass.js"></script>
 	<script src="../js/shaders/CopyShader.js"></script>
+
+	<script src="../js/THREEx.KeyboardState.js"></script>
+	<script src="../js/keyboard.js"></script>
 
 	<div id="blocker">
 
@@ -228,53 +234,11 @@ void main()
 			<li>q = toggle 16/32/grid</li>
 			<li>+ = increase particle count</li>
 			<li>x = increase max tweets</li>
-			<li>del = stop music</li>
+			<li>m = stop/mute music</li>
 		</ul>
 	</div>
 
 	<script type="text/javascript">
-		document.addEventListener('keydown', function(event) {
-			if(event.keyCode == 49 || event.keyCode == 97) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(1);
-				pointCloud2.subtractor = 150
-			}
-			else if(event.keyCode == 50 || event.keyCode == 98) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(2);
-				pointCloud2.subtractor = 110
-			}
-			else if(event.keyCode == 51 || event.keyCode == 99) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(3);
-				pointCloud2.subtractor = 150;
-				pointCloud2.divisor = .5
-			}
-			else if(event.keyCode == 52 || event.keyCode == 100) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(4);
-				pointCloud2.subtractor = 100;
-			}
-			else if (event.keyCode == 81) {
-				pointCloud2.animation++;
-				if (pointCloud2.animation == 3) {
-					pointCloud2.animation = 0;
-				}
-			}
-			else if(event.keyCode == 46) {
-				stop();
-			}
-			else if(event.keyCode == 88) {
-				maxTweets += 10;
-			}
-			else if(event.keyCode == 107) {
-				pointCloud2.addExtra(200);
-			}
-//			else if(event.keyCode == 109) {
-//				pointCloud2.removePoints(200);
-//				console.log("Decreased batch size to: " + pointCloud2.idx);
-//			}
-		});
 		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
 		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
 		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
