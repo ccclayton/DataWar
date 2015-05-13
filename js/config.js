@@ -16,6 +16,7 @@ var config={
         driftLimit:60
 	},
 	tweets: {
+		retweets:true,
 		maxTweets:150,
 		width:1600,
 		repulsion:0.1,

@@ -36,7 +36,11 @@ var TweetStructure=function(sceneGraph) {
         //console.log("batch processing usernames");
         var user = tweet.user;
         var description = tweet.description;
-        var retweet = tweet.retweet;
+        if (config.tweets.retweets == true) {
+            var retweet = tweet.retweet;
+        } else {
+            var retweet = null;
+        }
         var retweetText;
 
         if (retweet != null) {
