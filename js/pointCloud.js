@@ -328,14 +328,6 @@ PointCloud.prototype.updateGridRandom=function() {
 	}
 };
 
-function getLevel(average){
-	return average - 5;
-}
-
-function getLevelGrid(value) {
-	return (value/10) - 10;
-}
-
 PointCloud.prototype.getLevelHighest = function(value) {
 	return value/(this.divisor) - this.subtractor;
 }

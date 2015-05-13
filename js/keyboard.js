@@ -10,21 +10,21 @@ var init_keys = function(renderDom) {
 			console.log("Playing track 0");
 			document.getElementById('inst').style.display='none';
 			chooseSong(0);
-			pointCloud2.subtractor = 150
+			pointCloud2.subtractor = 150;
 			wasPressed['0'] = true;
 		}
 		if( scope.keyboard.eventMatches(event, '1') && !wasPressed['1'] ){
 			console.log("Playing track 1");
 			document.getElementById('inst').style.display='none';
 			chooseSong(1);
-			pointCloud2.subtractor = 150
+			pointCloud2.subtractor = 150;
 			wasPressed['1'] = true;
 		}
 		if( scope.keyboard.eventMatches(event, '2') && !wasPressed['2'] ){
 			console.log("Playing track 2");
 			document.getElementById('inst').style.display='none';
 			chooseSong(2);
-			pointCloud2.subtractor = 110
+			pointCloud2.subtractor = 110;
 		}
 		if( scope.keyboard.eventMatches(event, '3') && !wasPressed['3'] ){
 			console.log("Playing track 3");
@@ -47,11 +47,13 @@ var init_keys = function(renderDom) {
 			console.log("Increasing tweets");
 			maxTweets += 10;
 		}
-		if( scope.keyboard.eventMatches(event, '+') && !wasPressed['+'] ){
-			console.log("Adding points to visualizer");
-			pointCloud2.addExtra(200);
+		if ( scope.keyboard.eventMatches(event, 'q') && !wasPressed['q'] ){
+			pointCloud2.animation++;
+			if (pointCloud2.animation == 4) {
+				pointCloud2.animation = 0;
+			}
 		}
-	})	
+	});
 	
 	// listen on keyup to maintain ```wasPressed``` array
 	window.addEventListener('keyup', function(event){
@@ -76,8 +78,8 @@ var init_keys = function(renderDom) {
 		if( scope.keyboard.eventMatches(event, 'x')){
 			wasPressed['x'] = false;
 		}
-		if( scope.keyboard.eventMatches(event, '+')){
-			wasPressed['+'] = false;
+		if( scope.keyboard.eventMatches(event, 'q')){
+			wasPressed['q'] = false;
 		}
 	})
 };
