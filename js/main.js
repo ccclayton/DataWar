@@ -8,26 +8,17 @@ var materials = [];
 var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
 var cubes = new Array();
 var waterNormals;
-var tweetStructure;
+
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
 var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
+
 var tweetStructure;
 var maxTweets = config.tweets.maxTweets || 110;
+var tweetSpawnTimeout;
 
 var worldSize = 10000;
-
-//From Three.js ocean example that is included with the library.
-var parameters = {
-    width: 2000,
-    height: 2000,
-    widthSegments: 250,
-    heightSegments: 250,
-    depth: 1500,
-    param: 4,
-    filterparam: 1
-};
 
 var pointCloud = null;
 var pointCloud2 = null;
@@ -39,6 +30,9 @@ var NEAR = 1;
 var FAR = 100000;
 
 var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+
+window.heads = new Array();
+window.pyramid = null;
 
 init();
 animate();
@@ -102,6 +96,7 @@ function init() {
     renderer.shadowMapSoft = true;
 
     initWater();
+
     var options = {Layout: "3d",scene: this.scene};
     graph = new Graph(options);
     graph.layout = new Layout.ForceDirected(graph, {width:config.tweets.width, repulsion:config.tweets.repulsion});
@@ -110,7 +105,7 @@ function init() {
     grabTweets();
 
     //----------------------------------------------------------------------------------------------------------------------
-    createTweet(); //Creates Twitter Structure Graph.
+    //createTweet(); //Creates Twitter Structure Graph.
     //----------------------------------------------------------------------------------------------------------------------
 
     pointCloud = new PointCloud(scene);
@@ -173,13 +168,6 @@ function initSkybox() {
     var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 }
-
-function modelLoaded(obj){
-    obj.rotation.x = -Math.PI/2;
-    obj.scale.x = obj.scale.y = obj.scale.z = 8.25;
-
-    scene.add(obj);
-};
 
 function makeMoon() {
     var customMaterialAtmosphere = new THREE.ShaderMaterial( 
@@ -286,9 +274,34 @@ function drawGrid() {
 
     }
 
+function pyramidLoaded(obj, params){
+    obj.rotation.x = params.rotation;
+    obj.scale.x = obj.scale.y = obj.scale.z = params.scale;
+    obj.position.copy(params.position.clone());
+
+    window.pyramid = obj;
+    scene.add(obj);
+};
+
+function headLoaded(obj, params){
+    obj.rotation.x = params.rotation;
+    obj.scale.x = obj.scale.y = obj.scale.z = params.scale;
+    obj.position.copy(params.position.clone());
+
+    window.heads.push(obj);
+    scene.add(obj);
+};
+
+function showHeads () {
+    scene.remove(window.pyramid);
+    modelLoader(['/3dModels/danny/model_mesh.obj', '/3dModels/danny/model_mesh.obj.mtl'], this.headLoaded,  {rotation:0, scale:2000, position:new THREE.Vector3(-500,0,0)});
+    modelLoader(['/3dModels/colin/model_mesh.obj', '/3dModels/colin/model_mesh.obj.mtl'], this.headLoaded,  {rotation:0, scale:2000, position:new THREE.Vector3(500,-110,0)});
+    modelLoader(['/3dModels/travis/model_mesh.obj', '/3dModels/travis/model_mesh.obj.mtl'], this.headLoaded,  {rotation:0, scale:2000, position:new THREE.Vector3(-1400,-60,0)});
+    modelLoader(['/3dModels/wei/model_mesh.obj', '/3dModels/wei/model_mesh.obj.mtl'], this.headLoaded,  {rotation:0, scale:2000, position:new THREE.Vector3(1400,-110,0)});
+}
+
 function initObjects() {
-    modelLoader(['/3dModels/pyramid.stl'], this.modelLoaded);
-    // modelLoader(['/3dModels/danny/model_mesh.obj', '/3dModels/danny/model_mesh.obj.mtl'], this.modelLoaded);
+    modelLoader(['/3dModels/pyramid.stl'], this.pyramidLoaded, {rotation:-Math.PI/2, scale:8.25, position:new THREE.Vector3(0,0,0)});    
     makeMoon();
     drawGrid();
 
@@ -380,7 +393,7 @@ function initLights() {
 
 function grabTweets() {
 
-    setTimeout(grabTweets, 50000);
+    setTimeout(grabTweets, config.tweets.pollTime);
     //console.log("Getting tweets...");
     var param = {date : dt};
     $.get( '/api/tweets', param, function(data) {
@@ -397,7 +410,7 @@ function grabTweets() {
 }
 
 function createTweet(){
-    setTimeout(function() {createTweet()}, config.tweets.spawnTime);
+    tweetSpawnTimeout = setTimeout(function() {createTweet()}, config.tweets.spawnTime);
     //Twitter Structure
     //Creates a panel that shows the tweet's original author.''
    // console.log(graph.layout);
@@ -430,7 +443,19 @@ function animate() {
     scene.simulate(); // run physics
     water.render();
   
+    if (window.heads.length > 0) {
+        for (var i=0; i<window.heads.length; i++) {
+            window.heads[i].lookAt(yawObject.position);
+        }
+    }
 
+    if (yawObject.position.y < -5000) {
+        // yawObject.position.y = 10;
+        showHeads();
+        yawObject.position.copy(config.user.position);
+        yawObject.setLinearVelocity(new THREE.Vector3(0,0,0));
+        yawObject.__dirtyPosition = true;
+    }
 
     render();
 }
@@ -503,13 +528,40 @@ function randomFairColor() {
 }
 
 function resetScene() {
+    //reset user to home position
+    yawObject.position.set(config.user.position.x,config.user.position.y,config.user.position.z);
+    // camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    //stop music
+    stop();
+
+    //remove tweets
+    clearTimeout(tweetSpawnTimeout);
+
+    graph.layout.stop_calculating();
+
     for (var i = graph.nodes.length-1; i >= 0; i--) {
-        scene.remove(graph.nodes.pop());
+        var node = graph.nodes.pop();
+        // console.log(node);
+        scene.remove(node.mesh);
     }
-    var options = {Layout: "3d",scene: this.scene};
-    graph = new Graph(options);
-    graph.layout = new Layout.ForceDirected(graph);
-    tweetStructure = new TweetStructure(graph);
-    graph.layout.init({iterations: 10000});
+
+    for (var i = tweetStructure.tweetsInScene.length-1; i >= 0; i--) {
+        var node = tweetStructure.tweetsInScene.pop();
+        // console.log(node);
+        scene.remove(node.mesh);
+    }
+
+    graph.removeAllEdges();
+
+    //hide particles
+    for (var i = pointCloud2.values_size.length; i >= 0; i--) {
+        pointCloud2.values_size[i] = 0;
+    }
+    
+    // graph = new Graph({Layout: "3d",scene: this.scene});
+    // graph.layout = new Layout.ForceDirected(graph);
+    // tweetStructure = new TweetStructure(graph);
+    // createTweet();
 }
 

@@ -4,13 +4,24 @@ html, body {
 }
 
 body {
-	background-color: #ffffff;
+	background-color: #000000;
 	margin: 0;
 	overflow: hidden;
 	font-family: Comic;
 }
 
+#blankOverlay {
+	width:100%;
+	height: 100%;
+	margin:0;
+	padding: 0;
+	position: absolute;
+	background-color: #000000;
+	/*display: none;*/
+}
+
 #blocker {
+	opacity: 0;
 
 	position: absolute;
 
@@ -52,7 +63,9 @@ body {
 	font-size: 150%;
 }
 
-#d { position:absolute;
+#d {
+	display: none;
+	position:absolute;
 	width: 100%;
 	text-align:center;
 	margin:1em 0 -4.5em 0;
@@ -83,6 +96,7 @@ button:hover {
 }
 
 #controls{
+	display: none;	
 	color: white;
 	position:absolute;
 	bottom:0;

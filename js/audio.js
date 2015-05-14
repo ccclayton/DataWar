@@ -42,8 +42,8 @@ var chooseSong = function(choice) {
 		var url = '../data/O_Fortuna.mp3';
 	} else if (choice == 4) {
 		var url = '../data/skyrim.mp3';
-	} else if (choice == 5 ) {
-		var url = '../data/01_Aqua.mp3';
+	} else if (choice == 5) {
+		var url = '../data/08_Spring_Summer.mp3';
 	}
 	startSong(url);
 };

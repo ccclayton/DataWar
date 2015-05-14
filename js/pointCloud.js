@@ -52,6 +52,7 @@ PointCloud.prototype.init = function(){
 
 	this.seedParticles(this.maxParticles);
 	var pc = new THREE.PointCloud( this.geometry, shaderMaterial );
+	pc.sortParticles = true;
 	pc.frustumCulled = false;
 	window.pc = pc;
 	this.scene.add( pc );

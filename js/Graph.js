@@ -115,6 +115,12 @@ Graph.prototype.removeAllNodes=function(){
     }
 };
 
+Graph.prototype.removeAllEdges = function(){
+    while(this.edges.length>0){
+        this.removeEdge(this.edges[0]);
+    }
+}
+
 Graph.prototype.removeEdge = function(edge, n_request){
     this.edges.splice(this.edges.indexOf(edge), 1);
     edge.kill(n_request);

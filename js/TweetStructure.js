@@ -241,7 +241,7 @@ var TweetStructure=function(sceneGraph) {
     var clear = function () {
         //console.log("clearing graph to start new");
         graph.removeAllNodes();
-        tweetsInContext.length = 0;
+        storedTweets.length = 0;
     };
 
     return {
@@ -255,6 +255,8 @@ var TweetStructure=function(sceneGraph) {
         drawTweet: drawTweet,
         processTweets: processTweets,
         createUserNode: createUserNode,
-        createTweetPanel: createTweetPanel
+        createTweetPanel: createTweetPanel,
+        clear:clear,
+        tweetsInScene: tweetsInScene
     }
 };

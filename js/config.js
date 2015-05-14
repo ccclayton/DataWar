@@ -2,7 +2,7 @@
 var DEBUG = false;   //------------------------------------------------
 var config={
 	user: {
-		position:{x:0, y:10, z:650},
+		position:{x:0, y:10, z:1000},
 		skeleton:{
 			scale: 0.01,
 			xOffset: 5,
@@ -17,13 +17,14 @@ var config={
 	},
 	tweets: {
 		retweets:true,
-		maxTweets:150,
+		maxTweets:100,
 		width:1600,
 		repulsion:0.1,
-		spawnTime:1000
+		spawnTime:500,
+		pollTime:50000
 	},
 	audio: {
-		autoplay:true,
+		autoplay:false,
 		selectedSong:0
 	},
 	eq:{
