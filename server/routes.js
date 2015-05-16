@@ -18,7 +18,7 @@ module.exports = function(app) {
 
   var options = {
     // root: '/home/danny/Documents/Kinetech/DataWar/'
-     root: '../'
+     root: '../src/datawar.html'
   };
 
 
@@ -47,7 +47,7 @@ module.exports = function(app) {
           // var temp = options.root;
           // options.root += 'src/';
           // console.log(options.root);
-          res.render(options.root + 'src/datawar.html');
+          res.render(options.root);
           // options.root = temp;
         });
       });
@@ -59,7 +59,7 @@ module.exports = function(app) {
             // var temp = options.root;
             // options.root += 'src/';
             // console.log(options.root);
-            res.render(options.root + 'src/datawar.html');
+            res.render(options.root);
             // options.root = temp;
         });
 };
