@@ -1,3 +1,8 @@
+/**
+ * ONLY FOR DEPLOYMENT
+ * https://gist.github.com/learncodeacademy/35045e64d2bbe6eb14f9
+ */
+
 var plan = require('flightplan');
 
 var appName = 'datawar';

@@ -212,8 +212,7 @@ Layout.ForceDirected = function(graph, options) {
                     node.mesh.position.z -= (node.mesh.position.z - node.layout.tmp_pos_z) / 10;
                     //node.mesh.__dirtyPosition = true;
                 }
-                node.mesh.position.y = (0 * node.mesh.position.y) + (1* node.desired_y);
-                //node.mesh.__dirtyPosition = true;
+                node.mesh.position.y = (0.01 * node.mesh.position.y) + (.99 * node.desired_y);
 
                 // execute callback function if positions has been updated
                 if (updated && typeof callback_positionUpdated === 'function') {

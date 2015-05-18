@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * @Author: Travis Bennett
+ * @Author: Danny Gillies
+ */
 var DEBUG = false;   //------------------------------------------------
 var config={
 	user: {

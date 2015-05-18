@@ -1,12 +1,17 @@
 //Provided by: Sann-Remy Chea
 //https://github.com/srchea/Sound-Visualizer/
 
+/**
+ * @Author: Sann-Remy Chea
+ * (https://github.com/srchea/Sound-Visualizer/)
+ * Modified by Danny Gillies
+ */
+
 
 var context;
 var source, sourceJs;
 var analyser;
 var url = '../data/01_Aqua.mp3';
-//var url = '../data/08_Spring_Summer.mp3';
 var binaries = new Array();
 var boost = 0;
 
@@ -30,6 +35,11 @@ try {
 catch(e) {
 	$('#info').text('Web Audio API is not supported in this browser');
 }
+
+/**
+ * @Author: Danny Gillies
+ * @param choice
+ */
 var chooseSong = function(choice) {
 	stop();
 	if (choice == 0) {
@@ -49,6 +59,10 @@ var chooseSong = function(choice) {
 };
 var request = new XMLHttpRequest();
 
+/**
+ * Moved into a function to stop autoplay by Danny Gillies
+ * @param url
+ */
 function startSong(url) {
 	request.open("GET", url, true);
 	request.responseType = "arraybuffer";
@@ -133,6 +147,10 @@ function play() {
 	source.start(0);
 }
 
+/**
+ * @Author: Danny Gillies
+ * Stop music
+ */
 function stop() {
 	if (source != null)
 		source.stop();

@@ -37,7 +37,7 @@ var PointCloud = function (_scene) {
         offset: {type: "v2", value: new THREE.Vector2(2, -4).multiplyScalar(0.01)}
     };
     this.init();
-}
+};
 
 PointCloud.prototype.init = function () {
     var shaderMaterial = new THREE.ShaderMaterial({
@@ -60,6 +60,10 @@ PointCloud.prototype.init = function () {
     this.scene.add(pc);
 };
 
+/**
+ * @Author: Danny Gillies
+ * Determines which type of animation we would like to use based on user input
+ */
 //Must call this in your main render loop.
 PointCloud.prototype.update = function () {
     if (this.animation % 4 == 0) {
@@ -71,8 +75,13 @@ PointCloud.prototype.update = function () {
     } else if (this.animation % 4 == 3) {
         this.updateGridRandom();
     }
-}
+};
 
+/**
+ * @Author: Danny Gillies
+ * @Author: Colin Clayton
+ * Separates the pointcloud into 16 sections, sets colors based on location and animates each section based on frequency
+ */
 PointCloud.prototype.updateLinear = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -131,6 +140,10 @@ PointCloud.prototype.updateLinear = function () {
     }
 };
 
+/**
+ * @Author: Danny Gillies
+ * Separates the pointcloud into 32 sections, sets colors based on location and animates each section based on frequency
+ */
 PointCloud.prototype.updateLinear32 = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -194,6 +207,10 @@ PointCloud.prototype.updateLinear32 = function () {
     }
 };
 
+/**
+ * @Author: Danny Gillies
+ * Separates the pointcloud into a 16x16 grid, color is based on location in the grid and each section is animated by frequencies
+ */
 PointCloud.prototype.updateGrid = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -204,10 +221,10 @@ PointCloud.prototype.updateGrid = function () {
             var x_index = Math.floor((position.x / (this.fieldSize / 16.25)) + 8);
             var z_index = Math.floor((position.z / (this.fieldSize / 16.25)) + 8);
 
-            var x_low = x_index * 1;
-            var x_high = (x_index + 1) * 1;
-            var z_low = z_index * 1;
-            var z_high = (z_index + 1) * 1;
+            var x_low = x_index;
+            var x_high = (x_index + 1);
+            var z_low = z_index;
+            var z_high = (z_index + 1);
             var segment = [];
 
             for (var k = x_low; k < x_high; k++) {
@@ -292,6 +309,11 @@ PointCloud.prototype.updateGrid = function () {
     }
 };
 
+/**
+ * @Author: Travis Bennett
+ *
+ * Colors are set randomly, but manipulates points of the same color based on frequency
+ */
 PointCloud.prototype.updateGridRandom = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -315,6 +337,13 @@ PointCloud.prototype.updateGridRandom = function () {
     }
 };
 
+/**
+ * @Author: Danny Gillies
+ * @param value
+ * @returns how much to move the particle in which direction
+ *
+ * Calculates the amount to move the particle up or down based on frequency
+ */
 PointCloud.prototype.getLevelHighest = function (value) {
     return value / (this.divisor) - this.subtractor;
 };
@@ -369,23 +398,6 @@ PointCloud.prototype.addInFrontOfCamera = function () {
         (Math.random() - 0.5) * 4
     ));
     pointCloud.add(pos, 0x50ffff, 2);
-};
-
-PointCloud.prototype.addExtra = function (count) {
-    for (var i = 0; i < count; i++) {
-        var vertex = new THREE.Vector3();
-        vertex.x = (Math.random() - 0.5);
-        vertex.y = Math.random() * 0.03 + 0.01;
-        vertex.z = (Math.random() - 0.5);
-        vertex.multiplyScalar(this.fieldSize);
-        this.add(vertex, 0x000000, (Math.random() * this.maxSize) + this.minSize);
-    }
-}
-
-PointCloud.prototype.removePoints = function (count) {
-    for (var i = 0; i < count; i++) {
-        this.geometry.vertices.pop();
-    }
 };
 
 PointCloud.prototype.add = function (vertex, color, size) {
