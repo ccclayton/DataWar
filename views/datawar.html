@@ -229,148 +229,20 @@ void main()
 		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
 	}
-	</script> 
-	<!-- <script src = "TweetStructure.js"></script> -->
-	<div id="d">
-		<div id="inst">
-			Click or press corresponding number to change song
-		</div>
-		<div id="buttons_cars" class="bwrap">
-			<button id="cave">1=Cave Trolls</button>
-			<button id="star">2=Star Wars</button>
-			<button id="fortuna">3=O Fortuna</button>
-			<button id="skyrim">4=Skyrim</button>
-			<button id="ambient">5=Ambient</button>
-		</div>
-	</div>
+	</script>
+
 	<div id = "controls">
 		<ul>
-			<li>1-5 = change songs</li>
+			<li>0-5 = change songs</li>
 			<li>q = toggle 16/32/grid</li>
 			<li>x = increase max tweets</li>
-
 			<li>m = stop/mute music</li>
-
-			<li>p = stop music</li>
+			<li>p = start scene</li>
             <li>o = enable oculus</li>
 
 		</ul>
 	</div>
 
-	<script type="text/javascript">
-
-//		document.addEventListener('keydown', function(event) {
-//			if(event.keyCode == 49 || event.keyCode == 97) {
-//				document.getElementById('inst').style.display='none';
-//				chooseSong(1);
-//				pointCloud2.subtractor = 150
-//			}
-//			else if(event.keyCode == 50 || event.keyCode == 98) {
-//				document.getElementById('inst').style.display='none';
-//				chooseSong(2);
-//				pointCloud2.subtractor = 110
-//			}
-//			else if(event.keyCode == 51 || event.keyCode == 99) {
-//				document.getElementById('inst').style.display='none';
-//				chooseSong(3);
-//				pointCloud2.subtractor = 150;
-//				pointCloud2.divisor = .5
-//			}
-//			else if(event.keyCode == 52 || event.keyCode == 100) {
-//				document.getElementById('inst').style.display='none';
-//				chooseSong(4);
-//				pointCloud2.subtractor = 100;
-//			}
-//			else if(event.keyCode == 53 || event.keyCode == 101) {
-//				document.getElementById('inst').style.display='none';
-//				chooseSong(5);
-//				pointCloud2.subtractor = 150;
-//			}
-//			else if (event.keyCode == 81) {
-//				pointCloud2.animation++;
-//				if (pointCloud2.animation == 3) {
-//					pointCloud2.animation = 0;
-//				}
-//			}
-//			else if(event.keyCode == 46) {
-//				stop();
-//			}
-//			else if(event.keyCode == 88) {
-//				maxTweets += 10;
-//			}
-//			else if(event.keyCode == 107) {
-//				pointCloud2.addExtra(200);
-//			}
-////			else if(event.keyCode == 109) {
-////				pointCloud2.removePoints(200);
-////				console.log("Decreased batch size to: " + pointCloud2.idx);
-////			}
-//		});
-//		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
-//		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
-//		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
-//		document.getElementById("skyrim").onclick = function() {chooseSong(4); pointCloud2.subtractor = 80};
-//		document.getElementById("ambient").onclick = function() {chooseSong(5); pointCloud2.subtractor = 150};
-
-
-
-		document.addEventListener('keydown', function(event) {
-			if(event.keyCode == 49 || event.keyCode == 97) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(1);
-				pointCloud2.subtractor = 150
-			}
-			else if(event.keyCode == 50 || event.keyCode == 98) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(2);
-				pointCloud2.subtractor = 110
-			}
-			else if(event.keyCode == 51 || event.keyCode == 99) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(3);
-				pointCloud2.subtractor = 150;
-				pointCloud2.divisor = .5
-			}
-			else if(event.keyCode == 52 || event.keyCode == 100) {
-				document.getElementById('inst').style.display='none';
-				chooseSong(4);
-				pointCloud2.subtractor = 100;
-			}
-			else if (event.keyCode == 81) {
-				pointCloud2.animation++;
-				if (pointCloud2.animation == 3) {
-					pointCloud2.animation = 0;
-				}
-			}
-			else if(event.keyCode == 80) {
-				stop();
-			}
-			else if(event.keyCode == 88) {
-				maxTweets += 10;
-			}
-			else if(event.keyCode == 107) {
-				pointCloud2.addExtra(200);
-			}
-            else if(event.keyCode == 79){
-                console.log("OCULUS");
-                //controls = null;
-                oculusController = true;
-                initOculus(renderer,camera);
-
-            }
-
-//			else if(event.keyCode == 109) {
-//				pointCloud2.removePoints(200);
-//				console.log("Decreased batch size to: " + pointCloud2.idx);
-//			}
-		});
-
-		document.getElementById("cave").onclick = function() {chooseSong(1); pointCloud2.subtractor = 150};
-		document.getElementById("star").onclick = function() {chooseSong(2); pointCloud2.subtractor = 110};
-		document.getElementById("fortuna").onclick = function() {chooseSong(3); pointCloud2.subtractor = 150; pointCloud2.divisor = .5};
-		document.getElementById("skyrim").onclick = function() {chooseSong(4); pointCloud2.subtractor = 80};
-
-	</script>
 
 	<script type = "text/javascript" src = "../js/TweetStructure.js"></script>
 	<script type = "text/javascript" src = "../js/Graph.js"></script>

@@ -42,3 +42,12 @@ Many settings can be modified in js/config.js
 * *minSize*: minimum size of each point
 * *maxSize*: maximum size of each point
 * *colors*: array of colors for the equalizer, can add more or remove some
+
+## Authors
+Created by Daniel Gillies and Colin Clayton in collaboration with Weidong Yang and Travis Bennett of [Kineviz](http://kineviz.com/)
+
+## Special thanks
+mrdoob, author of [three.js](http://threejs.org/)
+Chandler Prall, author of [physi.js](https://github.com/chandlerprall/Physijs)
+Joyent, Inc. author of [node.js](https://nodejs.org/)
+Tolga Tezel, author of the [Twit API client for node.js](https://github.com/ttezel/twit)

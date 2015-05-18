@@ -14,8 +14,9 @@ var dt;
 module.exports = function(app) {
 
   app.engine('html', require('ejs').renderFile);
+    var parent = __dirname.substring( 0, __dirname.lastIndexOf( "/" ) + 1);
 
-    app.set('views', __dirname + '/views'); //optional since express defaults to CWD/views
+    app.set('views', parent + '/views'); //optional since express defaults to CWD/views
 
   var options = {
     // root: '/home/danny/Documents/Kinetech/DataWar/'
