@@ -1,13 +1,14 @@
 /**
  * @Author: Danny Gillies
- *
- * @Purpose: Set up the routes for our application
+ * Set up the routes for our application
  */
 
 'use strict';
 
 var mongoose = require('mongoose');
 var Tweet = require('../models/tweet.js');
+
+// Store the database connection in a variable and open the connection
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 var dt;

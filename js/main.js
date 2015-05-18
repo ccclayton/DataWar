@@ -178,7 +178,8 @@ function initOculus(renderer, camera) {
     effect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
     effect.setSize(window.innerWidth, window.innerHeight);
 }
-/*
+
+/**
  @author:Colin Clayton
  @author:Travis Bennett
  * Initializes and draws the Skybox using a THREE.js included shader.
@@ -431,45 +432,32 @@ function initLights() {
 
 /**
  * @author:Danny Gillies
- * Grabs tweets before adding them to array of current tweets.
+ * Pulls tweets from database and adds them to global tweet array
  */
 function grabTweets() {
 
     setTimeout(grabTweets, config.tweets.pollTime);
-    //console.log("Getting tweets...");
+    console.log("Getting tweets...");
     var param = {date: dt};
     $.get('/api/tweets', param, function (data) {
         if (data.tweets.length != 0) {
-            //console.log(data.tweets[data.tweets.length -1].created_at)
             dt = Date.parse(data.tweets[data.tweets.length - 1].created_at);
-            // console.log(data.tweets.length);
-            //console.log(dt);
             currTweetArray = currTweetArray.concat(data.tweets);
-            // console.log(currTweetArray);
-            //createGraph(data);
         }
     });
 }
 
 /**
  * @author:Danny Gillies
- *
+ * Adds the next tweet to the scene and re-calculates the force-directed layout graph
  */
 function createTweet() {
     tweetSpawnTimeout = setTimeout(function () {
         createTweet()
     }, config.tweets.spawnTime);
-    //Twitter Structure
-    //Creates a panel that shows the tweet's original author.''
-    // console.log(graph.layout);
 
     if (currTweetArray.length != 0) {
-        //var numTweets = tweetArray.length;
-        //var timePer = 50000 / numTweets;
-
-        //setTimeout(tweetStructure.drawGraph(tweetArray)
         if (graph.nodes.length < maxTweets) {
-            // tweetStructure.drawTweet(currTweetArray.pop());
             tweetStructure.drawTweet(currTweetArray.pop());
             graph.layout.init({iterations: 10000});
         }

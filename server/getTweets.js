@@ -1,15 +1,13 @@
 /**
  * @Author: Danny Gillies
- *
- * @Purpose: Pulls live tweets from twitter and stores them in a local mongodb database
- * @Keywords: The list of words we are tracking from twitter
  */
 
+// List of keywords to be captured
 var keywords = ['#dataviz', '#3dwebfest', '#autodesk', '#webgl', '#threejs'];
 
-var fs = require('fs');
 var Twit = require('twit');
 
+// Twitter dev information, using a temporary twitter account for this application. Do not need to change
 var T = new Twit({
     consumer_key:         'n37Pkz2GxSTsd9WCalaKLrHhQ'
   , consumer_secret:      'qYXPpzvzDSzpgqpt0gEF4e4TkmuF3p06I7eofIBIrM6bZJKmpg'
@@ -20,26 +18,30 @@ var T = new Twit({
 var Tweet = require('../models/tweet.js');
 var mongoose = require('mongoose');
 
+// Connect to database (Make sure this is only called once
 mongoose.connect('mongodb://localhost/test');
 var config = require('../js/config.js');
 
+// Stores database ina  variable
 var db = mongoose.connection;
 
+// Error handling for being unable to connect
 db.on('error', console.error.bind(console, 'connection error:'));
 
+// Opens the database connection to wait for tweets
 db.once('open', function () {
 	console.log("Connected to database, waiting for tweets...");
-
-	waitForTweets(db, function() {
-      db.close();
-      console.log("CLOSED");
-  	});
+	waitForTweets(db)
 
 });
 
-
-
-var waitForTweets = function(db, callback) {
+/**
+ * @Author: Danny Gillies
+ * Opens a stream to twitter and captures tweets with keywords in it, then stores them in the database
+ *
+ * @param db: database to store the tweets in
+ */
+var waitForTweets = function(db) {
 	var collection = db.collection('tweets');
 
 	// Track tweets with the keyword '#apple'
