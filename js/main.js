@@ -1,6 +1,7 @@
 /**
  * @author:Colin Clayton
  * @author:Danny Gillies
+ * Initializes and renders the scene.
  */
 
 var renderer, scene, camera, directionalLight, water;

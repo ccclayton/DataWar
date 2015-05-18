@@ -43,6 +43,14 @@ Many settings can be modified in js/config.js
 * *maxSize*: maximum size of each point
 * *colors*: array of colors for the equalizer, can add more or remove some
 
+## Oculus
+Must use Oculus-Rest Server which is included
+Go to oculus-rest-master/bin to find the binary for your OS
+or simply run the included Xcode Project or Visual Studio Solution File
+If using OSX, you may need to install libmicrohttpd like this:
+    brew install libmicrohttpd
+
+
 ## Authors
 Created by Daniel Gillies and Colin Clayton in collaboration with Weidong Yang and Travis Bennett of [Kineviz](http://kineviz.com/)
 
