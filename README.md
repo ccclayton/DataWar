@@ -17,8 +17,9 @@ This will launch a node app to gather tweets and store them in the database.
 Many settings can be modified in js/config.js
 
 **User settings:**
+* *controls*: turns controls list on and off
 * *position*: 3D point that determines where you spawn in the scene
-* *skeleton*: Can modify the look of the user skeleton (Mostly for kinect)
+* *skeleton*: can modify the look of the user skeleton (Mostly for kinect)
     
 **Wii balance board settings:**
 * *driftScale*: amount at which you can move left/right on the board
