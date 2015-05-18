@@ -1,17 +1,21 @@
+/**
+ * @Author: Danny Gillies
+ *
+ * @Purpose: Pulls live tweets from twitter and stores them in a local mongodb database
+ * @Keywords: The list of words we are tracking from twitter
+ */
+
+var keywords = ['#dataviz', '#3dwebfest', '#autodesk', '#webgl', '#threejs'];
+
 var fs = require('fs');
 var Twit = require('twit');
 
 var T = new Twit({
-    consumer_key:         'Em2k68ft24TM9ngeNjOqyD3Nn'
-  , consumer_secret:      'viFqJBbVDt0DygZV6pI5UzpsBR5GkLQYBLdHQnKASSSUmFMynl'
-  , access_token:         '416540180-SX6iJGrZZ3dfe7Y7Te6D8iRo8yAXHmxVb1vcIywI'
-  , access_token_secret:  'h7raMD2P8mfODYCeElvTTQVHdJbrmNcEhX0dlkN8xUhHA'
+    consumer_key:         'n37Pkz2GxSTsd9WCalaKLrHhQ'
+  , consumer_secret:      'qYXPpzvzDSzpgqpt0gEF4e4TkmuF3p06I7eofIBIrM6bZJKmpg'
+  , access_token:         '3219700082-ZHK1alLaY1GQPHGYPPlGwFAN9G1Yys6qzQIcRaN'
+  , access_token_secret:  'Wj9eCdaofbO7HhXgocio0KpjAg02pASq1oZ2bEiWThtKD'
 });
-
-// Read in all the models
-// fs.readdirSync(__dirname + '/../models').forEach(function(filename) {
-// 	if (~filename.indexOf('.js')) require(__dirname + "/../models/" + filename);
-// })
 
 var Tweet = require('../models/tweet.js');
 var mongoose = require('mongoose');
@@ -23,7 +27,7 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function (callback) {
+db.once('open', function () {
 	console.log("Connected to database, waiting for tweets...");
 
 	waitForTweets(db, function() {
@@ -37,11 +41,9 @@ db.once('open', function (callback) {
 
 var waitForTweets = function(db, callback) {
 	var collection = db.collection('tweets');
-	var i = 0;
 
 	// Track tweets with the keyword '#apple'
-	var stream = T.stream('statuses/filter', { track: ['USF', 'USFCA', "usfca", "sf", "sanfrancisco", "dataviz", "threejs"], language: 'en' })
-	// var stream = T.stream('statuses/filter', { track: ['apple'], language: 'en' })
+	var stream = T.stream('statuses/filter', { track: keywords , language: 'en' })
 
 	// Start the stream, and store the JSON information in data
 	stream.on('tweet', function (data) {

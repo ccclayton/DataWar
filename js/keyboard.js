@@ -8,40 +8,34 @@ var init_keys = function(renderDom) {
 	window.addEventListener('keydown', function(event){
 		if( scope.keyboard.eventMatches(event, '0') && !wasPressed['0'] ){
 			console.log("Playing track 0");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(0);
 			pointCloud2.subtractor = 150;
 			wasPressed['0'] = true;
 		}
 		if( scope.keyboard.eventMatches(event, '1') && !wasPressed['1'] ){
 			console.log("Playing track 1");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(1);
 			pointCloud2.subtractor = 150;
 			wasPressed['1'] = true;
 		}
 		if( scope.keyboard.eventMatches(event, '2') && !wasPressed['2'] ){
 			console.log("Playing track 2");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(2);
 			pointCloud2.subtractor = 110;
 		}
 		if( scope.keyboard.eventMatches(event, '3') && !wasPressed['3'] ){
 			console.log("Playing track 3");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(3);
 			pointCloud2.subtractor = 150;
 			pointCloud2.divisor = .5
 		}
 		if( scope.keyboard.eventMatches(event, '4') && !wasPressed['4'] ){
 			console.log("Playing track 4");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(4);
 			pointCloud2.subtractor = 120;
 		}
 		if( scope.keyboard.eventMatches(event, '5') && !wasPressed['5'] ){
 			console.log("Playing track 5");
-			//document.getElementById('inst').style.display='none';
 			chooseSong(5);
 			pointCloud2.subtractor = 100;
 		}
