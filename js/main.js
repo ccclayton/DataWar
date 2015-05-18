@@ -94,19 +94,18 @@ function init() {
     renderer.shadowMapSoft = true;
     document.body.appendChild(renderer.domElement);
 
-    console.log("Val of OC before controls creation: "+ oculusController);
-    if(!oculusController) {
+    
         //controls
         controls = new THREE.PointerLockControls(yawObject, camera);
         scene.add(controls.getObject());
         // console.log("Player cube: " + PlayerCube.id);
-    }
-    else{
-        controls = new THREE.FirstPersonControls( camera );
-        controls.movementSpeed = 20000;
-        controls.lookSpeed = 3.0;
+
+    //else{
+       // controls = new THREE.FirstPersonControls( camera );
+       // controls.movementSpeed = 20000;
+      //  controls.lookSpeed = 3.0;
         //controls.lookVertical = true;
-    }
+    //}
     camera.position.set(0, 10, 0);
 
 
@@ -145,16 +144,28 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
     console.log("Val of OC before init of Oculus: "+ oculusController);
 
-    if(oculusController) {
-        initOculus(renderer, camera);
-    }
+    initOculus(renderer,camera);
+    //if(oculusController) {
+     //   initOculus(renderer, camera);
+    //}
 }
 
 function initOculus(renderer,camera){
-    effect = new THREE.OculusRiftEffect(renderer,{worldScale: 1});
-    effect.setSize(window.innerWidth,window.innerHeight);
-    oculusControls = new THREE.OculusControls(camera);
-    oculusControls.connect();
+    //controls = null;
+    //scene.remove(controls.getObject());
+    if(oculusController) {
+        controls = new THREE.FirstPersonControls(camera);
+        controls.movementSpeed = 20000;
+        controls.lookSpeed = 3.0;
+        camera.position.set(config.user.position.x,config.user.position.y,config.user.position.z);
+    }
+
+        effect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
+        effect.setSize(window.innerWidth, window.innerHeight);
+        oculusControls = new THREE.OculusControls(camera);
+        oculusControls.connect();
+
+    //animate();
 }
 
 function initSkybox() {
@@ -421,6 +432,7 @@ function animate() {
     controls.update(0.0002 );
 
     if(oculusController) {
+        //controls.update(0.0002 );
         oculusControls.update(0.000002);
         effect.render(scene, camera);
 
@@ -526,6 +538,7 @@ function randomFairColor() {
 }
 
 function resetScene() {
+
     //reset user to home position
     yawObject.position.set(config.user.position.x,config.user.position.y,config.user.position.z);
     // camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -556,7 +569,8 @@ function resetScene() {
     for (var i = pointCloud2.values_size.length; i >= 0; i--) {
         pointCloud2.values_size[i] = 0;
     }
-    
+
+
     // graph = new Graph({Layout: "3d",scene: this.scene});
     // graph.layout = new Layout.ForceDirected(graph);
     // tweetStructure = new TweetStructure(graph);

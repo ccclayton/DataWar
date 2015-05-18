@@ -136,10 +136,18 @@ void main()
 	var blocker = document.getElementById( 'blocker' );
 	var instructions = document.getElementById( 'instructions' );
     var oculusControls = null;
-    var oculusController = true;
+    var oculusController = false;
 
 	var oscControl=null;
 
+//    document.addEventListener('keydown', function(event) {
+//        if (event.keyCode == 79) {
+//            oculusController = true;
+//        }
+//
+//        //oculusController = false;
+//
+//    });
 	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -343,13 +351,14 @@ void main()
 			else if(event.keyCode == 107) {
 				pointCloud2.addExtra(200);
 			}
-            else if(event.keyCode == 79){ //o
-
+            else if(event.keyCode == 79){
+                console.log("OCULUS");
+                //controls = null;
                 oculusController = true;
-                //resetScene();
-                //init();
-                console.log("OCULUS!!!");
+                initOculus(renderer,camera);
+
             }
+
 //			else if(event.keyCode == 109) {
 //				pointCloud2.removePoints(200);
 //				console.log("Decreased batch size to: " + pointCloud2.idx);
