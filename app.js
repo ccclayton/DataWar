@@ -31,6 +31,7 @@ oscServer.on('message', function(msg, rinfo){
 	// console.log(msg);
 	switch(msg[0]){
 		case '/wiibalanceboard':
+			console.log("GOT IT");
 			msg.shift();
 			connectedSockets.forEach(function(s){
 				s.emit("wiibalanceboard", msg);

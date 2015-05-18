@@ -18,7 +18,7 @@ module.exports = function(app) {
 
   var options = {
     // root: '/home/danny/Documents/Kinetech/DataWar/'
-     root: '../src/datawar.html'
+     root: '../views/datawar.html'
   };
 
 

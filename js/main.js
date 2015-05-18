@@ -5,14 +5,15 @@ var composer2, finalComposer;
 var geometry, material, mesh, fence, cube1, cube2, ground, PlayerCube, yawObject;
 var controls;
 var materials = [];
-var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
-var cubes = new Array();
 var waterNormals;
+var effect;
+var clock = new THREE.Clock();
 
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
 var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
+
 
 var tweetStructure;
 var maxTweets = config.tweets.maxTweets || 110;
@@ -80,11 +81,7 @@ function init() {
 
     initSkybox();
 
-    //controls
-    controls = new THREE.PointerLockControls(yawObject, camera);
-    scene.add(controls.getObject());
-    camera.position.set(0, 10, 0);
-    // console.log("Player cube: " + PlayerCube.id);
+
 
     initObjects();
 
@@ -94,6 +91,16 @@ function init() {
     renderer.setClearColor(0x000000);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapSoft = true;
+
+    effect = new THREE.OculusRiftEffect( renderer,scene, { worldScale: 1 } );
+    effect.setSize( window.innerWidth, window.innerHeight );
+   // oculusControls = new THREE.OculusControls(camera);
+
+    //controls
+    controls = new THREE.PointerLockControls(yawObject, camera);
+    scene.add(controls.getObject());
+    camera.position.set(0, 10, 0);
+    // console.log("Player cube: " + PlayerCube.id);
 
     initWater();
 
@@ -128,6 +135,7 @@ function init() {
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
+   // oculusControls.connect(); //Connect Oculus
 }
 
 function initSkybox() {
@@ -434,7 +442,11 @@ function animate() {
     pointCloud2.update();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
+
+    //oculusControls.update( clock.getDelta() );
     controls.update();
+
+
     // debugger
     if(skeleton.children.length != 0){
         skeleton.position.copy(yawObject.position.clone());
@@ -461,7 +473,8 @@ function animate() {
 }
 
 function render() {
-    renderer.render(scene, camera);
+    //renderer.render(scene, camera);
+    effect.render( scene, camera );
     // composer2.render(scene, camera);
     // finalComposer.render(scene, camera);
 }
@@ -499,8 +512,10 @@ function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+    effect.setSize( window.innerWidth, window.innerHeight ); //resizes oculus effect appropriately
 
     renderer.setSize( window.innerWidth, window.innerHeight );
+
 }
 
 function getRandomColor() {
