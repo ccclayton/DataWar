@@ -61,3 +61,4 @@ Created by Daniel Gillies and Colin Clayton in collaboration with Weidong Yang a
 * Chandler Prall, author of [physi.js](https://github.com/chandlerprall/Physijs)
 * Joyent, Inc. author of [node.js](https://nodejs.org/)
 * Tolga Tezel, author of the [Twit API client for node.js](https://github.com/ttezel/twit)
+* Olga Karpenko, our professor at University of San Francisco that allowed us to do this project and kept us on track
