@@ -3,36 +3,30 @@
  * @author:Danny Gillies
  */
 
-var renderer, scene, camera, cube1, cube2, directionalLight, water;
-var composer2, finalComposer;
-var geometry, material, mesh, fence, cube1, cube2, ground, PlayerCube, yawObject;
+var renderer, scene, camera, directionalLight, water;
+var geometry, material, mesh, ground, PlayerCube, yawObject;
 var controls;
-var materials = [];
 var waterNormals;
 var effect;
-var clock = new THREE.Clock();
 
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
 var dt = Date.parse(curdate);
 var currTweetArray = [];
 var graph;
 
-
 var tweetStructure;
 var maxTweets = config.tweets.maxTweets || 110;
 var tweetSpawnTimeout;
-
 var worldSize = 10000;
 
 var pointCloud = null;
 var pointCloud2 = null;
 var lineTrace = null;
-
 var VIEW_ANGLE = 75;
+
 var ASPECT = window.innerWidth / window.innerHeight;
 var NEAR = 1;
 var FAR = 100000;
-
 var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 
 window.heads = new Array();
@@ -44,23 +38,31 @@ animate();
 
 function init() {
 
-    //console.log("Beginning of Init..");
+    //Create Physi.js Thread worker
     Physijs.scripts.worker = '../Physijs/physijs_worker.js';
     Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
+    //Create a new Physi.js Scene
     scene = new Physijs.Scene;
     scene.setGravity(
         new THREE.Vector3(0, -250, 0)
     );
 
+    //Instantiate oscControls for the Wii Balance Board
     oscControl = new OscControl(scene);
 
+    //Create a Perspective camera for the scene
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     camera.position.z = 100;
+
+    //Add Camera to the scene
     scene.add(camera);
 
+    //Initialize all lights in the scene.
     initLights();
 
+    //This is an invisible Physi.js object that
+    //will hold the camera.
     yawObject = new Physijs.BoxMesh(
         new THREE.BoxGeometry(50, 10, 50),
         Physijs.createMaterial(
@@ -71,24 +73,23 @@ function init() {
         1000
     );
 
+    //We don't want it to be visible
     yawObject.visible = false;
-    scene.add(yawObject);
-    yawObject.position.set(config.user.position.x, config.user.position.y, config.user.position.z);
-    // window.PlayerCube = pitchObject;
-    //yawObject.addEventListener('collision', function (object) {
-    //    //console.log("Object " + this.id + " collided with " + object.id);
-    //    //if (object.id == fence.id) {
-    //    //    //console.log("PLAYER HIT WALL");
-    //    //}
-    //});
 
+    //Add it to the scene
+    scene.add(yawObject);
+
+    //Set to a position given in our config.js file
+    yawObject.position.set(config.user.position.x, config.user.position.y, config.user.position.z);
+
+    //Create the Skybox
     initSkybox();
 
-
+    //Create all objects that will be in the scene
+    //This will create the Pyramid in this case
     initObjects();
 
-    //buildAxes(1000);
-
+    //Create the WebGLRenderer to be used to render the scene
     renderer = new THREE.WebGLRenderer({clearAlpha: 1});
     renderer.setClearColor(0x000000);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -96,65 +97,75 @@ function init() {
     renderer.shadowMapSoft = true;
     document.body.appendChild(renderer.domElement);
 
-
-    //controls
+    //Create the main set of controls
     controls = new THREE.PointerLockControls(yawObject, camera);
-    scene.add(controls.getObject());
-    // console.log("Player cube: " + PlayerCube.id);
 
-    //else{
-    // controls = new THREE.FirstPersonControls( camera );
-    // controls.movementSpeed = 20000;
-    //  controls.lookSpeed = 3.0;
-    //controls.lookVertical = true;
-    //}
+    //We are putting the camera inside of 'yawObject'
+    //Then adding it to the scene
+    scene.add(controls.getObject());
+
+    //Set the position of the camera
     camera.position.set(0, 10, 0);
 
-
+    //Start the water shader
     initWater();
 
+    //Create the main graph to be used to display the twitter visualization
     var options = {Layout: "3d", scene: this.scene};
     graph = new Graph(options);
+
+    //We are using a force-directed graph to do this
+    //See Graph.js and force-directed-layout.js
     graph.layout = new Layout.ForceDirected(graph, {width: config.tweets.width, repulsion: config.tweets.repulsion});
-    tweetStructure = new TweetStructure(graph); //Create tweet graph
+
+    //Create a new TweetStructure which is the tweet graph
+    tweetStructure = new TweetStructure(graph);
 
     grabTweets();
 
-    //----------------------------------------------------------------------------------------------------------------------
-    //createTweet(); //Creates Twitter Structure Graph.
-    //----------------------------------------------------------------------------------------------------------------------
-
+    //Create a new PointCloud to follow the user's movement
+    //around the scene
     pointCloud = new PointCloud(scene);
+    //Adjust Color to white
     pointCloud.uniforms.color.value = new THREE.Color(0xFFFFFF);
 
-
+    //Create a second PointCloud to fill the scene with particles
     pointCloud2 = new PointCloud(scene);
 
+    //LineTrace is used to draw a line tracking where the user has gone around
+    //the scene
     lineTrace = new LineTrace(scene);
+
     pointCloud2.maxParticles = 50000;
+
+    //Sets value that determines how the particles span the space
     pointCloud2.fieldSize = worldSize;
 
+    //Adds particles to the scene
     pointCloud2.addBatch(20000);
 
+    //Provides key controls
     init_keys(renderer.domElement);
 
-    //read kinect data / build skeleton
+    //Reads kinect data / builds skeleton
     var bSkeleton = true;
     window.Kinect = connectKinect(bSkeleton);
 
-
     window.addEventListener('resize', onWindowResize, false);
-    console.log("Val of OC before init of Oculus: " + oculusController);
 
+    //Initializes the Oculus Rift
     initOculus(renderer, camera);
-    //if(oculusController) {
-    //   initOculus(renderer, camera);
-    //}
 }
 
+/**
+ * @author:Colin Clayton
+ *
+ * Initializes Oculus Controls, First Person Controls, and the
+ * OculusRiftEffect. Must use oculus-rest-server if you want
+ * positional tracking to work. See README.
+ */
 function initOculus(renderer, camera) {
-    //controls = null;
-    //scene.remove(controls.getObject());
+
     if (oculusController) {
         oculusControls = new THREE.OculusControls(camera);
         oculusControls.connect();
@@ -166,11 +177,12 @@ function initOculus(renderer, camera) {
 
     effect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
     effect.setSize(window.innerWidth, window.innerHeight);
-
-
-    //animate();
 }
-
+/*
+ @author:Colin Clayton
+ @author:Travis Bennett
+ * Initializes and draws the Skybox using a THREE.js included shader.
+ */
 function initSkybox() {
     var prefix = "images/nebula-";
     var directions = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
@@ -214,6 +226,11 @@ function initSkybox() {
     scene.add(skybox);
 }
 
+/**
+ * @author:Travis Bennett
+ * Initializes and draws the Moon object.
+ * Uses a shader for lighting that can be found in datawar.html
+ */
 function makeMoon() {
     var customMaterialAtmosphere = new THREE.ShaderMaterial(
         {
@@ -239,11 +256,12 @@ function makeMoon() {
     moon.position.set(0, 900, 0);
 
 }
-
+/**
+ * @author: Travis Bennett
+ */
 function drawGrid() {
 
     var numAreas = 2;
-
 
     var l2rGeometry = new THREE.Geometry();
     l2rGeometry.vertices.push(new THREE.Vector3(-worldSize / 2, 0.25, 0));
@@ -268,9 +286,11 @@ function drawGrid() {
         lineFB.position.x = (i * (worldSize / numAreas)) - worldSize / 2;
         scene.add(lineFB);
     }
-
 }
 
+/**
+ * @author:Travis Bennett
+ */
 function pyramidLoaded(obj, params) {
     obj.rotation.x = params.rotation;
     obj.scale.x = obj.scale.y = obj.scale.z = params.scale;
@@ -279,7 +299,9 @@ function pyramidLoaded(obj, params) {
     window.pyramid = obj;
     scene.add(obj);
 };
-
+/**
+ * @author:Travis Bennett
+ */
 function headLoaded(obj, params) {
     obj.rotation.x = params.rotation;
     obj.scale.x = obj.scale.y = obj.scale.z = params.scale;
@@ -289,6 +311,9 @@ function headLoaded(obj, params) {
     scene.add(obj);
 };
 
+/**
+ * @author:Travis Bennett
+ */
 function showHeads() {
     scene.remove(window.pyramid);
     modelLoader(['/3dModels/danny/model_mesh.obj', '/3dModels/danny/model_mesh.obj.mtl'], this.headLoaded, {
@@ -313,6 +338,9 @@ function showHeads() {
     });
 }
 
+/**
+ * @author:Travis Bennett
+ */
 function initObjects() {
     modelLoader(['/3dModels/pyramid.stl'], this.pyramidLoaded, {
         rotation: -Math.PI / 2,
@@ -336,11 +364,15 @@ function initObjects() {
         },
         vertexShader: document.getElementById('vertexShaderAtmosphere').textContent,
         fragmentShader: document.getElementById('fragmentShaderAtmosphere').textContent//,
-        //side: THREE.BothSides
     }));
     scene.add(beam);
 }
 
+/**
+ * @author: Colin Clayton
+ * Initializes and draws water using two built in THREE.js shaders.
+ * THREE.js Water and Mirror Shaders are used.
+ */
 function initWater() {
     waterNormals = new THREE.ImageUtils.loadTexture('../threejs.r65/examples/textures/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
@@ -357,13 +389,11 @@ function initWater() {
         distortionScale: 20.0
 
     });
-    //alert(water.geometry);
 
     mirrorMesh = new THREE.Mesh(
         new THREE.PlaneBufferGeometry(worldSize, worldSize, 50, 50),
         water.material
     );
-
 
     mirrorMesh.add(water);
     mirrorMesh.rotation.x = (-Math.PI * 0.5);
@@ -375,9 +405,6 @@ function initWater() {
         .8, // high friction
         0.1 // low restitution
     );
-    //ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-    //ground_material.map.repeat.set(10, 10);
-
     ground = new Physijs.BoxMesh(
         new THREE.BoxGeometry(worldSize, 1, worldSize),
         ground_material,
@@ -388,25 +415,24 @@ function initWater() {
     scene.add(ground);
 }
 
+/**
+ * @author:Colin Clayton
+ * Modified by Travis Bennett to be a function.
+ *
+ * Initializes all lights and then adds them to the scene.
+ */
 function initLights() {
     var light = new THREE.HemisphereLight(0xd1f8ff, 0x777788, 0.5);
-    // light.position.set(0.5, 1, 0.75);
     scene.add(light);
-
-    // // var light = new THREE.SpotLight(0xffffff, 1);
-    // // light.position.set(0, 50, 0);
-    // // scene.add(light);
-
-    // directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
-    // directionalLight.position.set(-1, 0.4, -1);
-    // scene.add(directionalLight);
-
-    // LIGHT
     directionalLight = new THREE.PointLight(0xd1f8ff);
     directionalLight.position.set(0, 500, 500);
     scene.add(directionalLight);
 }
 
+/**
+ * @author:Danny Gillies
+ * Grabs tweets before adding them to array of current tweets.
+ */
 function grabTweets() {
 
     setTimeout(grabTweets, config.tweets.pollTime);
@@ -425,6 +451,10 @@ function grabTweets() {
     });
 }
 
+/**
+ * @author:Danny Gillies
+ *
+ */
 function createTweet() {
     tweetSpawnTimeout = setTimeout(function () {
         createTweet()
@@ -446,84 +476,60 @@ function createTweet() {
     }
 }
 
+/**
+ * @author:Colin Clayton
+ * @author:Travis Bennett
+ * Performs all animation/rendering/updating.
+ */
 function animate() {
     requestAnimationFrame(animate);
 
-    //oculusControls.update( );//oculusControls
-
-    //oculusControls.update(clock.getDelta());
     pointCloud2.update();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
 
 
     controls.update(0.0002);
-
+    //If Oculus is enabled, need to update the controls,
+    //based on positional tracking and then render the effect to the scene
     if (oculusController) {
-        //controls.update(0.0002 );
         oculusControls.update(0.000002);
         effect.render(scene, camera);
 
     }
 
-    // debugger
     if (skeleton.children.length != 0) {
         skeleton.position.copy(yawObject.position.clone());
         skeleton.setRotationFromEuler(yawObject.rotation);
     }
     scene.simulate(); // run physics
-    water.render();
+    water.render(); //render water
 
+    //Heads will always look at the position of the user
     if (window.heads.length > 0) {
         for (var i = 0; i < window.heads.length; i++) {
             window.heads[i].lookAt(yawObject.position);
         }
     }
 
+    //If you fall to -5000, the 3D modeled heads will be drawn to the scene
+    //Your position will be reset as well
     if (yawObject.position.y < -5000) {
-        // yawObject.position.y = 10;
         showHeads();
         yawObject.position.copy(config.user.position);
         yawObject.setLinearVelocity(new THREE.Vector3(0, 0, 0));
         yawObject.__dirtyPosition = true;
     }
+    //Need to render the scene normally if the oculus is not being used
     if (!oculusController) {
         renderer.render(scene, camera);
     }
 
-
-    //render();
 }
-
-
-// Temporary for debugging while building virtual world. Borrowed from example: http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/
-function buildAxes(length) {
-    var axes = new THREE.Object3D();
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(length, 0, 0), 0xFF0000, false)); // +X
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(-length, 0, 0), 0xFF0000, true)); // -X
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, length, 0), 0x00FF00, false)); // +Y
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, -length, 0), 0x00FF00, true)); // -Y
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, length), 0x0000FF, false)); // +Z
-    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -length), 0x0000FF, true)); // -Z
-    scene.add(axes);
-}
-//Temporary for debugging while building virtual world.
-function buildAxis(src, dst, colorHex, dashed) {
-    var geom = new THREE.Geometry(),
-        mat;
-    if (dashed) {
-        mat = new THREE.LineDashedMaterial({linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3});
-    } else {
-        mat = new THREE.LineBasicMaterial({linewidth: 3, color: colorHex});
-    }
-    geom.vertices.push(src.clone());
-    geom.vertices.push(dst.clone());
-    geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
-    var axis = new THREE.Line(geom, mat, THREE.LinePieces);
-    return axis;
-}
-
-
+/**
+ * @author:Colin Clayton
+ * Makes sure everything is rendered appropriately for current screen size
+ */
 function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -539,6 +545,11 @@ function onWindowResize() {
 
 }
 
+/**
+ * @author:Colin Clayton
+ * May be used to create random colored particles.
+ * Returns a hex value such as "#EEEEEE"
+ */
 function getRandomColor() {
     var color = '#';
     var letters = '0123456789ABCDEF'.split('');
@@ -552,54 +563,43 @@ function getRandomColor() {
     return colorWithoutQuotes;
 }
 
-
-// Temporary Random Color Generator for temp data sculpture. http://srchea.com/experimenting-with-web-audio-api-three-js-webgl
-function randomFairColor() {
-    var min = 64;
-    var max = 224;
-    var r = (Math.floor(Math.random() * (max - min + 1)) + min) * 65536;
-    var g = (Math.floor(Math.random() * (max - min + 1)) + min) * 256;
-    var b = (Math.floor(Math.random() * (max - min + 1)) + min);
-    return r + g + b;
-}
-
+/**
+ * @author:Travis Bennet
+ * @author:Weidong Yang
+ */
 function resetScene() {
 
-    //reset user to home position
+    //Reset user to home position
     yawObject.position.set(config.user.position.x, config.user.position.y, config.user.position.z);
-    // camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    //stop music
+    //Stop music
     stop();
 
-    //remove tweets
+    //Remove tweets
     clearTimeout(tweetSpawnTimeout);
 
+    //Stop the force-directed-layout's calculations
     graph.layout.stop_calculating();
 
+    //Remove nodes from scene.
     for (var i = graph.nodes.length - 1; i >= 0; i--) {
         var node = graph.nodes.pop();
-        // console.log(node);
         scene.remove(node.mesh);
     }
 
+    //Remove TwitterNodes and TweetPanels from scene
     for (var i = tweetStructure.tweetsInScene.length - 1; i >= 0; i--) {
         var node = tweetStructure.tweetsInScene.pop();
         // console.log(node);
         scene.remove(node.mesh);
     }
 
+    //Remove edges
     graph.removeAllEdges();
 
     //hide particles
     for (var i = pointCloud2.values_size.length; i >= 0; i--) {
         pointCloud2.values_size[i] = 0;
     }
-
-
-    // graph = new Graph({Layout: "3d",scene: this.scene});
-    // graph.layout = new Layout.ForceDirected(graph);
-    // tweetStructure = new TweetStructure(graph);
-    // createTweet();
 }
 
