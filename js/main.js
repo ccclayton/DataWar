@@ -503,7 +503,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     if(oculusControls) {
         effect.setSize(window.innerWidth, window.innerHeight); //resizes oculus effect appropriately
-        controls.handleResize();
+        
     }
     else{
         renderer.setSize( window.innerWidth, window.innerHeight );
