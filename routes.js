@@ -15,10 +15,11 @@ module.exports = function(app) {
 
   app.engine('html', require('ejs').renderFile);
 
+    app.set('views', __dirname + '/views'); //optional since express defaults to CWD/views
 
   var options = {
     // root: '/home/danny/Documents/Kinetech/DataWar/'
-     root: '../src/datawar.html'
+     root: 'views/'
   };
 
 
@@ -47,7 +48,7 @@ module.exports = function(app) {
           // var temp = options.root;
           // options.root += 'src/';
           // console.log(options.root);
-          res.render(options.root);
+          res.render('datawar.html');
           // options.root = temp;
         });
       });
@@ -59,7 +60,7 @@ module.exports = function(app) {
             // var temp = options.root;
             // options.root += 'src/';
             // console.log(options.root);
-            res.render(options.root);
+            res.render('datawar.html');
             // options.root = temp;
         });
 };
