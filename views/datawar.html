@@ -72,7 +72,7 @@ void main()
 
 
 </head>
-	<body>
+	<>
 	<script type = "text/javascript" src ="../threejs.r70/build/three.js"></script>
 
 	<script src="../js/config.js"></script>
@@ -234,15 +234,21 @@ void main()
 	<div id = "controls">
 		<ul>
 			<li>0-5 = change songs</li>
-			<li>q = toggle 16/32/grid</li>
+			<li>q = toggle animation style</li>
 			<li>x = increase max tweets</li>
 			<li>m = stop/mute music</li>
 			<li>p = start scene</li>
             <li>o = enable oculus</li>
+			<li>n = hide controls</li>
 
 		</ul>
 	</div>
 
+	<script type = "text/javascript">
+		if (config.user.controls == false) {
+			document.getElementById('controls').style.display='none';
+		}
+	</script>
 
 	<script type = "text/javascript" src = "../js/TweetStructure.js"></script>
 	<script type = "text/javascript" src = "../js/Graph.js"></script>

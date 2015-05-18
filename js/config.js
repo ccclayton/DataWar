@@ -2,6 +2,7 @@
 var DEBUG = false;   //------------------------------------------------
 var config={
 	user: {
+		controls:true,
 		position:{x:0, y:10, z:1000},
 		skeleton:{
 			scale: 0.01,

@@ -37,7 +37,7 @@ var init_keys = function(renderDom) {
 			console.log("Playing track 4");
 			//document.getElementById('inst').style.display='none';
 			chooseSong(4);
-			pointCloud2.subtractor = 100;
+			pointCloud2.subtractor = 120;
 		}
 		if( scope.keyboard.eventMatches(event, '5') && !wasPressed['5'] ){
 			console.log("Playing track 5");
@@ -74,11 +74,14 @@ var init_keys = function(renderDom) {
 			createTweet();
 			$("#blankOverlay").fadeOut();
 		}
-		if( scope.keyboard.eventMatches(event, 'o') && !wasPressed['p'] ){
+		if( scope.keyboard.eventMatches(event, 'o') && !wasPressed['o'] ){
 			console.log("Turning on occulus");
 			oculusController = true;
 			initOculus(renderer,camera);
-
+		}
+		if( scope.keyboard.eventMatches(event, 'n') && !wasPressed['n'] ){
+			console.log("Hiding controls");
+			document.getElementById('controls').style.display='none';
 		}
 	});
 	
