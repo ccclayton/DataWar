@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A9501A10-D743-4435-A934-632BB495C1D6</string>
+	<key>IDESourceControlProjectName</key>
+	<string>oculus-rest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C879C485E2EC58ACCAC49B86741AD1300347EC64</key>
+		<string>https://github.com/ccclayton/DataWar.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>oculus-rest-master/oculus-rest.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C879C485E2EC58ACCAC49B86741AD1300347EC64</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ccclayton/DataWar.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C879C485E2EC58ACCAC49B86741AD1300347EC64</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C879C485E2EC58ACCAC49B86741AD1300347EC64</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DataWar</string>
+		</dict>
+	</array>
+</dict>
+</plist>

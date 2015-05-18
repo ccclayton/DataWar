@@ -157,8 +157,9 @@ function connectKinect(bSkeleton) {
   var setHeadLevel=function(){
     var zHead = jointPositions[0].z;
     var zTorso = jointPositions[8].z;
-    var adjustment = 0.4;
+
     pitchObject.rotation.x = 0.9 * pitchObject.rotation.x + 0.1 * (zHead - zTorso) * adjustment;
+
   }
 
   drawJoints();
@@ -185,7 +186,7 @@ function connectKinect(bSkeleton) {
       if(msg.length> 10){ //has valid skeleton data
 
         //get all the joint positions
-        // console.log(msg[0][5]*worldScale);
+
         for(var i=0; i<joints.length; i++){
           jointPositions[i].copy(new THREE.Vector3(msg[i][3]*worldScale,
                                                   msg[i][4]*worldScale + yOffset,
@@ -437,6 +438,8 @@ function connectKinect(bSkeleton) {
         // drawing.camera.rotation.y -= diff_hand_z / 100000;
 
       }
+
+
       ////TODO: PRobably take out
       //if(jointPositions[0].z > jointPositions[8].z){
       //

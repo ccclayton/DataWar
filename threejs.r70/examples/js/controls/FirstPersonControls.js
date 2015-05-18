@@ -30,7 +30,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.verticalMin = 0;
 	this.verticalMax = Math.PI;
 
-	this.autoSpeedFactor = 0.0;
+	this.autoSpeedFactor = 50.0;
 
 	this.mouseX = 0;
 	this.mouseY = 0;
@@ -157,6 +157,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			case 82: /*R*/ this.moveUp = true; break;
 			case 70: /*F*/ this.moveDown = true; break;
 
+
 		}
 
 	};
@@ -241,6 +242,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
 
 		}
+
 
 		var targetPosition = this.target,
 			position = this.object.position;
