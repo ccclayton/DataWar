@@ -19,11 +19,7 @@ module.exports = function(app) {
 
   var options = {
     // root: '/home/danny/Documents/Kinetech/DataWar/'
-<<<<<<< HEAD:routes.js
-     root: 'views/'
-=======
-     root: '../views/datawar.html'
->>>>>>> f751e70a26cc3687f3e57051612301bc2e2a1820:server/routes.js
+     root: '/views/'
   };
 
 
