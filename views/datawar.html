@@ -1,3 +1,16 @@
+<!--
+@author:Colin Clayton
+@author:Daniel Gillies
+@author:Weidong Yang
+@author:Travis Bennett
+
+Loads in all required project files.
+Includes 2 vertex shaders and 2 fragment shaders written by Weidong Yang
+
+Test for PointerLock Controls with code from tutorial found here:
+http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+-->
 <!DOCTYPE html>
 <html>
 
@@ -22,6 +35,7 @@
 
 	}
 
+
 </script>
 
 <script type="x-shader/x-fragment" id="fragmentshaderParticle">
@@ -39,6 +53,7 @@
 
 	}
 
+
 </script>
 
 <!-- ------ Custom Shader Code for atmospheric glow ------ -->
@@ -49,6 +64,7 @@ void main()
     vNormal = normalize( normalMatrix * normal );
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
+
 </script>
 
 <!-- fragment shader a.k.a. pixel shader -->
@@ -61,206 +77,187 @@ void main()
 	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p ); 
 	gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
 }
+
 </script>
 
 
 <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
 
-<title>Data Landscape</title>
-<link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
-
+    <title>Data Landscape</title>
+    <link rel="stylesheet" type="text/css" href="../style/stylesheet.css">
 
 </head>
-	<>
-	<script type = "text/javascript" src ="../threejs.r70/build/three.js"></script>
+<>
+<script type="text/javascript" src="../threejs.r70/build/three.js"></script>
+<script src="../js/config.js"></script>
+<script type="text/javascript" src="../Physijs/physi.js"></script>
+<script type="text/javascript" src="../Physijs/physiPointerLockControls.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/controls/FirstPersonControls.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/effects/OculusRiftEffect.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/controls/OculusControls.js"></script>
+<script type="text/javascript" src="../threejs.r70/src/loaders/JSONLoader.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
+<script type="text/javascript" src="../js/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="../js/audio.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/Mirror.js"></script>
+<script type="text/javascript" src="../threejs.r70/examples/js/WaterShader.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../js/oscControl.js"></script>
+<script src="../js/pointCloud.js"></script>
+<script src="../js/lineTrace.js"></script>
+<script src="../js/wiiBalanceBoard.js"></script>
+<script src="../js/connectKinect.js"></script>
+<script type="text/javascript" src="../js/loaders/DDSLoader.js"></script>
+<script type="text/javascript" src="../js/loaders/MTLLoader.js"></script>
+<script type="text/javascript" src="../js/loaders/OBJMTLLoader.js"></script>
+<script type="text/javascript" src="../js/loaders/STLLoader.js"></script>
+<script type="text/javascript" src="../js/modelLoader.js"></script>
+<script src="../js/postprocessing/EffectComposer.js"></script>
+<script src="../js/postprocessing/RenderPass.js"></script>
+<script src="../js/postprocessing/ShaderPass.js"></script>
+<script src="../js/postprocessing/MaskPass.js"></script>
+<script src="../js/shaders/CopyShader.js"></script>
+<script src="../js/THREEx.KeyboardState.js"></script>
+<script src="../js/keyboard.js"></script>
 
-	<script src="../js/config.js"></script>
-	
-	<script type = "text/javascript" src = "../Physijs/physi.js"></script>
-	<script type = "text/javascript" src = "../Physijs/physiPointerLockControls.js"></script>
-    <script type = "text/javascript" src="../threejs.r70/examples/js/controls/FirstPersonControls.js"></script>
-	<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
-	<script type = "text/javascript" src="../threejs.r70/examples/js/effects/OculusRiftEffect.js"></script>
-	<script type = "text/javascript" src="../threejs.r70/examples/js/controls/OculusControls.js"></script>
-	<script type = "text/javascript" src ="../threejs.r70/src/loaders/JSONLoader.js"> </script>
-	<script type = "text/javascript" src ="../threejs.r70/examples/js/loaders/ColladaLoader.js"></script>
-	<script type = "text/javascript" src = "../js/jquery-2.0.0.min.js"> </script>
-	<script type = "text/javascript" src = "../js/audio.js"> </script>
-	<script type = "text/javascript" src = "../threejs.r70/examples/js/Mirror.js"></script>
-	<script type = "text/javascript" src = "../threejs.r70/examples/js/WaterShader.js"></script>
+<div id="blankOverlay"></div>
 
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="../js/oscControl.js"></script>
-	<script src="../js/pointCloud.js"></script>
-	<script src="../js/lineTrace.js"></script>
-	<script src="../js/wiiBalanceBoard.js"></script>
+<div id="blocker">
 
-	<script src="../js/connectKinect.js"></script>
-	
-	<script type="text/javascript" src="../js/loaders/DDSLoader.js"></script>
-	<script type="text/javascript" src="../js/loaders/MTLLoader.js"></script>
-	<script type="text/javascript" src="../js/loaders/OBJMTLLoader.js"></script>
-	<script type="text/javascript" src="../js/loaders/STLLoader.js"></script>
-	<script type="text/javascript" src="../js/modelLoader.js"></script>
+    <div id="instructions">
+        <span style="font-size:50px;">Click To Load Environment</span>
+        <br/>
+        (Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
+    </div>
 
-	<script src="../js/postprocessing/EffectComposer.js"></script>
-	<script src="../js/postprocessing/RenderPass.js"></script>
-	<script src="../js/postprocessing/ShaderPass.js"></script>
-	<script src="../js/postprocessing/MaskPass.js"></script>
-	<script src="../js/shaders/CopyShader.js"></script>
+</div>
+<!-- <!-- Start world creation -->
+<script type="text/javascript">
+    var renderer, scene, camera, cube1, cube2;
 
-	<script src="../js/THREEx.KeyboardState.js"></script>
-	<script src="../js/keyboard.js"></script>
-
-	<div id="blankOverlay"></div>
-
-	<div id="blocker">
-
-	<div id="instructions">
-	<span style="font-size:50px;">Click To Load Environment</span>
-	<br />
-	(Use W, A, S, D/or Arrow Keys To Move, Space To Jump, And Mouse To Look Around!)
-	</div>
-
-	</div>
-	<!-- <!-- Start world creation -->
-	<script type="text/javascript">
-	var renderer, scene, camera, cube1, cube2;
-
-	var geometry, material, mesh;
-	var controls;
-	var materials = [];
-	var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
-	var cubes = new Array();
-	var blocker = document.getElementById( 'blocker' );
-	var instructions = document.getElementById( 'instructions' );
+    var geometry, material, mesh;
+    var controls;
+    var materials = [];
+    var boxText = new THREE.ImageUtils.loadTexture('../textures/wood_texture.jpg');
+    var cubes = new Array();
+    var blocker = document.getElementById('blocker');
+    var instructions = document.getElementById('instructions');
     var oculusControls = null;
-    var oculusController = false;
+    var oculusController = false; //Boolean used to determine if oculus is used or not.
 
-	var oscControl=null;
-
-//    document.addEventListener('keydown', function(event) {
-//        if (event.keyCode == 79) {
-//            oculusController = true;
-//        }
-//
-//        //oculusController = false;
-//
-//    });
-	// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
-	if ( havePointerLock ) {
-		var element = document.body;
-
-		var pointerlockchange = function ( event ) {
-
-			if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
-
-				controls.enabled = true;
-
-				blocker.style.display = 'none';
-
-			} else {
-
-				controls.enabled = false;
-
-				blocker.style.display = '-webkit-box';
-				blocker.style.display = '-moz-box';
-				blocker.style.display = 'box';
-
-				instructions.style.display = '';
-
-			}
-
-		};
-
-		var pointerlockerror = function ( event ) {
-			instructions.style.display = '';
-		};
-
-		// Hook pointer lock state change events
-		document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-		document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-		document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-		document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-		document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-		document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
-
-		instructions.addEventListener( 'click', function ( event ) {
-
-			instructions.style.display = 'none';
-			// Ask the browser to lock the pointer
-			element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-
-			if ( /Firefox/i.test( navigator.userAgent ) ) {
-
-				var fullscreenchange = function ( event ) {
-
-					if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
-
-						document.removeEventListener( 'fullscreenchange', fullscreenchange );
-						document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
-
-						element.requestPointerLock();
-					}
-
-				};
-
-				document.addEventListener( 'fullscreenchange', fullscreenchange, false );
-				document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
-
-				element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
-
-				element.requestFullscreen();
-
-			} else {
-
-				element.requestPointerLock();
-
-			}
-
-		}, false );
-
-	} else {
-
-		instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
-	}
-	</script>
-
-	<div id = "controls">
-		<ul>
-			<li>0-5 = change songs</li>
-			<li>q = toggle animation style</li>
-			<li>x = increase max tweets</li>
-			<li>m = stop/mute music</li>
-			<li>p = start scene</li>
-            <li>o = enable oculus</li>
-			<li>n = hide controls</li>
-
-		</ul>
-	</div>
-
-	<script type = "text/javascript">
-		if (config.user.controls == false) {
-			document.getElementById('controls').style.display='none';
-		}
-	</script>
-
-	<script type = "text/javascript" src = "../js/TweetStructure.js"></script>
-	<script type = "text/javascript" src = "../js/Graph.js"></script>
-	<script type = "text/javascript" src = "../js/force-directed-layout.js"></script>
-	<script type = "text/javascript" src = "../js/TwitterNode.js"></script>
-	<script type = "text/javascript" src = "../js/shapes.js"></script>
-	<script type = "text/javascript" src = "../js/TweetPanel.js"></script>
-	<script type = "text/javascript" src = "../js/main.js"> </script>
+    var oscControl = null;
 
 
-	</body>
+    // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+    var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
+    if (havePointerLock) {
+        var element = document.body;
+
+        var pointerlockchange = function (event) {
+
+            if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
+
+                controls.enabled = true;
+
+                blocker.style.display = 'none';
+
+            } else {
+
+                controls.enabled = false;
+
+                blocker.style.display = '-webkit-box';
+                blocker.style.display = '-moz-box';
+                blocker.style.display = 'box';
+                instructions.style.display = '';
+            }
+
+        };
+
+        var pointerlockerror = function (event) {
+            instructions.style.display = '';
+        };
+
+        // Hook pointer lock state change events
+        document.addEventListener('pointerlockchange', pointerlockchange, false);
+        document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+        document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+
+        document.addEventListener('pointerlockerror', pointerlockerror, false);
+        document.addEventListener('mozpointerlockerror', pointerlockerror, false);
+        document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+
+        instructions.addEventListener('click', function (event) {
+
+            instructions.style.display = 'none';
+            // Ask the browser to lock the pointer
+            element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+            if (/Firefox/i.test(navigator.userAgent)) {
+
+                var fullscreenchange = function (event) {
+
+                    if (document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
+
+                        document.removeEventListener('fullscreenchange', fullscreenchange);
+                        document.removeEventListener('mozfullscreenchange', fullscreenchange);
+
+                        element.requestPointerLock();
+                    }
+
+                };
+
+                document.addEventListener('fullscreenchange', fullscreenchange, false);
+                document.addEventListener('mozfullscreenchange', fullscreenchange, false);
+
+                element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+                element.requestFullscreen();
+
+            } else {
+
+                element.requestPointerLock();
+
+            }
+
+        }, false);
+
+    } else {
+
+        instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+    }
+</script>
+
+<div id="controls">
+    <ul>
+        <li>0-5 = change songs</li>
+        <li>q = toggle animation style</li>
+        <li>x = increase max tweets</li>
+        <li>m = stop/mute music</li>
+        <li>p = start scene</li>
+        <li>o = enable oculus</li>
+        <li>n = hide controls</li>
+
+    </ul>
+</div>
+
+<script type="text/javascript">
+    if (config.user.controls == false) {
+        document.getElementById('controls').style.display = 'none';
+    }
+</script>
+
+<script type="text/javascript" src="../js/TweetStructure.js"></script>
+<script type="text/javascript" src="../js/Graph.js"></script>
+<script type="text/javascript" src="../js/force-directed-layout.js"></script>
+<script type="text/javascript" src="../js/TwitterNode.js"></script>
+<script type="text/javascript" src="../js/shapes.js"></script>
+<script type="text/javascript" src="../js/TweetPanel.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
+
+</body>
 
 
 </html>
