@@ -55,7 +55,7 @@ If using OSX, you may need to install libmicrohttpd like this:
 Created by Daniel Gillies and Colin Clayton in collaboration with Weidong Yang and Travis Bennett of [Kineviz](http://kineviz.com/)
 
 ## Special thanks
-mrdoob, author of [three.js](http://threejs.org/)
-Chandler Prall, author of [physi.js](https://github.com/chandlerprall/Physijs)
-Joyent, Inc. author of [node.js](https://nodejs.org/)
-Tolga Tezel, author of the [Twit API client for node.js](https://github.com/ttezel/twit)
+* mrdoob, author of [three.js](http://threejs.org/)
+* Chandler Prall, author of [physi.js](https://github.com/chandlerprall/Physijs)
+* Joyent, Inc. author of [node.js](https://nodejs.org/)
+* Tolga Tezel, author of the [Twit API client for node.js](https://github.com/ttezel/twit)
