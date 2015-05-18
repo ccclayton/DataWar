@@ -154,6 +154,8 @@ function initOculus(renderer,camera){
     //controls = null;
     //scene.remove(controls.getObject());
     if(oculusController) {
+        oculusControls = new THREE.OculusControls(camera);
+        oculusControls.connect();
         controls = new THREE.FirstPersonControls(camera);
         controls.movementSpeed = 20000;
         controls.lookSpeed = 3.0;
@@ -162,8 +164,7 @@ function initOculus(renderer,camera){
 
         effect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
         effect.setSize(window.innerWidth, window.innerHeight);
-        oculusControls = new THREE.OculusControls(camera);
-        oculusControls.connect();
+
 
     //animate();
 }
@@ -503,7 +504,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     if(oculusControls) {
         effect.setSize(window.innerWidth, window.innerHeight); //resizes oculus effect appropriately
-        
+
     }
     else{
         renderer.setSize( window.innerWidth, window.innerHeight );
