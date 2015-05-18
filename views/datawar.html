@@ -79,6 +79,7 @@ void main()
 	
 	<script type = "text/javascript" src = "../Physijs/physi.js"></script>
 	<script type = "text/javascript" src = "../Physijs/physiPointerLockControls.js"></script>
+    <script type = "text/javascript" src="../threejs.r70/examples/js/controls/FirstPersonControls.js"></script>
 	<!-- <script src ="../threejs.r70/examples/js/controls/PointerLockControls.js"></script> -->
 	<script type = "text/javascript" src="../threejs.r70/examples/js/effects/OculusRiftEffect.js"></script>
 	<script type = "text/javascript" src="../threejs.r70/examples/js/controls/OculusControls.js"></script>
@@ -135,6 +136,7 @@ void main()
 	var blocker = document.getElementById( 'blocker' );
 	var instructions = document.getElementById( 'instructions' );
     var oculusControls = null;
+    var oculusController = true;
 
 	var oscControl=null;
 
@@ -242,6 +244,7 @@ void main()
 			<li>m = stop/mute music</li>
 
 			<li>p = stop music</li>
+            <li>o = enable oculus</li>
 
 		</ul>
 	</div>
@@ -340,6 +343,13 @@ void main()
 			else if(event.keyCode == 107) {
 				pointCloud2.addExtra(200);
 			}
+            else if(event.keyCode == 79){ //o
+
+                oculusController = true;
+                //resetScene();
+                //init();
+                console.log("OCULUS!!!");
+            }
 //			else if(event.keyCode == 109) {
 //				pointCloud2.removePoints(200);
 //				console.log("Decreased batch size to: " + pointCloud2.idx);

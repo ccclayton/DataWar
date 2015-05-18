@@ -72,12 +72,12 @@ function init() {
     scene.add(yawObject);
     yawObject.position.set(config.user.position.x,config.user.position.y,config.user.position.z);
     // window.PlayerCube = pitchObject;
-    yawObject.addEventListener('collision', function (object) {
-        //console.log("Object " + this.id + " collided with " + object.id);
-        //if (object.id == fence.id) {
-        //    //console.log("PLAYER HIT WALL");
-        //}
-    });
+    //yawObject.addEventListener('collision', function (object) {
+    //    //console.log("Object " + this.id + " collided with " + object.id);
+    //    //if (object.id == fence.id) {
+    //    //    //console.log("PLAYER HIT WALL");
+    //    //}
+    //});
 
     initSkybox();
 
@@ -90,17 +90,25 @@ function init() {
     renderer = new THREE.WebGLRenderer({clearAlpha: 1});
     renderer.setClearColor(0x000000);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio( window.devicePixelRatio );
     renderer.shadowMapSoft = true;
+    document.body.appendChild(renderer.domElement);
 
-    effect = new THREE.OculusRiftEffect( renderer, { worldScale: 1 } );
-    effect.setSize( window.innerWidth, window.innerHeight );
-    oculusControls = new THREE.OculusControls(camera);
-
-    //controls
-    controls = new THREE.PointerLockControls(yawObject, camera);
-    scene.add(controls.getObject());
+    console.log("Val of OC before controls creation: "+ oculusController);
+    if(!oculusController) {
+        //controls
+        controls = new THREE.PointerLockControls(yawObject, camera);
+        scene.add(controls.getObject());
+        // console.log("Player cube: " + PlayerCube.id);
+    }
+    else{
+        controls = new THREE.FirstPersonControls( camera );
+        controls.movementSpeed = 20000;
+        controls.lookSpeed = 3.0;
+        //controls.lookVertical = true;
+    }
     camera.position.set(0, 10, 0);
-    // console.log("Player cube: " + PlayerCube.id);
+
 
     initWater();
 
@@ -133,9 +141,20 @@ function init() {
     var bSkeleton = true;
     window.Kinect=connectKinect(bSkeleton);
 
-    document.body.appendChild(renderer.domElement);
+
     window.addEventListener('resize', onWindowResize, false);
-    oculusControls.connect(); //Connect Oculus
+    console.log("Val of OC before init of Oculus: "+ oculusController);
+
+    if(oculusController) {
+        initOculus(renderer, camera);
+    }
+}
+
+function initOculus(renderer,camera){
+    effect = new THREE.OculusRiftEffect(renderer,{worldScale: 1});
+    effect.setSize(window.innerWidth,window.innerHeight);
+    oculusControls = new THREE.OculusControls(camera);
+    oculusControls.connect();
 }
 
 function initSkybox() {
@@ -201,54 +220,6 @@ function makeMoon() {
     
     moon.position.set(0,900,0);
 
-    // create secondary scene to add atmosphere effect
-    
-    // atmosphereScene = new THREE.Scene();
-    
-    // camera2 = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-    // camera2.position = camera.position;
-    // camera2.rotation = camera.rotation; 
-    // atmosphereScene.add( camera2 );
-    
-    // var mesh = new THREE.Mesh( sphereGeo.clone(), customMaterialAtmosphere );
-    // mesh.scale.x = mesh.scale.y = mesh.scale.z = 1.2;
-    // // atmosphere should provide light from behind the sphere, so only render the back side
-    // mesh.material.side = THREE.BackSide;
-    // atmosphereScene.add(mesh);
-    
-    // // clone earlier sphere geometry to block light correctly
-    // // and make it a bit smaller so that light blends into surface a bit
-    // var blackMaterial = new THREE.MeshBasicMaterial( {color: 0x000000} ); 
-    // var sphere = new THREE.Mesh(sphereGeo.clone(), blackMaterial);
-    // sphere.scale.x = sphere.scale.y = sphere.scale.z = 1;
-    // atmosphereScene.add(sphere);
-    
-    // ////////////////////////////////////////////////////////////////////////
-    // // final composer will blend composer2.render() results with the scene 
-    // ////////////////////////////////////////////////////////////////////////
-    
-    // // prepare secondary composer
-    // var renderTargetParameters = 
-    //     { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, 
-    //       format: THREE.RGBFormat, stencilBuffer: false };
-    // var renderTarget = new THREE.WebGLRenderTarget( SCREEN_WIDTH, SCREEN_HEIGHT, renderTargetParameters );
-    // composer2 = new THREE.EffectComposer( renderer, renderTarget );
-    
-    // // prepare the secondary render's passes
-    // var render2Pass = new THREE.RenderPass( atmosphereScene, camera2 );
-    // composer2.addPass( render2Pass );
-    
-    // // prepare final composer
-    // finalComposer = new THREE.EffectComposer( renderer, renderTarget );
-
-    // // prepare the final render's passes
-    // var renderModel = new THREE.RenderPass( scene, camera );
-    // finalComposer.addPass( renderModel );
-
-    // var effectBlend = new THREE.ShaderPass( THREE.AdditiveBlendShader, "tDiffuse" );
-    // effectBlend.uniforms[ 'tDiffuse2' ].value = composer2.renderTarget2;
-    // effectBlend.renderToScreen = true;
-    // finalComposer.addPass( effectBlend );
 }
 
 function drawGrid() {
@@ -439,13 +410,21 @@ function createTweet(){
 function animate() {
     requestAnimationFrame(animate);
 
+    //oculusControls.update( );//oculusControls
+
+    //oculusControls.update(clock.getDelta());
     pointCloud2.update();
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
 
 
-    controls.update();
+    controls.update(0.0002 );
 
+    if(oculusController) {
+        oculusControls.update(0.000002);
+        effect.render(scene, camera);
+
+    }
 
     // debugger
     if(skeleton.children.length != 0){
@@ -468,19 +447,14 @@ function animate() {
         yawObject.setLinearVelocity(new THREE.Vector3(0,0,0));
         yawObject.__dirtyPosition = true;
     }
+    if(!oculusController){
+        renderer.render(scene,camera);
+    }
 
-    oculusControls.update(  );//oculusControls
-    effect.render( scene, camera );
 
     //render();
 }
 
-function render() {
-    //renderer.render(scene, camera);
-    effect.render( scene, camera );
-    // composer2.render(scene, camera);
-    // finalComposer.render(scene, camera);
-}
 
 // Temporary for debugging while building virtual world. Borrowed from example: http://soledadpenades.com/articles/three-js-tutorials/drawing-the-coordinate-axes/
 function buildAxes( length ) {
@@ -515,9 +489,15 @@ function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    effect.setSize( window.innerWidth, window.innerHeight ); //resizes oculus effect appropriately
+    if(oculusControls) {
+        effect.setSize(window.innerWidth, window.innerHeight); //resizes oculus effect appropriately
+        controls.handleResize();
+    }
+    else{
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+
 
 }
 
