@@ -6,7 +6,7 @@
  * it works also with other HMD using the same technology
  */
 
-THREE.OculusRiftEffect = function ( renderer,finalScene, options ) { //Added finalScene
+THREE.OculusRiftEffect = function ( renderer, options ) { //Added finalScene
 	// worldFactor indicates how many units is 1 meter
 	var worldFactor = (options && options.worldFactor) ? options.worldFactor: 1.0;
 

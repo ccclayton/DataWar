@@ -92,9 +92,9 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapSoft = true;
 
-    effect = new THREE.OculusRiftEffect( renderer,scene, { worldScale: 1 } );
+    effect = new THREE.OculusRiftEffect( renderer, { worldScale: 1 } );
     effect.setSize( window.innerWidth, window.innerHeight );
-   // oculusControls = new THREE.OculusControls(camera);
+    oculusControls = new THREE.OculusControls(camera);
 
     //controls
     controls = new THREE.PointerLockControls(yawObject, camera);
@@ -135,7 +135,7 @@ function init() {
 
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize, false);
-   // oculusControls.connect(); //Connect Oculus
+    oculusControls.connect(); //Connect Oculus
 }
 
 function initSkybox() {
@@ -443,7 +443,7 @@ function animate() {
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
 
-    //oculusControls.update( clock.getDelta() );
+
     controls.update();
 
 
@@ -469,7 +469,10 @@ function animate() {
         yawObject.__dirtyPosition = true;
     }
 
-    render();
+    oculusControls.update(  );//oculusControls
+    effect.render( scene, camera );
+
+    //render();
 }
 
 function render() {
