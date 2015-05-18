@@ -1,6 +1,6 @@
 # DataWar
 ## About this project
-Datawar (also known as Data Gallery) is a project developed as a proof-of-concept idea to join together many different technologies.
+Datawar (also known as VR Data Gallery) is a project developed as a proof-of-concept idea to join together many different technologies.
 It displays tweets in a 3D world as their own structures and simulates a 3D audio equalizer to display sound information in a beautiful way.
 Also, the Wii balance board, Oculus Rift, and Microsoft Kinect are all supported.
 
