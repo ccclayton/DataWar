@@ -8,7 +8,7 @@ var renderer, scene, camera, directionalLight, water;
 var geometry, material, mesh, ground, PlayerCube, yawObject;
 var controls;
 var waterNormals;
-var effect;
+var oculusEffect;
 
 var curdate = "Wed, 18 Oct 2000 13:00:00 EST";
 var dt = Date.parse(curdate);
@@ -176,8 +176,8 @@ function initOculus(renderer, camera) {
         camera.position.set(config.user.position.x, config.user.position.y, config.user.position.z);
     }
 
-    effect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
-    effect.setSize(window.innerWidth, window.innerHeight);
+    oculusEffect = new THREE.OculusRiftEffect(renderer, {worldScale: 1});
+    oculusEffect.setSize(window.innerWidth, window.innerHeight);
 }
 
 /**
@@ -483,7 +483,7 @@ function animate() {
     //based on positional tracking and then render the effect to the scene
     if (oculusController) {
         oculusControls.update(0.000002);
-        effect.render(scene, camera);
+        oculusEffect.render(scene, camera);
 
     }
 
@@ -524,7 +524,7 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     if (oculusControls) {
-        effect.setSize(window.innerWidth, window.innerHeight); //resizes oculus effect appropriately
+        oculusEffect.setSize(window.innerWidth, window.innerHeight); //resizes oculus effect appropriately
 
     }
     else {
