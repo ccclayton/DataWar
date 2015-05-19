@@ -1,8 +1,8 @@
 # DataWar
 ## About this project
-Datawar (also known as VR Data Gallery) is a project developed as a proof-of-concept idea to join together many different technologies.
-It displays tweets in a 3D world as their own structures and simulates a 3D audio equalizer to display sound information in a beautiful way.
-Also, the Wii balance board, Oculus Rift, and Microsoft Kinect are all supported.
+Datawar (also known as VR Data Gallery) is a project developed to join together many different technologies for the web. 
+It is strictly proof-of-concept, but includes a 3D VR Twitter visualization, a 3D audio equalizer, 
+and the use of some fun hardware such as the Wii Balance Board, Kinect, and Oculus Rift DK2.
 
 ## Installation & Usage
 Running this project is very simple. Upon cloning of the repository, run the following:
