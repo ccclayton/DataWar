@@ -11,6 +11,16 @@ Running this project is very simple. Upon cloning of the repository, run the fol
     node app.js
 Then connect to localhost:3000 in your browser
 
+## MongoDB
+You will need to use MongoDB for this. If for some reason it doesn't install through npm, install mongodb separately.
+
+Then do this:
+
+    cd server
+    sudo mongod
+
+This will start your mongodb server.
+
 ## Adding tweets
 Tweets will not be added to the scene unless you have some stored in your database. In order to store tweets in your database, do the following from the datawar directory in a separate terminal:
 
