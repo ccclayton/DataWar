@@ -65,7 +65,7 @@ PointCloud.prototype.init = function () {
 };
 
 /**
- * @Author: Danny Gillies
+ * @author: Danny Gillies
  * Determines which type of animation we would like to use based on user input
  */
 PointCloud.prototype.update = function () {
@@ -211,7 +211,7 @@ PointCloud.prototype.updateLinear32 = function () {
 };
 
 /**
- * @Author: Danny Gillies
+ * @author: Danny Gillies
  * Separates the PointCloud into a 16x16 grid, color is based on location in the grid and each section is animated by frequencies
  */
 PointCloud.prototype.updateGrid = function () {
@@ -313,8 +313,7 @@ PointCloud.prototype.updateGrid = function () {
 };
 
 /**
- * @Author: Travis Bennett
- *
+ * @author: Travis Bennett
  * Colors are set randomly, but manipulates points of the same color based on frequency
  */
 PointCloud.prototype.updateGridRandom = function () {
@@ -341,7 +340,7 @@ PointCloud.prototype.updateGridRandom = function () {
 };
 
 /**
- * @Author: Danny Gillies
+ * @author: Danny Gillies
  * @param value
  * @returns how much to move the particle in which direction
  *

@@ -20,6 +20,10 @@ function TweetPanel(tweet, position, mass, options) {
 TweetPanel.prototype = new Node();         //Inheritance
 TweetPanel.prototype.constructor = Node;  //Fixes the pointer.
 
+/**
+ * @author: Colin Clayton
+ * Modified by Travis Bennett
+ */
 TweetPanel.prototype.draw = function (location) {
     var canvas;
     var mesh;
@@ -86,23 +90,34 @@ TweetPanel.prototype.draw = function (location) {
     scene.add(this.mesh);
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.getPosition = function () {
     return this.mesh.position;
 };
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.updateMeshPosition = function () {
     this.position.copy(this.mesh.position);
     this.mesh.__dirtyPosition = true;
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.setPosition = function (newPos) {
     this.mesh.position.copy(newPos);
     this.mesh.__dirtyPosition = true;
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.setRotation = function (newRotation) { // THREE.Vector3
     var euler = new THREE.Euler(newRotation.x, newRotation.y, newRotation.z, 'XYZ');
     this.mesh.position.applyEuler(euler);
-
     this.mesh._dirtyRotation = true;
 };
 

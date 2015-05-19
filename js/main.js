@@ -2,6 +2,8 @@
  * @author:Colin Clayton
  * @author:Danny Gillies
  * Initializes and renders the scene.
+ * Creates an audio equalizer visualization with particles from the PointCloud class
+ * and a twitter visualization.
  */
 
 var renderer, scene, camera, directionalLight, water;
@@ -477,7 +479,6 @@ function animate() {
     tweetStructure.render();
     water.material.uniforms.time.value += 1.0 / 60.0;
 
-
     controls.update(0.0002);
     //If Oculus is enabled, need to update the controls,
     //based on positional tracking and then render the effect to the scene
@@ -530,14 +531,12 @@ function onWindowResize() {
     else {
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
-
-
 }
 
 /**
  * @author:Colin Clayton
  * May be used to create random colored particles.
- * Returns a hex value such as "#EEEEEE"
+ * Returns a string hex value such as '#EEEEEE'
  */
 function getRandomColor() {
     var color = '#';
@@ -556,10 +555,12 @@ function getRandomColor() {
  * @author:Travis Bennet
  * @author:Weidong Yang
  * @author:Danny Gillies
+ * Clears all nodes and particles from the scene.
+ * Also stops music and resets user's position to the beginning position.
  */
 function resetScene() {
 
-    //Reset user to home position
+    //Reset user to beginning position
     yawObject.position.set(config.user.position.x, config.user.position.y, config.user.position.z);
 
     //Stop music
