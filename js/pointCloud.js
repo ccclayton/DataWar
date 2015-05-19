@@ -2,6 +2,9 @@
  * @author:Weidong Yang
  * @author:Colin Clayton
  * @author:Danny Gillies
+ * Creates a PointCloud system
+ * Provides a few interesting ways to update particles within PointCloud
+ * based off of audio input's frequencies.
  */
 
 "use strict";
@@ -23,12 +26,10 @@ var PointCloud = function (_scene) {
     this.attributes = {
         size: {type: 'f', value: []},
         customColor: {type: 'c', value: []}
-        // velocity_x: { type: 'f', value: []}
     };
 
     this.values_size = this.attributes.size.value;
     this.values_color = this.attributes.customColor.value;
-
 
     this.uniforms = {
         amplitude: {type: "f", value: 1.0},
@@ -39,6 +40,9 @@ var PointCloud = function (_scene) {
     this.init();
 }
 
+/**
+ * @author: Weidong Yang
+ */
 PointCloud.prototype.init = function () {
     var shaderMaterial = new THREE.ShaderMaterial({
         uniforms: this.uniforms,
@@ -61,6 +65,9 @@ PointCloud.prototype.init = function () {
 };
 
 //Must call this in your main render loop.
+/**
+ * @author: Daniel Gillies
+ */
 PointCloud.prototype.update = function () {
     if (this.animation % 4 == 0) {
         this.updateLinear();
@@ -73,6 +80,10 @@ PointCloud.prototype.update = function () {
     }
 }
 
+/**
+ * @author: Daniel Gillies
+ * @author: Colin Clayton
+ */
 PointCloud.prototype.updateLinear = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -131,6 +142,9 @@ PointCloud.prototype.updateLinear = function () {
     }
 };
 
+/**
+ * @author: Daniel Gillies
+ */
 PointCloud.prototype.updateLinear32 = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {
@@ -194,6 +208,9 @@ PointCloud.prototype.updateLinear32 = function () {
     }
 };
 
+/**
+ * @author: Daniel Gillies
+ */
 PointCloud.prototype.updateGrid = function () {
 
     if (typeof binaries === 'object' && binaries.length - 1 > 0) {

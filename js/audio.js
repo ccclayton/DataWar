@@ -1,6 +1,6 @@
 //Provided by: Sann-Remy Chea
 //https://github.com/srchea/Sound-Visualizer/
-
+//Modified by Daniel Gillies
 
 var context;
 var source, sourceJs;

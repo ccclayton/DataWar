@@ -2,6 +2,7 @@
  * @author:Danny Gillies
  * @author:Colin Clayton
  * @author:Weidong Yang
+ * Extends Graph.js to create a graph of twitter data.
  */
 
 "use strict";
@@ -176,7 +177,7 @@ var TweetStructure = function (sceneGraph) {
             graph.layout.generate();
         }
 
-        //Need to tell THREE.js to update each edge and vertice
+        //Need to tell THREE.js to update each edge and vertex
         graph.edges.forEach(function (e) {
             e.line.geometry.verticesNeedUpdate = true;
             e.line.geometry.elementsNeedUpdate = true;

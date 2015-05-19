@@ -1,5 +1,6 @@
 /**
  @author David Piegza
+ //Modified by Colin Clayton and Daniel Gillies
  Implements a force-directed layout, the algorithm is based on Fruchterman and Reingold and
  the JUNG implementation.
  Needs the graph data structure Graph.js:

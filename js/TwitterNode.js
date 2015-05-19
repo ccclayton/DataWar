@@ -1,10 +1,13 @@
 /**
  * @author: Colin Clayton
  * @author: Danny Gillies
+ * Creates nodes for each twitter user's username.
+ * Can replace THREE.js Meshes with commented code for Physi.js Meshes.
+ * Can also make nodes based off of the particular geometry you need.
  */
 
 "use strict";
-var geomFlag;//global
+var geomFlag;
 function TwitterNode(username, geometry, geometryType, position, mass, options) {
     Node.call(this);
 

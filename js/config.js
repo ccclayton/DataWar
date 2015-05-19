@@ -1,5 +1,8 @@
+/**
+ * @author: Travis Bennett
+ */
 "use strict";
-var DEBUG = false;   //------------------------------------------------
+var DEBUG = false;
 var config={
 	user: {
 		controls:true,

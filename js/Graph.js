@@ -1,6 +1,6 @@
 
 /**
- @author: Weidong Yang, extending from David Piegza implementation
+ @author: Weidong Yang, Modified by Colin Clayton, extending from David Piegza implementation
 
  Implements a graph structure.
  Consists of Graph, Nodes and Edges.
@@ -272,34 +272,20 @@ Edge.prototype.kill=function(n_request){ //to avoid self referencing loop, we pa
     delete this.data;
 }
 
-//Changed by Colin Clayton
+//Modified by Colin Clayton
 Edge.prototype.draw=function(options){
     material = new THREE.LineBasicMaterial({ linewidth: options.linewidth, transparent: true, opacity:options.opacity, color:parseInt(options.color.substr(1),16)});
-    //material.transparent = false;
     material.side = THREE.DoubleSide;
     material.needsUpdate = true;
-    // material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1, linewidth: 1 , vertexColors: THREE.VertexColors});
 
     var tmp_geo = new THREE.Geometry();
-    //console.log("target mesh pos = " + this.target.mesh.position.x + " " + this.target.mesh.position.y);
-    tmp_geo.vertices.push(this.source.mesh.position); // was data.draw_object.position
+    tmp_geo.vertices.push(this.source.mesh.position);
     tmp_geo.vertices.push(this.target.mesh.position);
     this.line = new THREE.Line( tmp_geo, material, THREE.LinePieces );
     this.line.geometry.verticesNeedUpdate = true;
     this.line.geometry.elementsNeedUpdate = true;
-    // line = new THREE.Line( tmp_geo, material );
-    // var tmpBufferGeo = THREE.BufferGeometryUtils.fromGeometry( tmp_geo );
-    // line = new THREE.Line( tmpBufferGeo, material, THREE.LinePieces );
-
-
     this.line.scale.x = this.line.scale.y = this.line.scale.z = 1;
     this.line.originalScale = 0.1;
-
-
-    //this.data.draw_object = line;
-
-    //this.geometries.push(tmp_geo);  //TODO: NEED TO FIX THIS!!
-    // bufferGeometries.push(tmpBufferGeo);
 
     scene.add( this.line );
 };

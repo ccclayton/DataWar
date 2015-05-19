@@ -2,6 +2,8 @@
  * @author:Weidong Yang
  * @author:Travis Bennett
  * Modified by Colin Clayton so you are able to stop movement.
+ *
+ * Handles controls for the Wii Balance Board.
  */
 "use strict";
 

@@ -1,5 +1,6 @@
 /**
  * @author:Travis Bennett
+ * Loads 3D Models into scene
  */
 
 "use strict";
