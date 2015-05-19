@@ -555,6 +555,7 @@ function getRandomColor() {
 /**
  * @author:Travis Bennet
  * @author:Weidong Yang
+ * @author:Danny Gillies
  */
 function resetScene() {
 

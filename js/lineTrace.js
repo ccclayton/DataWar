@@ -4,6 +4,9 @@
  * Used for location tracking throughout the scene.
  */
 "use strict";
+/**
+ * @Author: Weidong Yang
+ */
 
 var LineTrace = function (_scene) {
     // we have to pre seed the particles. hide them with color black and size 0.

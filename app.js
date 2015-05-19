@@ -1,5 +1,8 @@
 /**
- * Main application file
+ * @Author: Danny Gillies
+ * @Author: Weidong Yang
+ *
+ * Starts the web server
  */
 
 'use strict';
@@ -66,10 +69,8 @@ io.sockets.on('connection', function(socket){
 
 
 app.use(express.static('./'));
-// app.use(express.static('/home/danny/Documents/Kinetech/DataWar'));
 
 // Start server
-// app.listen(3000);
 server.listen(3000);
 console.log('Listening on port 3000');
 

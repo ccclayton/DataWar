@@ -12,11 +12,11 @@ Running this project is very simple. Upon cloning of the repository, run the fol
 Then connect to localhost:3000 in your browser
 
 ## Adding tweets
-In order to store tweets in your database, do the following from the datawar directory in a separate terminal:
+Tweets will not be added to the scene unless you have some stored in your database. In order to store tweets in your database, do the following from the datawar directory in a separate terminal:
 
     cd server
     node getTweets.js
-This will launch a node app to gather tweets and store them in the database.
+This will launch a node app to gather tweets and store them in the database. If you would like to change the keywords you are searching for, open up the getTweets.js file and change the strings in the keywords array.
 
 ## Configuring settings
 Many settings can be modified in js/config.js

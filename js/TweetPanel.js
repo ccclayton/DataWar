@@ -88,7 +88,7 @@ TweetPanel.prototype.draw = function (location) {
 
 TweetPanel.prototype.getPosition = function () {
     return this.mesh.position;
-}
+};
 TweetPanel.prototype.updateMeshPosition = function () {
     this.position.copy(this.mesh.position);
     this.mesh.__dirtyPosition = true;
@@ -97,14 +97,14 @@ TweetPanel.prototype.updateMeshPosition = function () {
 TweetPanel.prototype.setPosition = function (newPos) {
     this.mesh.position.copy(newPos);
     this.mesh.__dirtyPosition = true;
-}
+};
 
 TweetPanel.prototype.setRotation = function (newRotation) { // THREE.Vector3
     var euler = new THREE.Euler(newRotation.x, newRotation.y, newRotation.z, 'XYZ');
     this.mesh.position.applyEuler(euler);
 
     this.mesh._dirtyRotation = true;
-}
+};
 
 // http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial
 // Modified by Daniel Gillies

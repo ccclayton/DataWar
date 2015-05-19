@@ -1,6 +1,9 @@
+
 /**
  * @author: Travis Bennett
+ * @author: Danny Gillies
  */
+
 "use strict";
 var DEBUG = false;
 var config={

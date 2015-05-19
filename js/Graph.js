@@ -47,6 +47,7 @@
 
  reached_limit() - returns true if the limit has been reached, otherwise false
 
+ modified slightly by Danny Gillies
  */
 "use strict";
 function Graph(options) {
