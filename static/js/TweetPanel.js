@@ -1,8 +1,11 @@
 /**
  * @author: Colin Clayton http://github.com/ccclayton
  * @author: Danny Gillies
+ * Creates 3D Canvas panels with the user's tweet written on them.
  */
+
 "use strict";
+
 function TweetPanel(tweet, position, mass, options) {
     Node.call(this);
     this.tweet = tweet;
@@ -17,11 +20,15 @@ function TweetPanel(tweet, position, mass, options) {
 TweetPanel.prototype = new Node();         //Inheritance
 TweetPanel.prototype.constructor = Node;  //Fixes the pointer.
 
+/**
+ * @author: Colin Clayton
+ * Modified by Travis Bennett
+ */
 TweetPanel.prototype.draw = function (location) {
     var canvas;
     var mesh;
     var context;
-    var tweetText,x, y, text, maxWidth, lineHeight;
+    var tweetText, x, y, text, maxWidth, lineHeight;
     canvas = document.createElement('canvas');
     canvas.width = 1920;
     canvas.height = 1080;
@@ -83,28 +90,39 @@ TweetPanel.prototype.draw = function (location) {
     scene.add(this.mesh);
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.getPosition = function () {
     return this.mesh.position;
 };
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.updateMeshPosition = function () {
     this.position.copy(this.mesh.position);
     this.mesh.__dirtyPosition = true;
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.setPosition = function (newPos) {
     this.mesh.position.copy(newPos);
     this.mesh.__dirtyPosition = true;
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TweetPanel.prototype.setRotation = function (newRotation) { // THREE.Vector3
     var euler = new THREE.Euler(newRotation.x, newRotation.y, newRotation.z, 'XYZ');
     this.mesh.position.applyEuler(euler);
-
     this.mesh._dirtyRotation = true;
 };
 
 // http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial
-// Modified by Danny Gillies
+// Modified by Daniel Gillies
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
     var words = text.split(' ');
     var line = '';

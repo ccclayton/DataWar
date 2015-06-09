@@ -1,3 +1,8 @@
+/**
+ * @author: Weidong Yang
+ * @author: Travis Bennett
+ */
+
 'use strict';
 
 var drawing;

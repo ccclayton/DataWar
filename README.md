@@ -1,8 +1,8 @@
 # DataWar
 ## About this project
-Datawar (also known as VR Data Gallery) is a project developed as a proof-of-concept idea to join together many different technologies.
-It displays tweets in a 3D world as their own structures and simulates a 3D audio equalizer to display sound information in a beautiful way.
-Also, the Wii balance board, Oculus Rift, and Microsoft Kinect are all supported.
+Datawar (also known as VR Data Gallery) is a project developed to join together many different technologies for the web. 
+It is strictly proof-of-concept, but includes a 3D VR Twitter visualization, a 3D audio equalizer, 
+and the use of some fun hardware such as the Wii Balance Board, Kinect, and Oculus Rift DK2.
 
 ## Installation & Usage
 Running this project is very simple. Upon cloning of the repository, run the following:
@@ -10,6 +10,16 @@ Running this project is very simple. Upon cloning of the repository, run the fol
     npm install
     node app.js
 Then connect to localhost:3000 in your browser
+
+## MongoDB
+You will need to use MongoDB for this. If for some reason it doesn't install through npm, install mongodb separately.
+
+Then do this:
+
+    cd server
+    sudo mongod
+
+This will start your mongodb server.
 
 ## Adding tweets
 Tweets will not be added to the scene unless you have some stored in your database. In order to store tweets in your database, do the following from the datawar directory in a separate terminal:

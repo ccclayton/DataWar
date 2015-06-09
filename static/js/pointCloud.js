@@ -2,6 +2,9 @@
  * @author:Weidong Yang
  * @author:Colin Clayton
  * @author:Danny Gillies
+ * Creates a PointCloud system
+ * Provides a few interesting ways to update particles within PointCloud
+ * based off of audio input's frequencies.
  */
 
 "use strict";
@@ -23,12 +26,10 @@ var PointCloud = function (_scene) {
     this.attributes = {
         size: {type: 'f', value: []},
         customColor: {type: 'c', value: []}
-        // velocity_x: { type: 'f', value: []}
     };
 
     this.values_size = this.attributes.size.value;
     this.values_color = this.attributes.customColor.value;
-
 
     this.uniforms = {
         amplitude: {type: "f", value: 1.0},
@@ -39,6 +40,9 @@ var PointCloud = function (_scene) {
     this.init();
 };
 
+/**
+ * @author: Weidong Yang
+ */
 PointCloud.prototype.init = function () {
     var shaderMaterial = new THREE.ShaderMaterial({
         uniforms: this.uniforms,
@@ -61,10 +65,9 @@ PointCloud.prototype.init = function () {
 };
 
 /**
- * @Author: Danny Gillies
+ * @author: Danny Gillies
  * Determines which type of animation we would like to use based on user input
  */
-//Must call this in your main render loop.
 PointCloud.prototype.update = function () {
     if (this.animation % 4 == 0) {
         this.updateLinear();
@@ -78,9 +81,9 @@ PointCloud.prototype.update = function () {
 };
 
 /**
- * @Author: Danny Gillies
- * @Author: Colin Clayton
- * Separates the pointcloud into 16 sections, sets colors based on location and animates each section based on frequency
+ * @author: Danny Gillies
+ * @author: Colin Clayton
+ * Separates the PointCloud into 16 sections, sets colors based on location and animates each section based on frequency
  */
 PointCloud.prototype.updateLinear = function () {
 
@@ -141,8 +144,8 @@ PointCloud.prototype.updateLinear = function () {
 };
 
 /**
- * @Author: Danny Gillies
- * Separates the pointcloud into 32 sections, sets colors based on location and animates each section based on frequency
+ * @author: Danny Gillies
+ * Separates the PointCloud into 32 sections, sets colors based on location and animates each section based on frequency
  */
 PointCloud.prototype.updateLinear32 = function () {
 
@@ -208,8 +211,8 @@ PointCloud.prototype.updateLinear32 = function () {
 };
 
 /**
- * @Author: Danny Gillies
- * Separates the pointcloud into a 16x16 grid, color is based on location in the grid and each section is animated by frequencies
+ * @author: Danny Gillies
+ * Separates the PointCloud into a 16x16 grid, color is based on location in the grid and each section is animated by frequencies
  */
 PointCloud.prototype.updateGrid = function () {
 
@@ -310,8 +313,7 @@ PointCloud.prototype.updateGrid = function () {
 };
 
 /**
- * @Author: Travis Bennett
- *
+ * @author: Travis Bennett
  * Colors are set randomly, but manipulates points of the same color based on frequency
  */
 PointCloud.prototype.updateGridRandom = function () {
@@ -338,7 +340,7 @@ PointCloud.prototype.updateGridRandom = function () {
 };
 
 /**
- * @Author: Danny Gillies
+ * @author: Danny Gillies
  * @param value
  * @returns how much to move the particle in which direction
  *
@@ -348,7 +350,10 @@ PointCloud.prototype.getLevelHighest = function (value) {
     return value / (this.divisor) - this.subtractor;
 };
 
-//@author: Colin Clayton
+/**
+ * @author: Colin Clayton
+ * @returns string of hex color values such as '#EEEEEE'
+ */
 function getRandomColor() {
     var color = '#';
     var letters = '0123456789ABCDEF'.split('');
@@ -362,7 +367,10 @@ function getRandomColor() {
     return colorWithoutQuotes;
 }
 
-//Modified by Colin Clayton
+/**
+ * @author: Weidong Yang
+ * Modified by Colin Clayton
+ */
 PointCloud.prototype.seedParticles = function (numVertices) {
     for (var i = 0; i < numVertices; i++) {
         var vertex = new THREE.Vector3();
@@ -377,6 +385,9 @@ PointCloud.prototype.seedParticles = function (numVertices) {
     }
 };
 
+/**
+ * @author: Weidong Yang
+ */
 PointCloud.prototype.addBatch = function (batchSize) {
     for (var i = 0; i < batchSize; i++) {
         var vertex = new THREE.Vector3();
@@ -389,6 +400,9 @@ PointCloud.prototype.addBatch = function (batchSize) {
     this.idx = batchSize;
 };
 
+/**
+ * @author: Weidong Yang
+ */
 //pull camera back 50, now we add particle at the center of yawObject
 PointCloud.prototype.addInFrontOfCamera = function () {
     var pos = controls.getObject().position.clone();
@@ -400,6 +414,9 @@ PointCloud.prototype.addInFrontOfCamera = function () {
     pointCloud.add(pos, 0x50ffff, 2);
 };
 
+/**
+ * @author: Weidong Yang
+ */
 PointCloud.prototype.add = function (vertex, color, size) {
     this.idx++;
     if (this.idx == this.maxParticles) { //when max particle exceeded, we stop adding new points.
@@ -416,12 +433,17 @@ PointCloud.prototype.add = function (vertex, color, size) {
     return this.idx;
 };
 
-//@author:Colin Clayton
+/**
+ * @author: Colin Clayton
+ */
 PointCloud.prototype.changeColor = function (idx, color) {
     this.values_color[idx].copy(new THREE.Color(color));
     this.attributes["customColor"].needsUpdate = true;
 };
 
+/**
+ * @author: Weidong Yang
+ */
 PointCloud.prototype.changeOpacity = function (idx, opacity) {
     window.pc[idx].material.opacity = opacity
 };

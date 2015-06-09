@@ -7,7 +7,6 @@ var Shapes = function () {
 
 };
 
-
 Shapes.prototype.plusGeometry = function (w, h, thickness, radius, depth) {
 
     var rectangleW = new THREE.Shape();

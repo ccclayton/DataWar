@@ -1,10 +1,17 @@
 /**
  * @author: Colin Clayton
  * @author: Danny Gillies
+ * Creates nodes for each twitter user's username.
+ * Can replace THREE.js Meshes with commented code for Physi.js Meshes.
+ * Can also make nodes based off of the particular geometry you need.
  */
 
 "use strict";
-var geomFlag;//global
+var geomFlag;
+
+/**
+ * @author: Colin Clayton
+ */
 function TwitterNode(username, geometry, geometryType, position, mass, options) {
     Node.call(this);
 
@@ -46,6 +53,9 @@ function TwitterNode(username, geometry, geometryType, position, mass, options) 
 TwitterNode.prototype = new Node();         //Inheritance
 TwitterNode.prototype.constructor = Node;  //Fixes the pointer.
 
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.draw = function (location) {
 
     var canvas = document.createElement('canvas');
@@ -181,36 +191,54 @@ TwitterNode.prototype.draw = function (location) {
     this.mesh.geometry.verticesNeedUpdate = true;
     this.mesh.geometry.elementsNeedUpdate = true;
     scene.add(this.mesh);
-}
+};
 
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.killNode = function () {
     scene.remove(this.node);
 };
 
+/**
+ * @author: Daniel Gillies
+ */
 TwitterNode.prototype.incRetweets = function () {
     this.retweeted++;
-}
+};
 
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.updateMeshPosition = function () {
     this.position.copy(this.mesh.position);
     this.mesh.__dirtyPosition = true;
 };
 
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.getPosition = function () {
     return this.mesh.position;
 };
 
-
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.setPosition = function (newPos) {
     this.mesh.position.copy(newPos);
     this.mesh.__dirtyPosition = true;
-}
+};
+
 //Must set __dirtyRotation flag to true when using Physi.js objects.
+/**
+ * @author: Colin Clayton
+ */
 TwitterNode.prototype.setRotation = function (newRotation) { // THREE.Vector3
     var euler = new THREE.Euler(newRotation.x, newRotation.y, newRotation.z, 'XYZ');
     this.mesh.position.applyEuler(euler);
     this.mesh.__dirtyRotation = true;
-}
+};
 
 // http://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
 // Modified by Danny Gillies

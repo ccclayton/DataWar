@@ -2,6 +2,8 @@
  * @author:Daniel Gillies
  * @author:Colin Clayton
  * @author:Travis Bennett
+ *
+ * Handles controls for Menu
  */
 var init_keys = function (renderDom) {
     // only on keydown + no repeat

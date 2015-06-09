@@ -1,9 +1,11 @@
-"use strict";
+
 /**
- * @Author: Travis Bennett
- * @Author: Danny Gillies
+ * @author: Travis Bennett
+ * @author: Danny Gillies
  */
-var DEBUG = false;   //------------------------------------------------
+
+"use strict";
+var DEBUG = false;
 var config={
 	user: {
 		controls:true,

@@ -1,6 +1,7 @@
 /**
  * @author:Weidong Yang
  * @author:Travis Bennett
+ * Handles connection between Wii Balance Board and webapp
  */
 "use strict";
 
