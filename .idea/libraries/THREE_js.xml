@@ -6,7 +6,7 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/threejs.r70" />
+      <root url="file://$PROJECT_DIR$/static/js/threejs.r70" />
     </CLASSES>
     <DOCUMENTATION>
       <root url="http://threejs.org/docs/" />

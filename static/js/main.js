@@ -40,7 +40,7 @@ animate();
 function init() {
 
     //Create Physi.js Thread worker
-    Physijs.scripts.worker = '../Physijs/physijs_worker.js';
+    Physijs.scripts.worker = '../static/js/Physijs/physijs_worker.js';
     Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
 
     //Create a new Physi.js Scene
@@ -376,7 +376,7 @@ function initObjects() {
  * THREE.js Water and Mirror Shaders are used.
  */
 function initWater() {
-    waterNormals = new THREE.ImageUtils.loadTexture('../threejs.r65/examples/textures/waternormals.jpg');
+    waterNormals = new THREE.ImageUtils.loadTexture('../static/js/threejs.r65/examples/textures/waternormals.jpg');
     waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
     //WATER FROM OCEAN EXAMPLE THREEJS 65

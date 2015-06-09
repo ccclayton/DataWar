@@ -21,7 +21,7 @@ var osc=require('node-osc/lib/osc.js');
 mongoose.connect('mongodb://localhost/test');
 
 // Setup server
-require('./server/config/express');
+//require('./server/config/express');
 require('./server/routes')(app);
 
 io.set('log level', 1);
@@ -67,6 +67,10 @@ io.sockets.on('connection', function(socket){
 
 });
 
+
+app.set('views', path.join(__dirname, 'views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use(express.static('./'));
 
