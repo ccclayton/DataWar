@@ -1,4 +1,5 @@
 # DataWar
+## Currently deployed to vrdatalandscape.com
 ## About this project
 Datawar (also known as VR Data Gallery) is a project developed to join together many different technologies for the web. 
 It is strictly proof-of-concept, but includes a 3D VR Twitter visualization, a 3D audio equalizer, 
