@@ -57,6 +57,7 @@ plan.remote(function(remote) {
 
     remote.log('Reload application');
     remote.sudo('ln -snf ~/' + tmpDir + ' ~/'+appName, {user: username});
-    remote.exec('forever stop ~/'+appName+'/'+startFile, {failsafe: true});
-    remote.exec('forever start ~/'+appName+'/'+startFile);
+    //remote.exec('pm2 stop ~/'+appName+'/'+startFile, {failsafe: true});
+    //remote.exec('pm2 delete ~/'+appName+'/'+startFile);
+    //remote.exec('pm2 start ~/'+appName+'/'+startFile);
 });
