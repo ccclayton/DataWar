@@ -20,7 +20,7 @@ var mongoose = require('mongoose');
 
 // Connect to database (Make sure this is only called once
 mongoose.connect('mongodb://localhost/test');
-var config = require('./config.js');
+//var config = require('./config.js');
 
 // Stores database ina  variable
 var db = mongoose.connection;
