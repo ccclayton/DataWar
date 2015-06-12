@@ -84,6 +84,10 @@ var init_keys = function (renderDom) {
             console.log("Hiding controls");
             document.getElementById('controls').style.display = 'none';
         }
+        if (scope.keyboard.eventMatches(event, 'v') && !wasPressed['v']) {
+            console.log("Opening overlay");
+            toggleOverlay();
+        }
     });
 
     // listen on keyup to maintain ```wasPressed``` array
@@ -121,8 +125,11 @@ var init_keys = function (renderDom) {
         if (scope.keyboard.eventMatches(event, 'p')) {
             wasPressed['p'] = false;
         }
-        if (scope.keyboard.eventMatches(event, 'p')) {
+        if (scope.keyboard.eventMatches(event, 'o')) {
             wasPressed['o'] = false;
+        }
+        if (scope.keyboard.eventMatches(event, 'v')) {
+            wasPressed['v'] = false;
         }
 
     })

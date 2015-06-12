@@ -90,9 +90,12 @@ void main()
 
     <title>Data Landscape</title>
     <link rel="stylesheet" type="text/css" href="../static/css/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css">
+    <script type="text/javascript" src="../static/js/modernizr.custom.js"></script>
+
 
 </head>
-<>
+<body>
 <script type="text/javascript" src="../static/js/threejs.r70/build/three.js"></script>
 <script type="text/javascript" src="../static/js/config.js"></script>
 <script type="text/javascript" src="../static/js/Physijs/physi.js"></script>
@@ -123,6 +126,7 @@ void main()
 <script type="text/javascript" src="../static/js/postprocessing/MaskPass.js"></script>
 <script type="text/javascript" src="../static/js/shaders/CopyShader.js"></script>
 <script type="text/javascript" src="../static/js/THREEx.KeyboardState.js"></script>
+<script type="text/javascript" src="../static/js/snap.svg-min.js"></script>
 <script type="text/javascript" src="../static/js/keyboard.js"></script>
 
 <div id="blankOverlay"></div>
@@ -232,17 +236,38 @@ void main()
     }
 </script>
 
+<div class="overlay overlay-door">
+    <button type="button" class="overlay-close">Close</button>
+    <div id="overlay-links">
+        <nav>
+            <ul>
+                <!--<li><a href="#">Home</a></li>-->
+                <li><a href="#https://github.com/ccclayton/DataWar">Github (Will be publicized soon)</a></li>
+                <li><a href="http://kineviz.com/">Kineviz</a></li>
+                <li><a href="http://kine-tech.org/">Kinetech Arts</a></li>
+                <li><a href="https://youtu.be/fiS3NBZRY44?list=PLPGM0VodoFEH_ImVDbcrWo_Njck6ygBEm&t=1690">3D Webfest Presentation</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="overlay-controls">
+        <ul>
+            <li>Controls:</li>
+            <li>0-5 = change songs</li>
+            <li>q = toggle animation style</li>
+            <li>x = increase max tweets</li>
+            <li>m = stop/mute music</li>
+            <li>p = start scene</li>
+            <li>o = enable oculus</li>
+            <li>n = hide controls</li>
+            <li>h = show heads of developers</li>
+        </ul>
+    </div>
+</div>
+
 <div id="controls">
+
     <ul>
-        <li>0-5 = change songs</li>
-        <li>q = toggle animation style</li>
-        <li>x = increase max tweets</li>
-        <li>m = stop/mute music</li>
-        <li>p = start scene</li>
-        <li>o = enable oculus</li>
-        <li>n = hide controls</li>
-        <li>h = show heads of developers</li>
-        <li>click <a href="https://youtu.be/fiS3NBZRY44?list=PLPGM0VodoFEH_ImVDbcrWo_Njck6ygBEm&t=1690">here</a> to see the project in action</li>
+        <li>press v to show menu</li>
     </ul>
 </div>
 
@@ -252,6 +277,8 @@ void main()
     }
 </script>
 
+<script type="text/javascript" src="../static/js/classie.js"></script>
+<script type="text/javascript" src="../static/js/overlay.js"></script>
 <script type="text/javascript" src="../static/js/TweetStructure.js"></script>
 <script type="text/javascript" src="../static/js/Graph.js"></script>
 <script type="text/javascript" src="../static/js/force-directed-layout.js"></script>
