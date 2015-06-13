@@ -27,7 +27,7 @@ var config={
 		maxTweets:100,
 		width:1600,
 		repulsion:0.1,
-		spawnTime:500,
+		spawnTime:2000,
 		pollTime:50000
 	},
 	audio: {
