@@ -102,6 +102,7 @@ body {
 
 /* Menu style */
 .overlay nav {
+	width: 100%;
 	text-align: center;
 	position: relative;
 	top: 50%;
@@ -110,34 +111,47 @@ body {
 	transform: translateY(-50%);
 }
 
-.overlay ul {
-	list-style: none;
+.overlay table {
+	/*position: absolute;*/
+	text-align: center;
+	/*left: 0px;*/
+	width: 100%;
+	margin: 0;
 	padding: 0;
-	margin: 0 auto;
-	display: inline-block;
-	height: 100%;
-	position: relative;
 }
 
-.overlay ul li {
-	display: block;
-	height: 25%;
-	min-height: 54px;
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-}
 
-.overlay ul li a {
-	font-size: 54px;
+.overlay table td {
+	width: 50%;
+	font-size: 24px;
 	font-weight: 300;
-	display: block;
+	/*display: block;*/
 	color: #fff;
 	-webkit-transition: color 0.2s;
 	transition: color 0.2s;
 }
 
-.overlay ul li a:hover,
-.overlay ul li a:focus {
+.overlay table a {
+	/*width: 50%;*/
+	font-size: 24px;
+	font-weight: 300;
+	/*display: block;*/
+	color: #fff;
+	-webkit-transition: color 0.2s;
+	transition: color 0.2s;
+}
+
+.overlay table th {
+	font-size: 36px;
+	font-weight: 400;
+	/*display: block;*/
+	color: #999;
+	-webkit-transition: color 0.2s;
+	transition: color 0.2s;
+}
+
+.overlay table tr td a:hover,
+.overlay table tr td a:focus {
 	color: #f0f0f0;
 }
 
@@ -191,7 +205,7 @@ body {
 		height: 70%;
 		font-size: 34px;
 	}
-	.overlay ul li {
+	.overlay table tr td {
 		min-height: 34px;
 	}
 }

@@ -119,12 +119,12 @@ Graph.prototype.removeAllEdges = function () {
     while (this.edges.length > 0) {
         this.removeEdge(this.edges[0]);
     }
-}
+};
 
 Graph.prototype.removeEdge = function (edge, n_request) {
     this.edges.splice(this.edges.indexOf(edge), 1);
     edge.kill(n_request);
-}
+};
 
 Graph.prototype.addNode = function (node) {
     if (this.nodeSet[node.id] == undefined && !this.reached_limit()) {
@@ -187,7 +187,6 @@ function Node(node_id) {
 }
 
 Node.prototype.kill = function () {
-    var that = this;
     this.scene.remove(this.data.draw_object);
     this.connectedEdges.length = 0;
     this.nodesTo.length = 0;
@@ -242,16 +241,6 @@ Node.prototype.connectedFrom = function (node) {
     return false;
 };
 
-
-Node.prototype.show = function () {
-
-};
-
-Node.prototype.hide = function () {
-
-};
-
-
 function Edge(source, target) {
     this.source = source;
     this.target = target;
@@ -293,15 +282,3 @@ Edge.prototype.draw = function (options) {
 
     scene.add(this.line);
 };
-
-Edge.prototype.show = function () {
-
-};
-
-Edge.prototype.hide = function () {
-
-};
-
-
-
-
