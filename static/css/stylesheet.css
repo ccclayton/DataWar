@@ -10,6 +10,14 @@ body {
 	font-family: Comic;
 }
 
+.aggettivi{
+	display:inline;
+	width:100px;
+	height:100px;
+}
+
+
+
 #blankOverlay {
 	width:100%;
 	height: 100%;
@@ -122,7 +130,7 @@ body {
 
 
 .overlay table td {
-	width: 50%;
+	width: 33%;
 	font-size: 24px;
 	font-weight: 300;
 	/*display: block;*/
@@ -208,4 +216,59 @@ body {
 	.overlay table tr td {
 		min-height: 34px;
 	}
+}
+
+.currentsong {
+	opacity: 0;
+	text-align: center;
+	color: #ffffff;
+}
+
+#s0 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
+}
+#s1 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
+}
+#s2 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
+}
+#s3 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
+}
+#s4 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
+}
+#s5 {
+	display: none;
+	opacity:0;
+	-webkit-transition: opacity 2s;
+	-moz-transition: opacity 2s;
+	-o-transition: opacity 2s;
+	transition: opacity 2s;
 }
