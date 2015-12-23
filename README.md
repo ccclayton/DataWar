@@ -81,4 +81,3 @@ Created by Daniel Gillies and Colin Clayton in collaboration with Weidong Yang a
 * Tolga Tezel, author of the [Twit API client for node.js](https://github.com/ttezel/twit)
 * https://github.com/possan, author of Oculus-Rest-Server
 * https://github.com/SoylentGraham, for adding support for Oculus DK2
-* Olga Karpenko, our professor at University of San Francisco that allowed us to do this project and kept us on track
